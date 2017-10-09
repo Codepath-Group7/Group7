@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash check it");
+        throw new RuntimeException("This is a crash check it, small change");
     }
 
 
