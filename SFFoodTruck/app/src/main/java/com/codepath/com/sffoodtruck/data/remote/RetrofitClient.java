@@ -1,19 +1,10 @@
 package com.codepath.com.sffoodtruck.data.remote;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
-
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
