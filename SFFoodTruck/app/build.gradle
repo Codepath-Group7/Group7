@@ -33,6 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding.enabled = true
 }
 
 dependencies {
@@ -51,5 +52,12 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.0'
+
+    //social login dependencies
+    compile 'com.google.firebase:firebase-auth:11.0.4'
+    compile 'com.facebook.android:facebook-login:4.27.0'
+    compile 'com.google.android.gms:play-services-auth:11.0.4'
+
     testCompile 'junit:junit:4.12'
 }
+apply plugin: 'com.google.gms.google-services'

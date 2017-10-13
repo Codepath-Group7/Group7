@@ -1,6 +1,6 @@
 package com.codepath.com.sffoodtruck.data.remote;
 
-import com.codepath.com.sffoodtruck.data.model.AccessToken;
+import com.codepath.com.sffoodtruck.data.model.YelpAccessToken;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -16,7 +16,7 @@ public interface LoginService {
     @Headers("content-type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST("/oauth2/token")
-    Call<AccessToken> getAccessToken(
+    Call<YelpAccessToken> getAccessToken(
             @Field("client_id") String client_id,
             @Field("client_secret") String client_secret,
             @Field("grant_type") String grantType);
