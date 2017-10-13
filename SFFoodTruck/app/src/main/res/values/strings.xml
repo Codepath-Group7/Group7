@@ -6,6 +6,7 @@
     <string name="client_key">FC95QmoTCZxQjkvDJQdCaQ</string>
     <string name="client_secret">lAbNWQBzW7KbjnRiE3llCAJuJKpeexkil34zf1joudfqz0D6YWKoDBGInUXVqDxb</string>
     <string name="settings_menu">Settings</string>
+    <string name="location_rationale">We need your location to find food trucks around you.</string>
     <string name="navigation_view_header_title">User Name</string>
     <string name="navigation_view_header_subtitle">User Email address</string>
     <string name="action_settings">Settings</string>
