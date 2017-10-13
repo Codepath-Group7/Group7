@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding mBinding;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,13 +77,25 @@ public class LoginActivity extends AppCompatActivity {
                 // ...
             }
         });
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user!=null){
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                }
+                else{
+                    Log.d(TAG,"User not logged in");
+                }
+            }
+        };
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -95,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -175,5 +188,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
