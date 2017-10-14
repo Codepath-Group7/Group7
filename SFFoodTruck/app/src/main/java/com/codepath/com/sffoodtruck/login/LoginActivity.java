@@ -1,11 +1,12 @@
 package com.codepath.com.sffoodtruck.login;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
+import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.AccessToken;
@@ -29,12 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Button btn = (Button) findViewById(R.id.button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    setUpLogin();
-            }
-        });
+        btn.setOnClickListener(view -> setUpLogin());
     }
 
     private void setUpLogin() {
@@ -56,8 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                             ,accessToken.getAccessToken()
                             ,accessToken.getTokenType());
 
+                    startNextActivity();
                     //Just to test the OAuth flow.
-                    testSearchApiRequest();
+                   // testSearchApiRequest();
 
                     Log.d(TAG,accessToken.getAccessToken() + " is the access token: "
                             + accessToken.getTokenType() );
@@ -72,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG,"Failed" ,t);
             }
         });
+    }
+
+    private void startNextActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     private void testSearchApiRequest() {
