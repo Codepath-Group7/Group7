@@ -68,6 +68,7 @@ dependencies {
 
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4' // Plain MVP
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
+    compile 'com.google.maps.android:android-maps-utils:0.5'
 
     final GOOGLE_PLAY_SERVICES_VERSION = '11.4.2'
     compile "com.google.android.gms:play-services-maps:$GOOGLE_PLAY_SERVICES_VERSION"
