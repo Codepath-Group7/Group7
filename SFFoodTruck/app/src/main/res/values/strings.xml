@@ -20,9 +20,6 @@
     <string name="navigation_view_header_subtitle">User Email address</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Google maps api key -->
-    <string name="google_maps_api_key">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
-
     <!--Setting the preferences labels -->
     <string name="pref_push_notification">Push Notifications</string>
     <string name="pref_suggestion_label">Food Truck Suggestion</string>

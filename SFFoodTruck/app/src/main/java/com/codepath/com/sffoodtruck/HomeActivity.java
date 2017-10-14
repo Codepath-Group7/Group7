@@ -49,6 +49,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
+                    //TODO: Integrate Map screen as Fragment in Home screen
+                    FoodTruckMapActivity.start(HomeActivity.this);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
