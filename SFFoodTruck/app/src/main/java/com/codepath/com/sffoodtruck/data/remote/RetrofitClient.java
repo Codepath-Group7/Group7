@@ -3,8 +3,11 @@ package com.codepath.com.sffoodtruck.data.remote;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.codepath.com.sffoodtruck.BuildConfig;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -58,6 +61,12 @@ public class RetrofitClient {
             throw new Exception("context cannot be null");
         } catch (Exception e) {
             Log.d(TAG,"Context cannot be null inside createService",e);
+        }
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(loggingInterceptor);
         }
 
         String authToken = QueryPreferences.getAccessToken(context);
