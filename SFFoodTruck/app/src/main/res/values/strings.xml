@@ -8,6 +8,9 @@
 
     <string name="facebook_app_id">349378388841351</string>
     <string name="fb_login_protocol_scheme">fb349378388841351</string>
-
-
+    <string name="google_web_client_id">1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com</string>
+    <string name="label_logout">Logout</string>
+    <string name="label_loggin_in">Loggin In</string>
+    <string name="google_btn_text">Sign in with Google</string>
+    <string name="facebook_btn_text">Continue with Facebook</string>
 </resources>
