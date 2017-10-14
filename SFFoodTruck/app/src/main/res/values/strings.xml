@@ -11,7 +11,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- Google maps api key -->
-    <string name="google_maps_api_key">AIzaSyChdZa2eT9JA1iCwLbWpTGSc87asa9XKbk</string>
+    <string name="google_maps_api_key">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
 
     <!--Setting the preferences labels -->
     <string name="pref_push_notification">Push Notifications</string>
@@ -19,11 +19,22 @@
     <string name="pref_suggestion_off">Suggestions for Food trucks are off</string>
     <string name="pref_suggestion_on">Suggestions for food truck are active</string>
     <string name="pref_suggestions_key">suggestions_key</string>
+
     <string name="pref_deals_key">new_deals_key</string>
     <string name="pref_new_deals_summary_off">Activate to get new deal alerts</string>
     <string name="pref_new_deals_summary_on">New deals notifications are active</string>
-    <string name="pref_location">Location</string>
     <string name="pref_new_deals_label">New Deals</string>
+
+    <string name="pref_location">Location</string>
+
+    <string name="pref_bg_loc_key">background_location_key</string>
+    <string name="pref_bg_loc_summary_off">Turn it on to receive location based suggestions</string>
+    <string name="pref_bg_loc_summary_on">Location based suggestions are active</string>
+    <string name="pref_bg_loc_label">Background Location</string>
+
+    <string name="pref_location_picker_label">Preferred Location</string>
+    <string name="pref_location_picker_key">pref_location_key</string>
+    <string name="pref_location_picker_summary">Select your preferred location</string>
 
 
 </resources>

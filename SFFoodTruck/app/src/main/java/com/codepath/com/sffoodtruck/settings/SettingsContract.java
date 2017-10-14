@@ -7,11 +7,11 @@ package com.codepath.com.sffoodtruck.settings;
 public interface SettingsContract {
 
     interface View{
-
+        void showPlacePicker();
     }
 
 
     interface Presenter{
-
+        void loadMap();
     }
 }
