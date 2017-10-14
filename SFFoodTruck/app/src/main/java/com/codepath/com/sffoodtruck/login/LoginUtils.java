@@ -1,9 +1,7 @@
 package com.codepath.com.sffoodtruck.login;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
@@ -12,15 +10,6 @@ import com.codepath.com.sffoodtruck.data.model.YelpAccessToken;
 import com.codepath.com.sffoodtruck.data.remote.LoginService;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
-import com.facebook.AccessToken;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import retrofit2.Call;
 import retrofit2.Callback;
