@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null){
                     hideProgressDialog();
-                    setUpLogin();
+                    LoginUtils.getYelpAccessToken(LoginActivity.this);
                     startHomeActivity();
                 }
                 else{
@@ -179,68 +179,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         registerAuthenticationWithFirebase(credential);
 
-    }
-
-    private void setUpLogin() {
-        LoginService service = RetrofitClient
-                .getInstance()
-                .getRetrofit()
-                .create(LoginService.class);
-        Call<YelpAccessToken> call = service.getAccessToken(getString(R.string.client_key),
-                getString(R.string.client_secret),
-                "authorization_code");
-
-        call.enqueue(new Callback<YelpAccessToken>() {
-            @Override
-            public void onResponse(Call<YelpAccessToken> call, Response<YelpAccessToken> response) {
-                YelpAccessToken accessToken = response.body();
-                if(accessToken != null){
-
-                    QueryPreferences.storeAccessToken(LoginActivity.this
-                            ,accessToken.getAccessToken()
-                            ,accessToken.getTokenType());
-
-                    //Just to test the OAuth flow.
-                    testSearchApiRequest();
-
-                    Log.d(TAG,accessToken.getAccessToken() + " is the access token: "
-                            + accessToken.getTokenType() );
-                }
-                else{
-                    Log.d(TAG,"accessToken failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<YelpAccessToken> call, Throwable t) {
-                Log.e(TAG,"Failed" ,t);
-            }
-        });
-    }
-
-    private void testSearchApiRequest() {
-        SearchApi services = RetrofitClient
-                .createService(SearchApi.class,LoginActivity.this);
-        Call<SearchResults> callResults = services.getSearchResults("95112");
-        callResults.enqueue(new Callback<SearchResults>() {
-            @Override
-            public void onResponse(Call<SearchResults> call,
-                                   Response<SearchResults> response) {
-                if(response.body() == null){
-                    Log.d(TAG,"response has failed "
-                            + response.code());
-                    return;
-                }
-
-                Log.d(TAG,response.body()
-                        .getBusinesses().get(0).getName());
-            }
-
-            @Override
-            public void onFailure(Call<SearchResults> call, Throwable t) {
-                Log.e(TAG,"Failed",t)
-                ;                                  }
-        });
     }
 
     @Override
