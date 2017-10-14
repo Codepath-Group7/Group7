@@ -79,6 +79,7 @@ dependencies {
     final GOOGLE_PLAY_SERVICES_VERSION = '11.4.2'
     compile "com.google.android.gms:play-services-maps:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-location:$GOOGLE_PLAY_SERVICES_VERSION"
+    compile "com.google.android.gms:play-services-places:$GOOGLE_PLAY_SERVICES_VERSION"
 
     testCompile 'junit:junit:4.12'
 }
