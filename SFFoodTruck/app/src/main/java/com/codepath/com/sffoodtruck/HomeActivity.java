@@ -41,6 +41,21 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
             };
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        setContentView(R.layout.activity_home);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        changeFragment(R.id.navigation_home);
+    }
+
     private void changeFragment(int itemViewId) {
         Fragment newFragment = null;
 
@@ -59,24 +74,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 .findFragmentById(R.id.content);
         if (newFragment.getClass().isInstance(currentFragment)) return;
 
-        /*getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, newFragment)
-                .commit();*/
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                 newFragment,R.id.content);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_home);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override
