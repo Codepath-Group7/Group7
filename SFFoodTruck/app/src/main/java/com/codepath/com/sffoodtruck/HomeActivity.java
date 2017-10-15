@@ -1,5 +1,6 @@
 package com.codepath.com.sffoodtruck;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,14 +9,18 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.codepath.com.sffoodtruck.login.LoginActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsActivity;
+import com.codepath.com.sffoodtruck.settings.SettingsFragment;
 import com.crashlytics.android.Crashlytics;
+
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -156,4 +161,5 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

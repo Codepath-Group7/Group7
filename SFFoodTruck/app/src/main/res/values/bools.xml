@@ -2,4 +2,5 @@
 <resources>
     <bool name="pref_default_suggestions">true</bool>
     <bool name="pref_default_new_deals">true</bool>
+    <bool name="pref_default_bg_loc">false</bool>
 </resources>

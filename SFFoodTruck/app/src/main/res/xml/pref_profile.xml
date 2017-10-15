@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="@string/pref_push_notification">
         <SwitchPreferenceCompat
@@ -20,7 +21,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_location">
-
+        <SwitchPreferenceCompat
+            android:defaultValue = "@bool/pref_default_bg_loc"
+            android:key = "@string/pref_bg_loc_key"
+            android:summaryOff= "@string/pref_bg_loc_summary_off"
+            android:summaryOn = "@string/pref_bg_loc_summary_on"
+            android:title ="@string/pref_bg_loc_label"
+            />
+        <Preference
+            android:title="@string/pref_location_picker_label"
+            android:key="@string/pref_location_picker_key"
+            android:summary="@string/pref_location_picker_summary"
+            />
     </PreferenceCategory>
 
 
