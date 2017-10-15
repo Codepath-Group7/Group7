@@ -1,5 +1,8 @@
 package com.codepath.com.sffoodtruck.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by saip92 on 10/11/2017.
  */
 
-public class Location {
+public class Location implements Parcelable {
     @SerializedName("city")
     @Expose
     private String city;
@@ -85,4 +88,46 @@ public class Location {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.city);
+        dest.writeString(this.country);
+        dest.writeString(this.address2);
+        dest.writeString(this.address3);
+        dest.writeString(this.state);
+        dest.writeString(this.address1);
+        dest.writeString(this.zipCode);
+    }
+
+    public Location() {
+    }
+
+    protected Location(Parcel in) {
+        this.city = in.readString();
+        this.country = in.readString();
+        this.address2 = in.readString();
+        this.address3 = in.readString();
+        this.state = in.readString();
+        this.address1 = in.readString();
+        this.zipCode = in.readString();
+    }
+
+    public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {
+        @Override
+        public Location createFromParcel(Parcel source) {
+            return new Location(source);
+        }
+
+        @Override
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
 }

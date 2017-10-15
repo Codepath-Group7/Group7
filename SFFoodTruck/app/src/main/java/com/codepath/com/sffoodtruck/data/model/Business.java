@@ -1,15 +1,19 @@
 package com.codepath.com.sffoodtruck.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by saip92 on 10/11/2017.
  */
 
-public class Business {
+public class Business implements Parcelable {
     @SerializedName("rating")
     @Expose
     private Float rating;
@@ -172,4 +176,61 @@ public class Business {
     public void setTransactions(List<String> transactions) {
         this.transactions = transactions;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.rating);
+        dest.writeString(this.price);
+        dest.writeString(this.phone);
+        dest.writeString(this.id);
+        dest.writeValue(this.isClosed);
+        dest.writeList(this.categories);
+        dest.writeValue(this.reviewCount);
+        dest.writeString(this.name);
+        dest.writeString(this.url);
+        dest.writeParcelable(this.coordinates, flags);
+        dest.writeString(this.imageUrl);
+        dest.writeParcelable(this.location, flags);
+        dest.writeValue(this.distance);
+        dest.writeStringList(this.transactions);
+    }
+
+    public Business() {
+    }
+
+    protected Business(Parcel in) {
+        this.rating = (Float) in.readValue(Float.class.getClassLoader());
+        this.price = in.readString();
+        this.phone = in.readString();
+        this.id = in.readString();
+        this.isClosed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.categories = new ArrayList<Category>();
+        in.readList(this.categories, Category.class.getClassLoader());
+        this.reviewCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.url = in.readString();
+        this.coordinates = in.readParcelable(Coordinates.class.getClassLoader());
+        this.imageUrl = in.readString();
+        this.location = in.readParcelable(Location.class.getClassLoader());
+        this.distance = (Float) in.readValue(Float.class.getClassLoader());
+        this.transactions = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<Business> CREATOR = new Parcelable.Creator<Business>() {
+        @Override
+        public Business createFromParcel(Parcel source) {
+            return new Business(source);
+        }
+
+        @Override
+        public Business[] newArray(int size) {
+            return new Business[size];
+        }
+    };
 }

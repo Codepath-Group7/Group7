@@ -18,6 +18,7 @@ import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
 import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -70,8 +71,12 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
         mBinding.rvFoodTruckFeed.setAdapter(mAdapter);
         ItemClickSupport.addTo(mBinding.rvFoodTruckFeed)
                 .setOnItemClickListener((recyclerView, position, v) ->
-                        Log.d(TAG,mAdapter.getBusinessForPos(position).getName()
-                                + " Got this name"));
+                {
+                    Log.d(TAG,"Opening detail view for "
+                            + mAdapter.getBusinessForPos(position).getName());
+                    startActivity(BusinessDetailActivity
+                            .newIntent(getActivity(),mAdapter.getBusinessForPos(position)));
+                });
     }
 
     @Override

@@ -12,4 +12,5 @@
     <dimen name="imageGradient">100dp</dimen>
     <dimen name="margin8">8dp</dimen>
     <dimen name="margin16">16dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
 </resources>

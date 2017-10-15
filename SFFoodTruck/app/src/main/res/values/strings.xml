@@ -51,4 +51,12 @@
     <string name="number_of_reviews_text">351 reviews</string>
     <string name="cuisine_type">American ( Traditional )</string>
 
+    <string name="tools_business_name">Agave Mexican Restaurant</string>
+    <string name="tools_business_desc"><![CDATA[Lounges, American, Venue & Event Spaces]]></string>
+    <string name="tools_business_hrs">12 PM - 10 PM</string>
+    <string name="tools_business_address">101 E San Fernando St, San Jose, CA 95112</string>
+    <string name="tools_business_phone">408-714-9133</string>
+    <string name="label_call">Call</string>
+    <string name="label_directions">Get Directions</string>
+
 </resources>
