@@ -1,7 +1,9 @@
 package com.codepath.com.sffoodtruck.ui.base.mvp;
 
+import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.BR;
@@ -10,36 +12,31 @@ import com.codepath.com.sffoodtruck.BR;
  * Created by saip92 on 10/15/2017.
  */
 
-public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseViewHolder> {
+public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ViewDataBinding binding = DataBindingUtil.inflate(layoutInflater,
+                viewType,parent,false);
+        return new BaseViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-
+        Object obj = getObjForPosition(position);
+        holder.bind(obj);
     }
 
     @Override
-    public int getItemCount() {
-        return 0;
+    public int getItemViewType(int position) {
+        return getLayoutIdForPosition(position);
     }
 
-    class BaseViewHolder extends RecyclerView.ViewHolder{
-        private final ViewDataBinding mBinding;
+    protected abstract int getLayoutIdForPosition(int position);
 
-        public BaseViewHolder(ViewDataBinding binding){
-            super(binding.getRoot());
-            mBinding = binding;
-        }
+    protected abstract Object getObjForPosition(int position);
 
-        public void bind(Object obj){
-            mBinding.setVariable(BR._all,obj);
-        }
-
-    }
 
 }

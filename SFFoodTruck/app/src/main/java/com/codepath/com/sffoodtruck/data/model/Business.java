@@ -97,6 +97,14 @@ public class Business {
         return categories;
     }
 
+    public String getCategory(){
+        if(categories == null || categories.size() == 0){
+            return null;
+        }else{
+            return categories.get(0).getTitle();
+        }
+    }
+
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }

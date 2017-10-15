@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="obj" type="com.codepath.com.sffoodtruck.data.model.Business"/>
@@ -23,12 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bannerImage"
                 android:src="@color/colorPrimary"
+                app:imageUrl="@{obj.imageUrl}"
+                app:error="@{@drawable/placeholder_350x128}"
                 />
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/bannerImage"
                 android:layout_gravity="end"
-                android:alpha="0.4f"
+                android:alpha="0.4"
                 android:background="@drawable/image_view_gradient"
                 />
             <TextView
@@ -87,6 +90,7 @@
             android:padding="@dimen/padding8"
             android:layout_alignBaseline="@id/tvRatings"
             tools:text="@string/cuisine_type"
+            android:text="@{obj.category ?? ` `}"
             />
 
     </RelativeLayout>

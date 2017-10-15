@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
+import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.crashlytics.android.Crashlytics;
 
 import com.facebook.login.LoginManager;
@@ -43,7 +45,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                            new FoodTruckFeedFragment(),R.id.content);
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
