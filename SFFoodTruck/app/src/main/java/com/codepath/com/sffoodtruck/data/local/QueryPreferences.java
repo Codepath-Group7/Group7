@@ -33,6 +33,7 @@ public class QueryPreferences {
                 .edit()
                 .putString(context.getString(R.string.pref_location_picker_key),locationAddr)
                 .apply();
+
     }
 
     public static String getLocationPref(Context context){

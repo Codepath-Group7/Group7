@@ -16,6 +16,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by saip92 on 10/13/2017.
@@ -74,6 +75,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 //Updating the preference of location manually
                 QueryPreferences.storeLocationPref(getActivity(),
                         place.getAddress().toString());
+                LatLng latLng = place.getLatLng();
+                Log.d(TAG,"LatLng" + latLng.latitude + ", " +latLng.longitude);
             }
         }
     }
