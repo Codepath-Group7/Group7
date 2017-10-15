@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.codepath.com.sffoodtruck.login.LoginActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsFragment;
+import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
 import com.crashlytics.android.Crashlytics;
 
 import com.facebook.login.LoginManager;
