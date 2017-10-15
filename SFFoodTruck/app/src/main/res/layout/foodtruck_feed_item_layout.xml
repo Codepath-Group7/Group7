@@ -27,7 +27,7 @@
                 android:layout_height="@dimen/bannerImage"
                 android:src="@color/colorPrimary"
                 app:imageUrl="@{obj.imageUrl}"
-                app:error="@{@drawable/placeholder_350x128}"
+                app:error="@{@drawable/placeholder_1000x200}"
                 />
             <View
                 android:layout_width="wrap_content"
