@@ -1,25 +1,23 @@
 package com.codepath.com.sffoodtruck;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.codepath.com.sffoodtruck.login.LoginActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsActivity;
-import com.codepath.com.sffoodtruck.settings.SettingsFragment;
-import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
+import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.crashlytics.android.Crashlytics;
 
 import com.facebook.login.LoginManager;
@@ -48,10 +46,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_map:
                     mTextMessage.setText(R.string.title_dashboard);
-                    //TODO: Integrate Map screen as Fragment in Home screen
-                    FoodTruckMapActivity.start(HomeActivity.this);
+                    changeFragment(R.id.navigation_map);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -61,6 +58,25 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         }
 
     };
+
+    private void changeFragment(int itemViewId) {
+        Fragment newFragment = null;
+
+        switch (itemViewId) {
+            case R.id.navigation_map:
+                newFragment = FoodTruckMapFragment.newInstance();
+        }
+
+        if (newFragment == null) return;
+
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(R.id.content);
+        if (newFragment.getClass().isInstance(currentFragment)) return;
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, newFragment)
+                .commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
