@@ -34,4 +34,11 @@ public class FoodTruckFeedAdapter extends SingleLayoutAdapter {
         mBusinesses.addAll(businesses);
         notifyDataSetChanged();
     }
+
+    public Business getBusinessForPos(int pos){
+        if(pos >= 0 && pos < mBusinesses.size())
+            return mBusinesses.get(pos);
+        else
+            return null;
+    }
 }

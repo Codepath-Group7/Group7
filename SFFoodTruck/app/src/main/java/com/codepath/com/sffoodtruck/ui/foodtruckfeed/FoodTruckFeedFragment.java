@@ -18,6 +18,7 @@ import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,10 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
     private void setupRecyclerView() {
         mBinding.rvFoodTruckFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.rvFoodTruckFeed.setAdapter(mAdapter);
+        ItemClickSupport.addTo(mBinding.rvFoodTruckFeed)
+                .setOnItemClickListener((recyclerView, position, v) ->
+                        Log.d(TAG,mAdapter.getBusinessForPos(position).getName()
+                                + " Got this name"));
     }
 
     @Override
