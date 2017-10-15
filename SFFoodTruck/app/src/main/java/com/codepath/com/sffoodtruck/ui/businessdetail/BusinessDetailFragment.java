@@ -69,7 +69,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvBusinessAddress.setText(mBusiness.getLocation().getAddress1());
         mBinding.tvBusinessDesc.setText(mBusiness.getCategories().get(0).getTitle());
         mBinding.tvBusinessPhone.setText(mBusiness.getPhone());
-
+        mBinding.rbFoodTruckRating.setRating(mBusiness.getRating());
         Picasso.with(getActivity())
                 .load(mBusiness.getImageUrl())
                 .fit()
