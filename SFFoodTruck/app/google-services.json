@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1089068767481",
+    "firebase_url": "https://foodtrux-84caa.firebaseio.com",
+    "project_id": "foodtrux-84caa",
+    "storage_bucket": "foodtrux-84caa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089068767481:android:d49872bcec00efc8",
+        "android_client_info": {
+          "package_name": "com.codepath.com.sffoodtruck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089068767481-7nj3g6rud42kb4aegla0nc1tbhtf2ac3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codepath.com.sffoodtruck",
+            "certificate_hash": "45d9f6ab75c689336439ea6e8581dd712dae3863"
+          }
+        },
+        {
+          "client_id": "1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALYjOV_QoEnpG_bNnUS824o-ORqs6CAWA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
