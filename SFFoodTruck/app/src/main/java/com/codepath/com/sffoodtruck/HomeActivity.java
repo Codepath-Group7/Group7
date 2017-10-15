@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.codepath.com.sffoodtruck.login.LoginActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.settings.SettingsFragment;
+import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
 import com.crashlytics.android.Crashlytics;
 
 import com.facebook.login.LoginManager;
@@ -49,6 +50,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
+                    //TODO: Integrate Map screen as Fragment in Home screen
+                    FoodTruckMapActivity.start(HomeActivity.this);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);

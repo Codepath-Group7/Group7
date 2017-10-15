@@ -15,12 +15,10 @@
     <string name="facebook_btn_text">Continue with Facebook</string>
 
     <string name="settings_menu">Settings</string>
+    <string name="location_rationale">We need your location to find food trucks around you.</string>
     <string name="navigation_view_header_title">User Name</string>
     <string name="navigation_view_header_subtitle">User Email address</string>
     <string name="action_settings">Settings</string>
-
-    <!-- Google maps api key -->
-    <string name="google_maps_api_key">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
 
     <!--Setting the preferences labels -->
     <string name="pref_push_notification">Push Notifications</string>
