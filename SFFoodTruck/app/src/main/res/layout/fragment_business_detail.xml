@@ -48,12 +48,21 @@
                         android:layout_below="@id/tv_business_name"
                         android:padding="@dimen/padding_4"
                         tools:text="@string/tools_business_desc"/>
-
+                    <android.support.v7.widget.AppCompatRatingBar
+                        android:id="@+id/rbFoodTruckRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="?attr/ratingBarStyleSmall"
+                        android:isIndicator="true"
+                        tools:rating="5"
+                        android:layout_below="@id/tv_business_desc"
+                        android:layout_marginTop="@dimen/margin8"
+                        android:layout_marginBottom="@dimen/margin8"/>
                     <TextView
                         android:id="@+id/tv_business_hrs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_business_desc"
+                        android:layout_below="@id/rbFoodTruckRating"
                         android:padding="@dimen/padding_4"
                         tools:text="@string/tools_business_hrs"/>
 
@@ -91,9 +100,10 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rl_call_view"
+                    android:id="@+id/rl_directions_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin8">
 
                     <ImageView
                         android:id="@+id/iv_directions_icon"
@@ -114,11 +124,19 @@
                         android:textStyle="bold"/>
 
                 </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_directions_view"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="1dp"
+                    android:background="@color/colorDivider"
+                    android:id="@+id/first_divider"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_marginBottom="@dimen/margin8"/>
+                <RelativeLayout
+                    android:id="@+id/rl_call_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_marginBottom="@dimen/margin8">
 
                     <ImageView
                         android:id="@+id/iv_call_icon"
