@@ -89,6 +89,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 googleSignOut();
                 startLoginActivity();
                 return true;
+            case R.id.action_settings:
+                Intent startSettingsActivity =
+                        new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -137,24 +142,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         throw new RuntimeException("This is a crash check it, small change");
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_settings,menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.action_settings:
-                Intent startSettingsActivity =
-                        new Intent(this, SettingsActivity.class);
-                startActivity(startSettingsActivity);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
     @Override

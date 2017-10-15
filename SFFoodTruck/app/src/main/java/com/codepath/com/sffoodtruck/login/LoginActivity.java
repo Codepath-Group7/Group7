@@ -81,14 +81,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     setUpLogin();
             }
         });*/
-        mBinding.facebookBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initializeFacebookLoginManager();
-            }
-        });
-        btn.setOnClickListener(view -> setUpLogin());
-    }
+        mBinding.facebookBtn.setOnClickListener(view -> initializeFacebookLoginManager());
 
 
         /*
@@ -104,37 +97,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .requestIdToken(getString(R.string.google_web_client_id))
                 .requestEmail()
                 .build();
-                    startNextActivity();
-                    //Just to test the OAuth flow.
-                   // testSearchApiRequest();
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mBinding.googleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                googleSignIn();
-            }
-        });
+        mBinding.googleBtn.setOnClickListener(view -> googleSignIn());
         /*
         End of Google Login
          */
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user!=null){
-                    hideProgressDialog();
-                    LoginUtils.getYelpAccessToken(LoginActivity.this);
-                    startHomeActivity();
-                }
-                else{
-                    Log.d(TAG,"User not logged in");
-                }
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if(user!=null){
+                hideProgressDialog();
+                LoginUtils.getYelpAccessToken(LoginActivity.this);
+                startHomeActivity();
+            }
+            else{
+                Log.d(TAG,"User not logged in");
             }
         };
     }
@@ -226,21 +209,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void registerAuthenticationWithFirebase(AuthCredential credential){
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     }
+
+                    // ...
                 });
     }
 
