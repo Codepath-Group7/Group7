@@ -19,6 +19,7 @@ import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,6 +41,9 @@ import retrofit2.Response;
 public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContract.MvpView>
         implements FoodTruckMapContract.Presenter {
     private static final String TAG = FoodTruckMapPresenter.class.getSimpleName();
+
+    private static final long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private static final long FASTEST_INTERVAL = 2000; /* 2 sec */
 
     @Override
     public void loadFoodTrucks(final Context context) {
@@ -133,22 +137,27 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
     }
 
     private void getCurrentLocation(final FusedLocationProviderClient client, final ResponseHandler<Location> responseHandler) {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        locationRequest.setNumUpdates(1); // only need one location
+
         //noinspection MissingPermission
-        client.requestLocationUpdates(LocationRequest.create(), null)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        Log.d(TAG, "getCurrentLocation() - onComplete");
-                        Location location = (Location) task.getResult();
-                        if (responseHandler != null) responseHandler.onComplete(location);
-                    }
-                });
+        client.requestLocationUpdates(locationRequest, new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Log.d(TAG, "getCurrentLocation() - onComplete");
+                Location location = locationResult.getLastLocation();
+                if (responseHandler != null) responseHandler.onComplete(location);
+            }
+        }, null).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
+            }
+        });
     }
 
     /**
