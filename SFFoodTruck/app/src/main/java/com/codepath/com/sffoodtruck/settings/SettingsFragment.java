@@ -68,8 +68,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if(resultCode == Activity.RESULT_OK){
                 Place place = PlacePicker.getPlace(getActivity(),data);
                 locationPref.setSummary(place.getAddress());
-                /*String toastMsg = String.format("Place: %s", place.getName());
-                Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();*/
             }
         }
     }
