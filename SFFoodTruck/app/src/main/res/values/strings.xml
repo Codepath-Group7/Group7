@@ -43,4 +43,11 @@
     <string name="pref_location_picker_key">pref_location_key</string>
     <string name="pref_location_picker_summary">Select your preferred location</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="distance">480 ft</string>
+    <string name="food_truck_title">Delux Eatery and Drinkery</string>
+    <string name="number_of_reviews_text">351 reviews</string>
+    <string name="cuisine_type">American ( Traditional )</string>
+
 </resources>

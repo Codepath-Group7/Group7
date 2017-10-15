@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.settings;
+package com.codepath.com.sffoodtruck.ui.settings;
 
 import android.app.Activity;
 import android.content.Intent;
