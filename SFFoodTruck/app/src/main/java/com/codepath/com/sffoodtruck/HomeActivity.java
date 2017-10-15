@@ -2,7 +2,6 @@ package com.codepath.com.sffoodtruck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -13,13 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
-import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.crashlytics.android.Crashlytics;
@@ -37,35 +32,14 @@ import io.fabric.sdk.android.Fabric;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
-    private TextView mTextMessage;
     private GoogleApiClient mGoogleApiClient;
     private final static String TAG = HomeActivity.class.getSimpleName();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                            new FoodTruckFeedFragment(),R.id.content);
-                    return true;
-                case R.id.navigation_map:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    changeFragment(R.id.navigation_map);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    Log.d(TAG,"Check this "
-                            + PreferenceManager.getDefaultSharedPreferences(HomeActivity.this)
-                            .getString(getString(R.string.pref_location_picker_key),"check this"));
-                    return true;
-            }
-            return false;
-        }
-
-    };
+            = item -> {
+                changeFragment(item.getItemId());
+                return true;
+            };
 
     private void changeFragment(int itemViewId) {
         Fragment newFragment = null;
@@ -73,6 +47,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         switch (itemViewId) {
             case R.id.navigation_map:
                 newFragment = FoodTruckMapFragment.newInstance();
+                break;
+            case R.id.navigation_home:
+                newFragment = FoodTruckFeedFragment.newInstance();
+                break;
         }
 
         if (newFragment == null) return;
@@ -81,9 +59,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 .findFragmentById(R.id.content);
         if (newFragment.getClass().isInstance(currentFragment)) return;
 
-        getSupportFragmentManager().beginTransaction()
+        /*getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content, newFragment)
-                .commit();
+                .commit();*/
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                newFragment,R.id.content);
     }
 
     @Override
@@ -95,7 +75,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -168,13 +147,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         startActivity(intent);
         finish();
     }
-
-    public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash check it, small change");
-    }
-
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

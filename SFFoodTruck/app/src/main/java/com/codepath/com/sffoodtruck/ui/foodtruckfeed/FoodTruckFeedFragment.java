@@ -37,6 +37,11 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
     }
 
 
+    public static FoodTruckFeedFragment newInstance(){
+        return new FoodTruckFeedFragment();
+    }
+
+
     @Override
     public FoodTruckFeedContract.Presenter createPresenter() {
         return new FoodTruckFeedPresenter();
