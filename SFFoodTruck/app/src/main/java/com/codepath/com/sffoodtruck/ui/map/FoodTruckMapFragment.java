@@ -1,10 +1,12 @@
 package com.codepath.com.sffoodtruck.ui.map;
 
 import android.Manifest;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.ui.IconGenerator;
@@ -173,8 +176,12 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
     private void addFoodTruckToMap(FoodTruckMapViewModel viewModel) {
         String name = viewModel.getName();
-        BitmapDescriptor icon = MapUtils.createBubble(
-                getContext(), IconGenerator.STYLE_GREEN, name);
+
+        IconGenerator iconGenerator = new IconGenerator(getContext());
+        iconGenerator.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        iconGenerator.setTextAppearance(getContext(), R.style.amu_Bubble_TextAppearance_Light);
+        Bitmap bitmap = iconGenerator.makeIcon(name);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
 
         Coordinates coordinates = viewModel.getCoordinates();
         if (coordinates == null) return; // TODO: handle locations with no coordinates
