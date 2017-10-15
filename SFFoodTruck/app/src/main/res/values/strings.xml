@@ -5,6 +5,15 @@
     <string name="title_notifications">Notifications</string>
     <string name="client_key">FC95QmoTCZxQjkvDJQdCaQ</string>
     <string name="client_secret">lAbNWQBzW7KbjnRiE3llCAJuJKpeexkil34zf1joudfqz0D6YWKoDBGInUXVqDxb</string>
+
+    <string name="facebook_app_id">349378388841351</string>
+    <string name="fb_login_protocol_scheme">fb349378388841351</string>
+    <string name="google_web_client_id">1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com</string>
+    <string name="label_logout">Logout</string>
+    <string name="label_loggin_in">Loggin In</string>
+    <string name="google_btn_text">Sign in with Google</string>
+    <string name="facebook_btn_text">Continue with Facebook</string>
+
     <string name="settings_menu">Settings</string>
     <string name="navigation_view_header_title">User Name</string>
     <string name="navigation_view_header_subtitle">User Email address</string>
@@ -24,6 +33,5 @@
     <string name="pref_new_deals_summary_on">New deals notifications are active</string>
     <string name="pref_location">Location</string>
     <string name="pref_new_deals_label">New Deals</string>
-
 
 </resources>

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by saip92 on 10/11/2017.
  */
 
-public class AccessToken {
+public class YelpAccessToken {
 
     @SerializedName("access_token")
     @Expose
