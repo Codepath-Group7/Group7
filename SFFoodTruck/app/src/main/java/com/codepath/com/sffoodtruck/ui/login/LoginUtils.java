@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.login;
+package com.codepath.com.sffoodtruck.ui.login;
 
 import android.content.Context;
 import android.util.Log;

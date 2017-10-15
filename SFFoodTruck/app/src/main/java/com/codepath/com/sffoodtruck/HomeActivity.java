@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -15,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.codepath.com.sffoodtruck.login.LoginActivity;
-import com.codepath.com.sffoodtruck.settings.SettingsActivity;
+import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
+import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
+import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
+import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapActivity;
+import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.crashlytics.android.Crashlytics;
 
@@ -44,7 +48,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                            new FoodTruckFeedFragment(),R.id.content);
                     return true;
                 case R.id.navigation_map:
                     mTextMessage.setText(R.string.title_dashboard);
@@ -52,6 +57,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
+                    Log.d(TAG,"Check this "
+                            + PreferenceManager.getDefaultSharedPreferences(HomeActivity.this)
+                            .getString(getString(R.string.pref_location_picker_key),"check this"));
                     return true;
             }
             return false;
@@ -103,10 +111,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_logout:
-                LoginManager.getInstance().logOut();
-                FirebaseAuth.getInstance().signOut();
-                googleSignOut();
-                startLoginActivity();
+                logout();
                 return true;
             case R.id.action_settings:
                 Intent startSettingsActivity =
@@ -115,6 +120,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        LoginManager.getInstance().logOut();
+        FirebaseAuth.getInstance().signOut();
+        googleSignOut();
+        startLoginActivity();
     }
 
     private void googleSignOut() {

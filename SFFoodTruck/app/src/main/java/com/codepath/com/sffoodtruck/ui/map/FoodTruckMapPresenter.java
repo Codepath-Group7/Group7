@@ -122,17 +122,11 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
     private void getLastLocation(FusedLocationProviderClient client, final ResponseHandler<Location> responseHandler) {
         //noinspection MissingPermission
         Task<Location> locationTask = client.getLastLocation();
-        locationTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
-            }
+        locationTask.addOnFailureListener(e -> {
+            if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
         });
-        locationTask.addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if (responseHandler != null) responseHandler.onComplete(task.getResult());
-            }
+        locationTask.addOnCompleteListener(task -> {
+            if (responseHandler != null) responseHandler.onComplete(task.getResult());
         });
     }
 
@@ -152,11 +146,8 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
                 Location location = locationResult.getLastLocation();
                 if (responseHandler != null) responseHandler.onComplete(location);
             }
-        }, null).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
-            }
+        }, null).addOnFailureListener(e -> {
+            if (responseHandler != null) responseHandler.onFailed(e.getMessage(), e);
         });
     }
 

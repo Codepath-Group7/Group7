@@ -9,4 +9,11 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
+    <style name="RatingBarStyle" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="android:minHeight">@dimen/ratingBarMinHeight</item>
+        <item name="android:maxHeight">@dimen/ratingBarMaxHeight</item>
+    </style>
+
+    <dimen name="ratingBarMinHeight">20dp</dimen>
+    <dimen name="ratingBarMaxHeight">24dp</dimen>
 </resources>

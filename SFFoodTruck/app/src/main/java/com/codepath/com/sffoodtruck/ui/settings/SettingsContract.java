@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.settings;
+package com.codepath.com.sffoodtruck.ui.settings;
 
 /**
  * Created by saip92 on 10/14/2017.
