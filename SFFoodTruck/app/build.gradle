@@ -68,7 +68,7 @@ dependencies {
     //social login dependencies
     compile 'com.google.firebase:firebase-auth:11.0.4'
     compile 'com.facebook.android:facebook-login:4.27.0'
-    compile 'com.google.android.gms:play-services-auth:11.0.4'
+
     compile 'com.android.support:preference-v7:25.3.1'
     compile 'pub.devrel:easypermissions:1.0.1'
 
@@ -76,10 +76,11 @@ dependencies {
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5'
 
-    final GOOGLE_PLAY_SERVICES_VERSION = '11.4.2'
+    final GOOGLE_PLAY_SERVICES_VERSION = '11.0.4'
     compile "com.google.android.gms:play-services-maps:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-location:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-places:$GOOGLE_PLAY_SERVICES_VERSION"
+    compile "com.google.android.gms:play-services-auth:$GOOGLE_PLAY_SERVICES_VERSION"
 
     testCompile 'junit:junit:4.12'
 }
