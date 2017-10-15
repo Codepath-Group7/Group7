@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1089068767481-qddtfdipigsk1dii0thlfj2ohkhbr1dh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codepath.com.sffoodtruck",
+            "certificate_hash": "99c29fb68ab88a074754c15380c8e130fded7560"
+          }
+        },
+        {
           "client_id": "1089068767481-q0agu8qnhpa2gcit97am9j5i0i0gid18.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
