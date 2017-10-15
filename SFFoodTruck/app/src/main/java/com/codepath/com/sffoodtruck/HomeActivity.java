@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -55,6 +56,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
+                    Log.d(TAG,"Check this "
+                            + PreferenceManager.getDefaultSharedPreferences(HomeActivity.this)
+                            .getString(getString(R.string.pref_location_picker_key),"check this"));
                     return true;
             }
             return false;

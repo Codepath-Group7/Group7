@@ -3,6 +3,7 @@ package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
@@ -28,6 +30,7 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
 
     private FragmentFoodTruckFeedBinding mBinding;
     private FoodTruckFeedAdapter mAdapter;
+    private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
 
     public FoodTruckFeedFragment() {
         // Required empty public constructor
