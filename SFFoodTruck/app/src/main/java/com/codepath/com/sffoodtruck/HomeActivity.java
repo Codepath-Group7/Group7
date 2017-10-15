@@ -91,10 +91,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_logout:
-                LoginManager.getInstance().logOut();
-                FirebaseAuth.getInstance().signOut();
-                googleSignOut();
-                startLoginActivity();
+                logout();
                 return true;
             case R.id.action_settings:
                 Intent startSettingsActivity =
@@ -103,6 +100,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        LoginManager.getInstance().logOut();
+        FirebaseAuth.getInstance().signOut();
+        googleSignOut();
+        startLoginActivity();
     }
 
     private void googleSignOut() {
