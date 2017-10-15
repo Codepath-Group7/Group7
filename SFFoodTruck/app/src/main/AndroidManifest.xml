@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.codepath.com.sffoodtruck">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
     <application
         android:allowBackup="true"
@@ -21,16 +25,11 @@
             android:name="io.fabric.ApiKey"
             android:value="ac2e5f506963b54a2c0c5425db1e93110a65ab5a"/>
 
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.LoginActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="https://github.com"
-                    android:scheme="com.codepath.com.sffoodtruck" />
             </intent-filter>
         </activity>
 
@@ -52,7 +51,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".settings.SettingsActivity"
+            android:parentActivityName=".HomeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                        android:value=".HomeActivity"/>
+        </activity>
 
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_api_key" />
     </application>
 
 </manifest>

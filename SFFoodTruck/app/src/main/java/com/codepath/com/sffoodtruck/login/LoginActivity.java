@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import android.os.Bundle;
+import android.widget.Button;
 
 import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
@@ -85,6 +87,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 initializeFacebookLoginManager();
             }
         });
+        btn.setOnClickListener(view -> setUpLogin());
+    }
 
 
         /*
@@ -95,10 +99,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Start of Google Login
          */
 
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.google_web_client_id))
                 .requestEmail()
                 .build();
+                    startNextActivity();
+                    //Just to test the OAuth flow.
+                   // testSearchApiRequest();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -136,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
     }
+
 
     //Responsible to handle the permissions required for login into facebook.
     private void initializeFacebookLoginManager() {
