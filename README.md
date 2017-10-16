@@ -1,26 +1,56 @@
-# Group7
+# Group Project *Food Trux*
 
-Description:
-	This is a one stop App for all food truck lovers. We customize and show food truck in and around your location. Find awesome food and drinks through our fun and elegant app.
+**Food Trux** is a one stop App for all food truck lovers. We customize and show food truck in and around your location. Find awesome food and drinks through our fun and elegant app. The app utilizes [Yelp REST API](https://www.yelp.com/developers/documentation/v3).
 
-Required User stories:
+The following **required** functionality is completed:
 
-* User should be able to login the app using either gmail or Facebook.
-* User should be able to see a list of food trucks on the home screen.
-* User should be able to see the food trucks in a map view.
-* The list of food trucks should sorted based on user’s location.
-* User should be able to search a cuisine or a specific food truck.
-* User can click on a food truck in list view or map view to see the details of the food trucks. The following should be shown:
-  * Business hours
-  * Pictures
-  * Ratings
-  * Reviews
-  * Address
-  * Cuisine
-* User can post photos and reviews about the food truck.
-* User can store his cuisine and location preferences in application settings.
+* [X] User should be able to login the app using either gmail or Facebook.
+* [X] User should be able to see a list of food trucks on the home screen.
+* [X] User should be able to see the food trucks in a map view.
+* [X] The list of food trucks should sorted based on user’s location.
+* [ ] User should be able to search a cuisine or a specific food truck.
+* [X] User can click on a food truck in list view or map view to see the details of the food trucks. The following should be shown:
+  * [ ] Business hours
+  * [ ] Pictures
+  * [X] Ratings
+  * [ ] Reviews
+  * [X] Address
+  * [ ] Cuisine
+* [ ] User can post photos and reviews about the food truck.
+* [X] User can store his cuisine and location preferences in application settings.
 
-Optional User stories:
-* Autocomplete keywords for search feature.
-* Filter results in the list view.
-* User in similar geo location can connect with each other through a chat room.
+The following **optional** functionality is completed:
+* [ ] Autocomplete keywords for search feature.
+* [ ] Filter results in the list view.
+* [ ] User in similar geo location can connect with each other through a chat room.
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+## Open-source libraries used
+
+- [Retrofit](https://github.com/square/retrofit) - Asynchronous HTTP requests with JSON parsing
+- [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Gson](https://github.com/google/gson) - library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object.
+- [Mosby](https://github.com/sockeqwe/mosby) - A Model-View-Presenter library for Android apps.
+
+## License
+
+    Copyright 2017 Akshay Mathur, Robert Lee, Sai Pranesh Mukkalla
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
