@@ -11,7 +11,7 @@ The following **required** functionality is completed:
 * [ ] User should be able to search a cuisine or a specific food truck.
 * [X] User can click on a food truck in list view or map view to see the details of the food trucks. The following should be shown:
   * [ ] Business hours
-  * [ ] Pictures
+  * [X] Pictures
   * [X] Ratings
   * [ ] Reviews
   * [X] Address
@@ -28,7 +28,7 @@ The following **optional** functionality is completed:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/EOxiwhw.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />      <img src='http://i.imgur.com/6cckdg6.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -41,7 +41,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## License
 
-    Copyright 2017 Akshay Mathur, Robert Lee, Sai Pranesh Mukkalla
+    Copyright 2017 Akshay Mathur, Robert Lee, Sai Pranesh Mukkala
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
