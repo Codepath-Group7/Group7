@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
-        style="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:theme="@style/ToolbarTheme"
         />
 
     <FrameLayout

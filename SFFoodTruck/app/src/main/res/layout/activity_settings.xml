@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:elevation="@dimen/defaultElevation"
-        style="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ToolbarTheme"
         app:title="@string/settings_menu"/>
 
     <fragment

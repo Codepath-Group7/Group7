@@ -25,13 +25,14 @@ implements FoodTruckFeedContract.Presenter{
 
 
     private static final String TAG = FoodTruckFeedPresenter.class.getSimpleName();
+    private static final String FOODTRUCK = "foodtrucks";
 
     @Override
     public void loadFoodTruckFeed(Context context) {
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, context);
 
-        Call<SearchResults> callResults = services.getSearchResults("95112");
+        Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {

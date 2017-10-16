@@ -14,6 +14,10 @@
         <item name="android:maxHeight">@dimen/ratingBarMaxHeight</item>
     </style>
 
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
     <dimen name="ratingBarMinHeight">20dp</dimen>
     <dimen name="ratingBarMaxHeight">24dp</dimen>
+    <color name="white">#ffffff</color>
 </resources>

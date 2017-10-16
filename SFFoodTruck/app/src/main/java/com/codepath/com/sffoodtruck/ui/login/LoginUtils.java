@@ -59,7 +59,7 @@ public class LoginUtils {
         });
     }
 
-    private void testSearchApiRequest(Context context) {
+    /*private void testSearchApiRequest(Context context) {
         SearchApi services = RetrofitClient
                 .createService(SearchApi.class,context);
         Call<SearchResults> callResults = services.getSearchResults("95112");
@@ -82,5 +82,5 @@ public class LoginUtils {
                 Log.e(TAG,"Failed",t)
                 ;                                  }
         });
-    }
+    }*/
 }

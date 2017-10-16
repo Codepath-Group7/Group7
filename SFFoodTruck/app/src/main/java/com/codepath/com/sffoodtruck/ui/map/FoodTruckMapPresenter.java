@@ -41,7 +41,7 @@ import retrofit2.Response;
 public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContract.MvpView>
         implements FoodTruckMapContract.Presenter {
     private static final String TAG = FoodTruckMapPresenter.class.getSimpleName();
-
+    private static final String FOODTRUCK = "foodtrucks";
     private static final long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private static final long FASTEST_INTERVAL = 2000; /* 2 sec */
 
@@ -70,8 +70,7 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
 
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, context);
-
-        Call<SearchResults> callResults = services.getSearchResults(location);
+        Call<SearchResults> callResults = services.getSearchResults(location,FOODTRUCK);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call,
