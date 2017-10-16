@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.login.LoginActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/foodtruck"
+        android:layout_above="@+id/googleBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="62dp"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -20,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="@dimen/btn_horizontal_margin"
         android:layout_marginLeft="@dimen/btn_horizontal_margin"
-        android:elevation="10dp">
+        android:elevation="@dimen/elevation10">
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -57,7 +64,7 @@
         android:layout_alignEnd="@id/googleBtn"
         android:layout_alignRight="@id/googleBtn"
         android:background="@drawable/rounded_corners_fb"
-        android:elevation="10dp">
+        android:elevation="@dimen/elevation10">
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
