@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
+import android.content.Context;
+
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBasePresenter;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBaseView;
@@ -15,6 +17,6 @@ public class BusinessDetailContract {
     }
 
     interface Presenter extends MvpBasePresenter<MvpView> {
-        void loadBusiness();
+        void loadBusiness(Context context, String businessId);
     }
 }

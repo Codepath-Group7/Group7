@@ -58,5 +58,6 @@
     <string name="tools_business_phone">408-714-9133</string>
     <string name="label_call">Call</string>
     <string name="label_directions">Get Directions</string>
+    <string name="tools_price">$$$</string>
 
 </resources>

@@ -60,18 +60,19 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPresenter().loadBusiness();
+        getPresenter().loadBusiness(getActivity(),mBusiness.getId());
     }
 
     @Override
     public void renderBusiness(Business data) {
-        mBinding.tvBusinessName.setText(mBusiness.getName());
-        mBinding.tvBusinessAddress.setText(mBusiness.getLocation().getAddress1());
-        mBinding.tvBusinessDesc.setText(mBusiness.getCategories().get(0).getTitle());
-        mBinding.tvBusinessPhone.setText(mBusiness.getPhone());
-        mBinding.rbFoodTruckRating.setRating(mBusiness.getRating());
+        mBinding.tvBusinessName.setText(data.getName());
+        mBinding.tvBusinessAddress.setText(data.getLocation().getCompleteAddress());
+        mBinding.tvBusinessDesc.setText(data.getAllCategories());
+        mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
+        mBinding.rbFoodTruckRating.setRating(data.getRating());
+        mBinding.tvPrice.setText(data.getPrice());
         Picasso.with(getActivity())
-                .load(mBusiness.getImageUrl())
+                .load(data.getImageUrl())
                 .fit()
                 .into(mBinding.ivBusinessImage);
     }
