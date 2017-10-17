@@ -49,10 +49,6 @@ public class RetrofitClient {
     }
 
 
-    public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
-    }
-
 
     //Generic service creator that adds authentication headers while creating new API interfaces
     public static <S> S createService(
@@ -74,6 +70,33 @@ public class RetrofitClient {
 
                 AuthenticationInterceptor interceptor = new
                         AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+                sBuilder.client(httpClient.build());
+                mRetrofit = sBuilder.build();
+            }
+
+        }
+
+        return mRetrofit.create(serviceClass);
+    }
+
+
+    //Generic service creator that adds authentication headers while creating new API interfaces
+    public static <S> S createService(
+            Class<S> serviceClass, String authToken)  {
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(loggingInterceptor);
+        }
+
+        if (!TextUtils.isEmpty(authToken)) {
+
+            AuthenticationInterceptor interceptor = new
+                    AuthenticationInterceptor(authToken);
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);

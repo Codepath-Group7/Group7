@@ -46,7 +46,7 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
 
     @Override
     public FoodTruckFeedContract.Presenter createPresenter() {
-        return new FoodTruckFeedPresenter();
+        return new FoodTruckFeedPresenter(QueryPreferences.getAccessToken(getActivity()));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
     public void onResume() {
         super.onResume();
         if(getPresenter() != null && isAdded()){
-            getPresenter().loadFoodTruckFeed(getActivity());
+            getPresenter().loadFoodTruckFeed();
         }else{
             Log.d("PRESENTER","it is null");
         }

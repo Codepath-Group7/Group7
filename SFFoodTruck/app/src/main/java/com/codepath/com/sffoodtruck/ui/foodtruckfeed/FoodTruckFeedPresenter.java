@@ -26,11 +26,18 @@ implements FoodTruckFeedContract.Presenter{
 
     private static final String TAG = FoodTruckFeedPresenter.class.getSimpleName();
     private static final String FOODTRUCK = "foodtrucks";
+    private final String authToken;
+
+
+    public FoodTruckFeedPresenter(String authToken){
+        Log.d(TAG,"This is the generated token"  + authToken);
+        this.authToken = authToken;
+    }
 
     @Override
-    public void loadFoodTruckFeed(Context context) {
+    public void loadFoodTruckFeed() {
         final SearchApi services = RetrofitClient
-                .createService(SearchApi.class, context);
+                .createService(SearchApi.class, authToken);
 
         Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK);
         callResults.enqueue(new Callback<SearchResults>() {
@@ -39,7 +46,7 @@ implements FoodTruckFeedContract.Presenter{
                 SearchResults searchResults = response.body();
                 if (searchResults == null || searchResults.getBusinesses() == null
                         || searchResults.getBusinesses().isEmpty()) {
-                    Log.w(TAG, "response has failed " + response.code());
+                    Log.e(TAG, "response has failed " + response.code());
                     return;
                 }
 
@@ -49,21 +56,9 @@ implements FoodTruckFeedContract.Presenter{
 
             @Override
             public void onFailure(Call<SearchResults> call, Throwable t) {
-
+                Log.e(TAG, "response has failed " ,t );
             }
         });
     }
 
-    public void onSaveClick(View view){
-        Log.d(TAG,"Clicked on business object: ");
-    }
-
-    public boolean onLongClick(String text){
-        Log.d(TAG,"Long cliked " + text);
-        return true;
-    }
-
-    public void onItemClick(Business business){
-        Log.d("TESTCLASS","Item has been clicked");
-    }
 }
