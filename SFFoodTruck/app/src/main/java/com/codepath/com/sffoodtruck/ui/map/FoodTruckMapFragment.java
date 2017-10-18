@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.map;
 
 import android.Manifest;
 import android.graphics.Bitmap;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,9 +14,13 @@ import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
+import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
+import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.common.ActivityRequestCodeGenerator;
 import com.codepath.com.sffoodtruck.ui.util.MapUtils;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -28,6 +33,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
+import java.util.Locale;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -58,7 +64,15 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
     @Override
     public FoodTruckMapContract.Presenter createPresenter() {
-        return new FoodTruckMapPresenter();
+        SearchApi searchApi = RetrofitClient
+                .createService(SearchApi.class, getContext());
+
+        final FusedLocationProviderClient client =
+                LocationServices.getFusedLocationProviderClient(getContext());
+
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+        return new FoodTruckMapPresenter(searchApi, client, geocoder);
     }
 
     @Nullable
@@ -141,7 +155,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         enableMapMyLocation(map);
-        getPresenter().loadFoodTrucks(getContext());
+        getPresenter().loadFoodTrucks();
     }
 
     private void enableMapMyLocation(GoogleMap map) {
