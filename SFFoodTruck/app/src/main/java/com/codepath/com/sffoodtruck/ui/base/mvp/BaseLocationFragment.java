@@ -1,34 +1,26 @@
 package com.codepath.com.sffoodtruck.ui.base.mvp;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
-import com.codepath.com.sffoodtruck.ui.common.ActivityRequestCodeGenerator;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedContract;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.io.IOException;
@@ -90,15 +82,25 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "Connected to Google API Client");
-        createLocationRequest();
-        getLastKnownLocation();
+        //getLastKnownLocation();
         if(mRequestingLocationUpdates){
             startLocationUpdates();
         }
     }
 
+    @AfterPermissionGranted(RC_LOCATION)
     private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        String perms[] = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+        if(EasyPermissions.hasPermissions(getActivity(),perms)) {
+            checkLocationSettings();
+            LocationServices.FusedLocationApi
+                    .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }else{
+            Log.d(TAG,"Requesting for permissions: ");
+            EasyPermissions.requestPermissions(getActivity(),
+                    getString(R.string.location_rationale),RC_LOCATION,perms);
+        }
     }
 
     protected void stopLocationUpdates() {
@@ -136,7 +138,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                 Manifest.permission.ACCESS_COARSE_LOCATION};
         if(EasyPermissions.hasPermissions(getActivity(),perms)){
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            changeLocationSettings();
+            checkLocationSettings();
             if(mLastLocation != null){
                 Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                         +mLastLocation.getLongitude());
@@ -154,7 +156,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
 
     //Checks for the current location settings,
     // and prompts the user to ask for missing permissions if any
-    protected void changeLocationSettings(){
+    protected void checkLocationSettings(){
+        createLocationRequest();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
         PendingResult<LocationSettingsResult> result =
@@ -167,6 +170,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                     // All location settings are satisfied. The client can
                     // initialize location requests here.
                     Log.d(TAG,"All Location settings are granted ");
+                    startLocationUpdates();
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     // Location settings are not satisfied, but this can be fixed
