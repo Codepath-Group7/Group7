@@ -9,11 +9,9 @@ import android.util.Log;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.model.ReviewsResponse;
-import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
-import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapViewModel;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,8 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
