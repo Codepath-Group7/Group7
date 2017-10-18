@@ -23,6 +23,9 @@ import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -107,13 +110,59 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvPrice.setText(data.getPrice());
         mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
         mAdapter.addPhotos(data.getPhotos());
-
+        fetchPhotosFromFirebase();
         Picasso.with(getActivity())
                 .load(data.getImageUrl())
                 .fit()
                 .into(mBinding.ivBusinessImage);
     }
-    
+
+    private void fetchPhotosFromFirebase(){
+        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusiness.getId());
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String photoName = dataSnapshot.getValue(String.class);
+                Log.d(TAG,"Firebase photos path--> " + photoName);
+                mAdapter.addPhoto(photoName);
+                /*StorageReference storageReference = FirebaseUtils.getBusinessPhotoReference(photoName);
+                if(storageReference!=null){
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.d(TAG,"Firebase photos path--> " + uri.toString());
+                            mAdapter.addPhoto(uri.toString());
+                        }
+                    });
+
+                }*/
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -149,7 +198,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
                 //Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 Log.d(TAG,"File upload successfully");
                 DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusiness.getId());
-                databaseReference.push().setValue(photoUri.getLastPathSegment());
+                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
                 //progressDialog.dismiss();
             }
         });

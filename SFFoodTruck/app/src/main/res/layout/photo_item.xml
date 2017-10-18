@@ -15,7 +15,6 @@
         android:id="@+id/iv_photo"
         android:src="@drawable/foodtruck"
         app:imageUrl="@{obj}"
-        app:error="@{@drawable/placeholder_1000x200}"
         android:padding="@dimen/padding4"
         />
 </LinearLayout>

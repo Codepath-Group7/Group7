@@ -31,6 +31,11 @@ public class BusinessPhotosRecyclerViewAdapter extends SingleLayoutAdapter {
         notifyItemRangeInserted(initialSize,photoList.size());
     }
 
+    public void addPhoto(String photo){
+        mPhotoList.add(photo);
+        notifyItemInserted(mPhotoList.size());
+    }
+
     @Override
     protected Object getObjForPosition(int position) {
         return mPhotoList.get(position);

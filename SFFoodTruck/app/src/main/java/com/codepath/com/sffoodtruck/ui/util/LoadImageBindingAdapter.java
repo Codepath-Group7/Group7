@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.util;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -21,5 +22,16 @@ public class LoadImageBindingAdapter {
                 .fit()
                 .error(error)
                 .into(view);
+    }
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadSmallImage(ImageView view, String url){
+        Picasso.Builder builder = new Picasso.Builder(view.getContext());
+        builder.listener(new Picasso.Listener() {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                exception.printStackTrace();
+            }});
+
+        builder.build().load(url).into(view);
     }
 }

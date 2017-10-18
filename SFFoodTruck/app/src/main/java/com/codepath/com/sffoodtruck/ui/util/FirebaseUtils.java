@@ -19,10 +19,12 @@ public class FirebaseUtils {
     public static StorageReference getBaseStorageReference(){
         return FirebaseStorage.getInstance().getReference();
     }
-
+    public static StorageReference getBusinessStorageReference(){
+        return getBaseStorageReference().child(BUSINESS_PHOTO_STORAGE);
+    }
     public static StorageReference getBusinessPhotoReference(String filename){
         if(filename!=null){
-            return getBaseStorageReference().child(BUSINESS_PHOTO_STORAGE).child(filename);
+            return getBusinessStorageReference().child(filename);
         }
         return null;
     }
