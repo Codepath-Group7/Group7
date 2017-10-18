@@ -55,7 +55,7 @@
     <string name="tools_business_desc"><![CDATA[Lounges, American, Venue & Event Spaces]]></string>
     <string name="tools_business_hrs">12 PM - 10 PM</string>
     <string name="tools_business_address">101 E San Fernando St, San Jose, CA 95112</string>
-    <string name="tools_business_phone">408-714-9133</string>
+    <string name="tools_business_phone">408–714-9133</string>
     <string name="label_call">Call</string>
     <string name="label_directions">Get Directions</string>
     <string name="tools_price">$$$</string>
@@ -66,7 +66,8 @@
     <string name="label_reviews">Reviews</string>
     <string name="label_add_review">Add review</string>
     <string name="tools_user_name">Akshay Mathur</string>
-    <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It...</string>
+    <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It…</string>
     <string name="label_submit">submit</string>
+    <string name="hint_review_text">Review</string>
 
 </resources>

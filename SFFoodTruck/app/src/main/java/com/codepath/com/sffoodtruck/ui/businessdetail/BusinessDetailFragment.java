@@ -21,6 +21,9 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     public static final String TAG = BusinessDetailFragment.class.getSimpleName();
     public static final String BUSINESS_KEY = "business_key";
     public static final int REQUEST_PHOTO = 99;
+    public static final int REQUEST_REVIEW = 44;
     private Business mBusiness;
     private FragmentBusinessDetailBinding mBinding;
     private List<String> mPhotoList;
@@ -42,6 +46,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     private BusinessPhotosRecyclerViewAdapter mPhotosAdapter;
     private BusinessReviewsRecyclerViewAdapter mReviewsAdapter;
     private LinearLayoutManager mPhotosLayoutManager, mReviewsLayoutManager;
+
     public BusinessDetailFragment() {
         // Required empty public constructor
     }
@@ -51,10 +56,10 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         return new BusinessDetailPresenter();
     }
 
-    public static Fragment newInstance(Business business){
+    public static Fragment newInstance(Business business) {
         BusinessDetailFragment fragment = new BusinessDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BUSINESS_KEY,business);
+        bundle.putParcelable(BUSINESS_KEY, business);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -73,7 +78,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_business_detail, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_business_detail, container, false);
         return mBinding.getRoot();
 
     }
@@ -82,20 +87,30 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerViews();
-        mBinding.btnAddPhotos.setOnClickListener((v)->{
-                DialogFragment fragment = new TakePhotoDialogFragment();
-            fragment.setTargetFragment(BusinessDetailFragment.this,REQUEST_PHOTO);
-                fragment.show(getFragmentManager(),TakePhotoDialogFragment.TAG);
-            });
-        getPresenter().loadBusiness(getActivity(),mBusiness.getId());
-        getPresenter().loadReviews(getActivity(),mBusiness.getId());
+        mBinding.btnAddPhotos.setOnClickListener(v -> openTakePhotoDialog());
+        mBinding.btnAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
+        getPresenter().loadBusiness(getActivity(), mBusiness.getId());
+        getPresenter().loadReviews(getActivity(), mBusiness.getId());
     }
-    private void setupRecyclerViews(){
-        mPhotosLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+
+    private void openTakePhotoDialog() {
+        DialogFragment fragment = new TakePhotoDialogFragment();
+        fragment.setTargetFragment(BusinessDetailFragment.this, REQUEST_PHOTO);
+        fragment.show(getFragmentManager(), TakePhotoDialogFragment.TAG);
+    }
+
+    private void openSubmitReviewDialog() {
+        DialogFragment fragment = new SubmitReviewDialogFragment();
+        fragment.setTargetFragment(BusinessDetailFragment.this, REQUEST_REVIEW);
+        fragment.show(getFragmentManager(), SubmitReviewDialogFragment.TAG);
+    }
+
+    private void setupRecyclerViews() {
+        mPhotosLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mBinding.rvPhotosList.setLayoutManager(mPhotosLayoutManager);
         mBinding.rvPhotosList.setAdapter(mPhotosAdapter);
 
-        mReviewsLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mReviewsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mBinding.rvReviewList.setLayoutManager(mReviewsLayoutManager);
         mBinding.rvReviewList.setAdapter(mReviewsAdapter);
         RecyclerView.ItemDecoration itemDecoration = new
@@ -128,13 +143,24 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
-            Log.d(TAG, "From dialog fragment " + data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
-            getPresenter().uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI),mBusiness.getId());
+            Log.d(TAG, "From photo dialog fragment " + data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
+            getPresenter().uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI), mBusiness.getId());
+        }
+        else if(requestCode == REQUEST_REVIEW && resultCode == Activity.RESULT_OK){
+            Review review = data.getParcelableExtra(SubmitReviewDialogFragment.EXTRA_REVIEW);
+            Log.d(TAG, "From review dialog fragment " + review.getText());
+            getPresenter().submitReviewToFirebase(mBusiness.getId(),review);
         }
     }
 
     @Override
     public void renderReviews(List<Review> reviews) {
         mReviewsAdapter.addReviews(reviews);
+        getPresenter().fetchReviewsFromFirebase(mBusiness.getId());
+    }
+
+    @Override
+    public void addReviewToAdapter(Review review) {
+        mReviewsAdapter.addReview(review);
     }
 }

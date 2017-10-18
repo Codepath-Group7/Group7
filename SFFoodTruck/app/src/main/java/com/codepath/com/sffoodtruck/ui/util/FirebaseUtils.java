@@ -1,5 +1,8 @@
 package com.codepath.com.sffoodtruck.ui.util;
 
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -14,6 +17,7 @@ public class FirebaseUtils {
     private static final String BUSINESS_PHOTO_STORAGE = "business_photos";
     private static final String BUSINESS_DATABASE = "businesses";
     private static final String PHOTOS = "photos";
+    private static final String REVIEWS = "reviews";
 
     /* Start of Storage References */
     public static StorageReference getBaseStorageReference(){
@@ -50,5 +54,16 @@ public class FirebaseUtils {
         }
         return null;
     }
+
+    public static DatabaseReference getBusinessDatabaseReviewsRef(String businessId){
+        if(businessId!=null){
+            return getBusinessDatabaseRef(businessId).child(REVIEWS);
+        }
+        return null;
+    }
     /* End of Database References */
+
+    public static FirebaseUser getCurrentUser(){
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 }

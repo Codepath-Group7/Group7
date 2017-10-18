@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.model.ReviewsResponse;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
@@ -157,6 +158,44 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             @Override
             public void onFailure(Call<ReviewsResponse> call, Throwable t) {
                 Log.e(TAG, "Failed", t);
+            }
+        });
+    }
+
+    @Override
+    public void submitReviewToFirebase(String businessId, Review review) {
+        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabaseReviewsRef(businessId);
+        databaseReference.push().setValue(review);
+    }
+
+    @Override
+    public void fetchReviewsFromFirebase(String businessId) {
+        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabaseReviewsRef(businessId);
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Review review = dataSnapshot.getValue(Review.class);
+                getView().addReviewToAdapter(review);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
