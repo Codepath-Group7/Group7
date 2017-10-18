@@ -123,7 +123,9 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
         mBinding.rbFoodTruckRating.setRating(data.getRating());
         mBinding.tvPrice.setText(data.getPrice());
-        mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
+        if(data.getHours()!=null && data.getHours().size()>0){
+            mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
+        }
         mPhotosAdapter.addPhotos(data.getPhotos());
         getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
         Picasso.with(getActivity())
