@@ -59,5 +59,9 @@
     <string name="label_call">Call</string>
     <string name="label_directions">Get Directions</string>
     <string name="tools_price">$$$</string>
+    <string name="label_hrs_today">Hours Today (24-hour):</string>
+    <string name="label_photos">Photos</string>
+    <string name="label_upload">Upload</string>
+    <string name="label_cancel">cancel</string>
 
 </resources>

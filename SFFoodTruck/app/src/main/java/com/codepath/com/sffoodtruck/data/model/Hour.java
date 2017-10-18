@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -47,6 +48,31 @@ public class Hour implements Parcelable {
     public void setIsOpenNow(Boolean isOpenNow) {
         this.isOpenNow = isOpenNow;
     }
+
+    /* Start of changes
+    Added by: Akshay
+    Reason: method to get all today's business hours'
+     */
+    public String getTodaysHours(){
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int yelpDayOfWeek = dayOfWeek - 2;
+        if(yelpDayOfWeek<0){
+            yelpDayOfWeek=6;
+        }
+        StringBuilder hourBuilder = new StringBuilder();
+        for (Open open : this.open){
+            if(open.getDay() == yelpDayOfWeek){
+                hourBuilder.append(open.getStart());
+                hourBuilder.append(" - ");
+                hourBuilder.append(open.getEnd());
+                hourBuilder.append(", ");
+            }
+        }
+        String hoursString = hourBuilder.toString();
+        return hoursString.substring(0,hoursString.length()-2);
+    }
+    /*End of changes*/
 
     @Override
     public int describeContents() {

@@ -12,7 +12,7 @@
     <dimen name="imageGradient">100dp</dimen>
     <dimen name="margin8">8dp</dimen>
     <dimen name="margin16">16dp</dimen>
-    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding4">4dp</dimen>
     <dimen name="elevation10">10dp</dimen>
     <dimen name="elevation5">5dp</dimen>
 </resources>
