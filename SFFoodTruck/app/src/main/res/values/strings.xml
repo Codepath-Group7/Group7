@@ -67,5 +67,6 @@
     <string name="label_add_review">Add review</string>
     <string name="tools_user_name">Akshay Mathur</string>
     <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It...</string>
+    <string name="label_submit">submit</string>
 
 </resources>
