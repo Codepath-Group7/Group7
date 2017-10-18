@@ -1,8 +1,10 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,11 +30,13 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodTruckFeedContract.MvpView {
+public class FoodTruckFeedFragment extends BaseLocationFragment implements
+        FoodTruckFeedContract.MvpView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private FragmentFoodTruckFeedBinding mBinding;
     private FoodTruckFeedAdapter mAdapter;
     private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
+    private SharedPreferences mSharedPreferences;
 
     public FoodTruckFeedFragment() {
         // Required empty public constructor
@@ -53,7 +57,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new FoodTruckFeedAdapter(new ArrayList<>());
-
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override
@@ -90,6 +94,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     @Override
     public void onResume() {
         super.onResume();
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         if(getPresenter() != null && isAdded()){
             getPresenter().initialLoad();
         }else{
@@ -98,7 +103,23 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public void showFoodTruckList(List<Business> businessList) {
         mAdapter.addData(businessList);
+    }
+
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        if(key.equals(QueryPreferences.PREF_CURRENT_LOCATION)){
+            //Handle location updates accordingly
+        }
     }
 }
