@@ -72,6 +72,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key_enabled"/>
 
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="@string/google_api_key_enabled" />
+
         <activity android:name=".ui.businessdetail.BusinessDetailActivity"/>
         <activity android:name=".ui.nearby.NearByActivity">
         </activity>
