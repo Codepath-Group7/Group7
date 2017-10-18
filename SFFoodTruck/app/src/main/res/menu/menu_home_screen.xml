@@ -11,4 +11,9 @@
           android:icon="@drawable/ic_settings_black_24px"
           app:showAsAction="never"
         />
+
+    <item android:id="@+id/action_nearby"
+          android:title="@string/nearby"
+          app:showAsAction="never"
+        />
 </menu>

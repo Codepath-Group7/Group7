@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="google_maps_api_key">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
+    <string name="google_api_key_enabled">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
+    <string name="google_web_client_id">1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com</string>
+    <string name="client_key">FC95QmoTCZxQjkvDJQdCaQ</string>
+    <string name="client_secret">lAbNWQBzW7KbjnRiE3llCAJuJKpeexkil34zf1joudfqz0D6YWKoDBGInUXVqDxb</string>
 </resources>

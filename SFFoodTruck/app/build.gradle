@@ -57,22 +57,24 @@ dependencies {
     }
 
     //social login dependencies
-    
 
     // Plain MVP
-    
+
     final GOOGLE_PLAY_SERVICES_VERSION = '11.0.4'
     final SUPPORT_VERSION = '25.3.1'
     compile "com.google.android.gms:play-services-maps:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-location:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-places:$GOOGLE_PLAY_SERVICES_VERSION"
     compile "com.google.android.gms:play-services-auth:$GOOGLE_PLAY_SERVICES_VERSION"
+    compile "com.google.android.gms:play-services-nearby:$GOOGLE_PLAY_SERVICES_VERSION"
 
     compile "com.android.support:appcompat-v7:$SUPPORT_VERSION"
     compile "com.android.support:design:$SUPPORT_VERSION"
     compile "com.android.support:support-vector-drawable:$SUPPORT_VERSION"
     compile "com.android.support:support-v4:$SUPPORT_VERSION"
     compile "com.android.support:preference-v7:$SUPPORT_VERSION"
+
+
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -85,9 +87,8 @@ dependencies {
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4'
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5'
-
     compile 'com.squareup.picasso:picasso:2.5.2'
-
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
