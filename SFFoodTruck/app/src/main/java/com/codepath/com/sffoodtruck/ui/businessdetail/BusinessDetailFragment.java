@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.squareup.picasso.Picasso;
@@ -35,8 +38,10 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     private Business mBusiness;
     private FragmentBusinessDetailBinding mBinding;
     private List<String> mPhotoList;
-    private BusinessPhotosRecyclerViewAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private List<Review> mReviewList;
+    private BusinessPhotosRecyclerViewAdapter mPhotosAdapter;
+    private BusinessReviewsRecyclerViewAdapter mReviewsAdapter;
+    private LinearLayoutManager mPhotosLayoutManager, mReviewsLayoutManager;
     public BusinessDetailFragment() {
         // Required empty public constructor
     }
@@ -59,7 +64,9 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         super.onCreate(savedInstanceState);
         mBusiness = getArguments().getParcelable(BUSINESS_KEY);
         mPhotoList = new ArrayList<>();
-        mAdapter = new BusinessPhotosRecyclerViewAdapter(mPhotoList);
+        mPhotosAdapter = new BusinessPhotosRecyclerViewAdapter(mPhotoList);
+        mReviewList = new ArrayList<>();
+        mReviewsAdapter = new BusinessReviewsRecyclerViewAdapter(mReviewList);
     }
 
     @Override
@@ -74,18 +81,26 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerView();
+        setupRecyclerViews();
         mBinding.btnAddPhotos.setOnClickListener((v)->{
                 DialogFragment fragment = new TakePhotoDialogFragment();
             fragment.setTargetFragment(BusinessDetailFragment.this,REQUEST_PHOTO);
                 fragment.show(getFragmentManager(),TakePhotoDialogFragment.TAG);
             });
         getPresenter().loadBusiness(getActivity(),mBusiness.getId());
+        getPresenter().loadReviews(getActivity(),mBusiness.getId());
     }
-    private void setupRecyclerView(){
-        mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        mBinding.rvPhotosList.setLayoutManager(mLayoutManager);
-        mBinding.rvPhotosList.setAdapter(mAdapter);
+    private void setupRecyclerViews(){
+        mPhotosLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        mBinding.rvPhotosList.setLayoutManager(mPhotosLayoutManager);
+        mBinding.rvPhotosList.setAdapter(mPhotosAdapter);
+
+        mReviewsLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mBinding.rvReviewList.setLayoutManager(mReviewsLayoutManager);
+        mBinding.rvReviewList.setAdapter(mReviewsAdapter);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        mBinding.rvReviewList.addItemDecoration(itemDecoration);
     }
 
     @Override
@@ -97,7 +112,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.rbFoodTruckRating.setRating(data.getRating());
         mBinding.tvPrice.setText(data.getPrice());
         mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
-        mAdapter.addPhotos(data.getPhotos());
+        mPhotosAdapter.addPhotos(data.getPhotos());
         getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
         Picasso.with(getActivity())
                 .load(data.getImageUrl())
@@ -107,7 +122,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public void addPhotoToAdapter(String photo) {
-        mAdapter.addPhoto(photo);
+        mPhotosAdapter.addPhoto(photo);
     }
 
     @Override
@@ -118,4 +133,8 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         }
     }
 
+    @Override
+    public void renderReviews(List<Review> reviews) {
+        mReviewsAdapter.addReviews(reviews);
+    }
 }

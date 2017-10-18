@@ -63,5 +63,9 @@
     <string name="label_photos">Photos</string>
     <string name="label_upload">Upload</string>
     <string name="label_cancel">cancel</string>
+    <string name="label_reviews">Reviews</string>
+    <string name="label_add_review">Add review</string>
+    <string name="tools_user_name">Akshay Mathur</string>
+    <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It...</string>
 
 </resources>

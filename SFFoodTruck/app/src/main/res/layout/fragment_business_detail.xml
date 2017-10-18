@@ -192,11 +192,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDivider"
-                    android:layout_marginTop="@dimen/margin8"
-                    android:layout_marginBottom="@dimen/margin8"/>
+                    android:layout_marginTop="@dimen/margin8"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin8">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -214,6 +214,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/rv_photos_list"
+                    android:layout_marginTop="@dimen/margin8">
+                </android.support.v7.widget.RecyclerView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDivider"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_marginBottom="@dimen/margin8"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_reviews"
+                        android:padding="@dimen/padding4"
+                        android:layout_gravity="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_add_review"
+                        android:drawableLeft="@drawable/ic_rate_review_black_24dp"
+                        android:drawableStart="@drawable/ic_rate_review_black_24dp"
+                        android:text="@string/label_add_review"/>
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_review_list"
                     android:layout_marginTop="@dimen/margin8">
                 </android.support.v7.widget.RecyclerView>
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.ReviewsResponse;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
@@ -39,12 +40,6 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     @Override
     public void loadBusiness(Context context, String businessId) {
 
-        getFoodTruckDetails(context,businessId);
-    }
-
-
-    private void getFoodTruckDetails(Context context, String businessId){
-
         if (TextUtils.isEmpty(businessId)) return;
 
         final SearchApi services = RetrofitClient
@@ -68,7 +63,6 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
                 Log.e(TAG, "Failed", t);
             }
         });
-
     }
 
     @Override
@@ -136,6 +130,33 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
                 DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(businessId);
                 databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
                 //progressDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void loadReviews(Context context, String businessId) {
+        if (TextUtils.isEmpty(businessId)) return;
+
+        final SearchApi services = RetrofitClient
+                .createService(SearchApi.class, context);
+        Call<ReviewsResponse> callResults = services.getBusinessReviews(businessId);
+        callResults.enqueue(new Callback<ReviewsResponse>() {
+            @Override
+            public void onResponse(Call<ReviewsResponse> call,
+                                   Response<ReviewsResponse> response) {
+                ReviewsResponse reviewsResponse = response.body();
+                if (reviewsResponse == null) {
+                    Log.w(TAG, "response has failed " + response.code());
+                    return;
+                }
+
+                getView().renderReviews(reviewsResponse.getReviews());
+            }
+
+            @Override
+            public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+                Log.e(TAG, "Failed", t);
             }
         });
     }
