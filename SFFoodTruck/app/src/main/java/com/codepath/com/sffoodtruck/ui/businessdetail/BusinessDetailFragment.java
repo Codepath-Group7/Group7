@@ -110,97 +110,25 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvPrice.setText(data.getPrice());
         mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
         mAdapter.addPhotos(data.getPhotos());
-        fetchPhotosFromFirebase();
+        getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
         Picasso.with(getActivity())
                 .load(data.getImageUrl())
                 .fit()
                 .into(mBinding.ivBusinessImage);
     }
 
-    private void fetchPhotosFromFirebase(){
-        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusiness.getId());
-
-        databaseReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String photoName = dataSnapshot.getValue(String.class);
-                Log.d(TAG,"Firebase photos path--> " + photoName);
-                mAdapter.addPhoto(photoName);
-                /*StorageReference storageReference = FirebaseUtils.getBusinessPhotoReference(photoName);
-                if(storageReference!=null){
-                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Log.d(TAG,"Firebase photos path--> " + uri.toString());
-                            mAdapter.addPhoto(uri.toString());
-                        }
-                    });
-
-                }*/
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+    @Override
+    public void addPhotoToAdapter(String photo) {
+        mAdapter.addPhoto(photo);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
             Log.d(TAG, "From dialog fragment " + data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
-            uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
+            getPresenter().uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI),mBusiness.getId());
+            //uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
         }
     }
 
-    private void uploadPhotoToStorage(Uri photoUri){
-        StorageReference photoRef = FirebaseUtils.getBusinessPhotoReference(photoUri.getLastPathSegment());
-        UploadTask mUploadTask = photoRef.putFile(photoUri);
-        mUploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.e(TAG,"File upload failed");
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                @SuppressWarnings("VisibleForTests")
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
-                        getTotalByteCount();
-                Log.d(TAG,"Upload is " + progress + "% done");
-                //progressDialog.setProgress((int) progress);
-
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Log.d(TAG,"File upload successfully");
-                DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusiness.getId());
-                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
-                //progressDialog.dismiss();
-            }
-        });
-    }
 }

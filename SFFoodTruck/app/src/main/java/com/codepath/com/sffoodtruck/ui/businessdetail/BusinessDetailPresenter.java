@@ -1,6 +1,8 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -10,6 +12,16 @@ import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapViewModel;
+import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
@@ -57,5 +69,74 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             }
         });
 
+    }
+
+    @Override
+    public void fetchPhotosFromFirebase(String businessId) {
+        DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(businessId);
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String photoName = dataSnapshot.getValue(String.class);
+                Log.d(TAG,"Firebase photos path--> " + photoName);
+                getView().addPhotoToAdapter(photoName);
+                //mAdapter.addPhoto(photoName);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void uploadPhotoToStorage(Uri photoUri, final String businessId) {
+        StorageReference photoRef = FirebaseUtils.getBusinessPhotoReference(photoUri.getLastPathSegment());
+        UploadTask mUploadTask = photoRef.putFile(photoUri);
+        mUploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e(TAG,"File upload failed");
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                @SuppressWarnings("VisibleForTests")
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
+                        getTotalByteCount();
+                Log.d(TAG,"Upload is " + progress + "% done");
+                //progressDialog.setProgress((int) progress);
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Log.d(TAG,"File upload successfully");
+                DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(businessId);
+                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
+                //progressDialog.dismiss();
+            }
+        });
     }
 }
