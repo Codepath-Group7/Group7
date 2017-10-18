@@ -16,7 +16,9 @@ import retrofit2.http.Query;
 public interface SearchApi {
 
     @GET("/v3/businesses/search")
-    Call<SearchResults> getSearchResults(@Query("location") String location, @Query("categories") String category);
+    Call<SearchResults> getSearchResults(@Query("location") String location,
+                                         @Query("categories") String category,
+                                         @Query("offset") int offset);
 
     @GET("/v3/businesses/{id}")
     Call<Business> getBusiness(@Path("id") String businessId);

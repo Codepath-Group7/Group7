@@ -20,7 +20,8 @@ public interface FoodTruckFeedContract {
 
 
     interface Presenter extends MvpBasePresenter<MvpView>{
-        void loadFoodTruckFeed();
+        void initialLoad();
+        void loadFoodTruckFeed(int page);
     }
 
 }
