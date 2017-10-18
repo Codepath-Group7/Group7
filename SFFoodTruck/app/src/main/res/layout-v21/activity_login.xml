@@ -64,7 +64,7 @@
         android:layout_alignEnd="@id/googleBtn"
         android:layout_alignRight="@id/googleBtn"
         android:background="@drawable/rounded_corners_fb"
-        android:elevation="@dimen/elevation10">
+        android:elevation="@dimen/elevation5">
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"

@@ -57,6 +57,21 @@ public class Business implements Parcelable {
     @Expose
     private List<String> transactions = null;
 
+    /* Start of fields needed for business detail */
+    @SerializedName("is_claimed")
+    @Expose
+    private Boolean isClaimed;
+    @SerializedName("display_phone")
+    @Expose
+    private String displayPhone;
+    @SerializedName("photos")
+    @Expose
+    private List<String> photos = null;
+    @SerializedName("hours")
+    @Expose
+    private List<Hour> hours = null;
+    /* End of fields needed for business detail */
+
     public Float getRating() {
         return rating;
     }
@@ -108,6 +123,26 @@ public class Business implements Parcelable {
             return categories.get(0).getTitle();
         }
     }
+    /* Start of changes
+    Added by: Akshay
+    Reason: method to get all business categories excluding 'foodtrucks'
+     */
+    public String getAllCategories(){
+        if(categories == null || categories.size() == 0){
+            return null;
+        }else{
+            StringBuilder categoryStringBuilder = new StringBuilder();
+            for(Category category : categories){
+                if(!category.getAlias().equalsIgnoreCase("foodtrucks")){
+                    categoryStringBuilder.append(category.getTitle());
+                    categoryStringBuilder.append(", ");
+                }
+            }
+            String categoryString = categoryStringBuilder.toString();
+            return categoryString.substring(0,categoryString.length()-2);
+        }
+    }
+    /* End of changes*/
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
@@ -177,6 +212,41 @@ public class Business implements Parcelable {
         this.transactions = transactions;
     }
 
+     /* Start of methods needed for business detail view */
+
+    public Boolean getClaimed() {
+        return isClaimed;
+    }
+
+    public void setClaimed(Boolean claimed) {
+        isClaimed = claimed;
+    }
+
+    public String getDisplayPhone() {
+        return displayPhone;
+    }
+
+    public void setDisplayPhone(String displayPhone) {
+        this.displayPhone = displayPhone;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public List<Hour> getHours() {
+        return hours;
+    }
+
+    public void setHours(List<Hour> hours) {
+        this.hours = hours;
+    }
+     /* End of fields needed for business detail view */
+
 
     @Override
     public int describeContents() {
@@ -190,7 +260,7 @@ public class Business implements Parcelable {
         dest.writeString(this.phone);
         dest.writeString(this.id);
         dest.writeValue(this.isClosed);
-        dest.writeList(this.categories);
+        dest.writeTypedList(this.categories);
         dest.writeValue(this.reviewCount);
         dest.writeString(this.name);
         dest.writeString(this.url);
@@ -199,6 +269,10 @@ public class Business implements Parcelable {
         dest.writeParcelable(this.location, flags);
         dest.writeValue(this.distance);
         dest.writeStringList(this.transactions);
+        dest.writeValue(this.isClaimed);
+        dest.writeString(this.displayPhone);
+        dest.writeStringList(this.photos);
+        dest.writeTypedList(this.hours);
     }
 
     public Business() {
@@ -210,8 +284,7 @@ public class Business implements Parcelable {
         this.phone = in.readString();
         this.id = in.readString();
         this.isClosed = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.categories = new ArrayList<Category>();
-        in.readList(this.categories, Category.class.getClassLoader());
+        this.categories = in.createTypedArrayList(Category.CREATOR);
         this.reviewCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.name = in.readString();
         this.url = in.readString();
@@ -220,6 +293,10 @@ public class Business implements Parcelable {
         this.location = in.readParcelable(Location.class.getClassLoader());
         this.distance = (Float) in.readValue(Float.class.getClassLoader());
         this.transactions = in.createStringArrayList();
+        this.isClaimed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.displayPhone = in.readString();
+        this.photos = in.createStringArrayList();
+        this.hours = in.createTypedArrayList(Hour.CREATOR);
     }
 
     public static final Parcelable.Creator<Business> CREATOR = new Parcelable.Creator<Business>() {
