@@ -3,7 +3,6 @@ package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +18,7 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
+import com.codepath.com.sffoodtruck.ui.util.EndlessRecyclerViewScrollListener;
 import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -67,7 +67,8 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
     }
 
     private void setupRecyclerView() {
-        mBinding.rvFoodTruckFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mBinding.rvFoodTruckFeed.setLayoutManager(layoutManager);
         mBinding.rvFoodTruckFeed.setAdapter(mAdapter);
         ItemClickSupport.addTo(mBinding.rvFoodTruckFeed)
                 .setOnItemClickListener((recyclerView, position, v) ->
@@ -77,13 +78,20 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
                     startActivity(BusinessDetailActivity
                             .newIntent(getActivity(),mAdapter.getBusinessForPos(position)));
                 });
+        mBinding.rvFoodTruckFeed.addOnScrollListener
+                (new EndlessRecyclerViewScrollListener(layoutManager){
+                    @Override
+                    public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                        getPresenter().loadFoodTruckFeed(page);
+                    }
+                });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if(getPresenter() != null && isAdded()){
-            getPresenter().loadFoodTruckFeed();
+            getPresenter().initialLoad();
         }else{
             Log.d("PRESENTER","it is null");
         }
@@ -91,6 +99,6 @@ public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedCont
 
     @Override
     public void showFoodTruckList(List<Business> businessList) {
-        mAdapter.addAll(businessList);
+        mAdapter.addData(businessList);
     }
 }

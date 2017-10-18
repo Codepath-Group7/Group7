@@ -35,11 +35,16 @@ implements FoodTruckFeedContract.Presenter{
     }
 
     @Override
-    public void loadFoodTruckFeed() {
+    public void initialLoad() {
+        loadFoodTruckFeed(0);
+    }
+
+    @Override
+    public void loadFoodTruckFeed(int page) {
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
 
-        Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK);
+        Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK, page);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
