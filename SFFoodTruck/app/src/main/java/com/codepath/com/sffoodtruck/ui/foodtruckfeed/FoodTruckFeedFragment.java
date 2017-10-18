@@ -17,6 +17,7 @@ import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.base.mvp.BaseLocationFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
 import com.codepath.com.sffoodtruck.ui.util.EndlessRecyclerViewScrollListener;
 import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
@@ -27,8 +28,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FoodTruckFeedFragment extends AbstractMvpFragment<FoodTruckFeedContract.MvpView,
-        FoodTruckFeedContract.Presenter> implements FoodTruckFeedContract.MvpView {
+public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodTruckFeedContract.MvpView {
 
     private FragmentFoodTruckFeedBinding mBinding;
     private FoodTruckFeedAdapter mAdapter;
