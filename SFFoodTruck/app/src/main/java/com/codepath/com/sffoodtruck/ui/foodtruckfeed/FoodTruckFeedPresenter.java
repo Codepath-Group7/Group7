@@ -1,6 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 
@@ -28,7 +29,6 @@ implements FoodTruckFeedContract.Presenter{
     private static final String FOODTRUCK = "foodtrucks";
     private final String authToken;
 
-
     public FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
         this.authToken = authToken;
@@ -44,7 +44,7 @@ implements FoodTruckFeedContract.Presenter{
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
 
-        Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK, page);
+        Call<SearchResults> callResults = services.getSearchResults("95112" ,FOODTRUCK, page);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
