@@ -16,6 +16,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
@@ -39,37 +41,50 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
     private FusedLocationProviderClient client;
     private Geocoder geocoder;
     private SearchApi searchApi;
+    private Place placePreference;
 
     public FoodTruckMapPresenter(SearchApi searchApi
-            , FusedLocationProviderClient client, Geocoder geocoder) {
+            , FusedLocationProviderClient client, Geocoder geocoder, Place placePreference) {
         this.searchApi = searchApi;
         this.client = client;
         this.geocoder = geocoder;
+        this.placePreference = placePreference;
     }
 
     @Override
     public void loadFoodTrucks() {
-        getLocation(new ResponseHandler<Location>() {
-            @Override
-            public void onComplete(Location location) {
-                if (location != null) {
-                    getView().renderZoomToLocation(location);
-                }
-                String locationString = findLocation(location);
-                searchForFoodTrucks(locationString);
-            }
+        if (placePreference != null && placePreference.getLatLng() != null) {
+            LatLng latLng = placePreference.getLatLng();
+            Location location = new Location("Place");
+            location.setLatitude(latLng.latitude);
+            location.setLongitude(latLng.longitude);
+            getView().renderZoomToLocation(location);
 
-            @Override
-            public void onFailed(String message, Exception exception) {
-                Log.e(TAG, Log.getStackTraceString(exception));
-            }
-        });
+            String locationString = findLocation(location);
+            searchForFoodTrucks(locationString);
+        } else {
+            getLocation(new ResponseHandler<Location>() {
+                @Override
+                public void onComplete(Location location) {
+                    if (location != null) {
+                        getView().renderZoomToLocation(location);
+                    }
+                    String locationString = findLocation(location);
+                    searchForFoodTrucks(locationString);
+                }
+
+                @Override
+                public void onFailed(String message, Exception exception) {
+                    Log.e(TAG, Log.getStackTraceString(exception));
+                }
+            });
+        }
     }
 
     private void searchForFoodTrucks(String location) {
         if (TextUtils.isEmpty(location)) return;
 
-        Call<SearchResults> callResults = searchApi.getSearchResults(location, FOODTRUCK);
+        Call<SearchResults> callResults = searchApi.getSearchResults(location, FOODTRUCK, 0);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call,

@@ -75,6 +75,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 //Updating the preference of location manually
                 QueryPreferences.storeLocationPref(getActivity(),
                         place.getAddress().toString());
+
+                QueryPreferences.storePlacePref(getActivity(), place);
                 LatLng latLng = place.getLatLng();
                 Log.d(TAG,"LatLng " + latLng.latitude + ", " +latLng.longitude);
             }

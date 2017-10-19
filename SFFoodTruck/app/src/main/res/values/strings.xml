@@ -42,6 +42,7 @@
 
     <string name="pref_location_picker_label">Preferred Location</string>
     <string name="pref_location_picker_key">pref_location_key</string>
+    <string name="pref_location_picker_place_key">pref_location_place_key</string>
     <string name="pref_location_picker_summary">Select your preferred location</string>
 
     <!-- TODO: Remove or change this placeholder text -->
