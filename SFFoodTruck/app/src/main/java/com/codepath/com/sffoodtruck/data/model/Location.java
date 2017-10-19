@@ -106,13 +106,13 @@ public class Location implements Parcelable {
     }
 
     public String getCompleteAddress() {
-        if(displayAddress.size()==2){
-            return displayAddress.get(0) + ", " + displayAddress.get(1);
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String address : this.displayAddress){
+            stringBuilder.append(address);
+            stringBuilder.append(", ");
         }
-        else{
-            return displayAddress.get(0);
-        }
-
+        String completeAddress = stringBuilder.toString();
+        return completeAddress.substring(0,completeAddress.length()-2);
     }
 
     public void setDisplayAddress(List<String> displayAddress) {
