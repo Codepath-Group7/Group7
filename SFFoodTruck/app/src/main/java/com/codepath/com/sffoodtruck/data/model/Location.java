@@ -112,7 +112,8 @@ public class Location implements Parcelable {
             stringBuilder.append(", ");
         }
         String completeAddress = stringBuilder.toString();
-        return completeAddress.substring(0,completeAddress.length()-2);
+        if(completeAddress.length()>0) return completeAddress.substring(0,completeAddress.length()-2);
+        else return "";
     }
 
     public void setDisplayAddress(List<String> displayAddress) {
