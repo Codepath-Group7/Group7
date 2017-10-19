@@ -1,6 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -10,7 +11,9 @@ import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +30,9 @@ implements FoodTruckFeedContract.Presenter{
     private static final String TAG = FoodTruckFeedPresenter.class.getSimpleName();
     private static final String FOODTRUCK = "foodtrucks";
     private final String authToken;
+    private static final String PARAM_LOCATION = "location";
+    private static final String PARAM_CATEGORIES = "categories";
+    private static final String PARAM_TERM = "term";
 
 
     public FoodTruckFeedPresenter(String authToken){
@@ -35,11 +41,15 @@ implements FoodTruckFeedContract.Presenter{
     }
 
     @Override
-    public void loadFoodTruckFeed() {
+    public void loadFoodTruckFeed(String query) {
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
 
-        Call<SearchResults> callResults = services.getSearchResults("95112",FOODTRUCK);
+        Map<String,String> queryParams = new HashMap<>();
+        queryParams.put(PARAM_LOCATION,"95112");
+        queryParams.put(PARAM_CATEGORIES,FOODTRUCK);
+        if(query!=null && !TextUtils.isEmpty(query)) queryParams.put(PARAM_TERM,query);
+        Call<SearchResults> callResults = services.getSearchResults(queryParams);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
