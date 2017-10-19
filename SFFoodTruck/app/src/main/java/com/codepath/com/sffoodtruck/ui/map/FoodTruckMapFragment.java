@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
@@ -21,6 +22,7 @@ import com.codepath.com.sffoodtruck.ui.common.ActivityRequestCodeGenerator;
 import com.codepath.com.sffoodtruck.ui.util.MapUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -66,13 +68,11 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     public FoodTruckMapContract.Presenter createPresenter() {
         SearchApi searchApi = RetrofitClient
                 .createService(SearchApi.class, getContext());
-
         final FusedLocationProviderClient client =
                 LocationServices.getFusedLocationProviderClient(getContext());
-
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-        return new FoodTruckMapPresenter(searchApi, client, geocoder);
+        Place placePref = QueryPreferences.getPlacePref(getContext());
+        return new FoodTruckMapPresenter(searchApi, client, geocoder, placePref);
     }
 
     @Nullable
