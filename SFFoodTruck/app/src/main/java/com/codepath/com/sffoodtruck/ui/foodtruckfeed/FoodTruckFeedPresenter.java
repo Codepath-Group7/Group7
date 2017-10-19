@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 
@@ -34,20 +35,23 @@ implements FoodTruckFeedContract.Presenter{
     private static final String PARAM_CATEGORIES = "categories";
     private static final String PARAM_TERM = "term";
 
-
     public FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
         this.authToken = authToken;
     }
-
+    
+    public void initialLoad() { //add query string
+        loadFoodTruckFeed(0);
+    }
+   
     @Override
-    public void loadFoodTruckFeed(String query) {
+    public void loadFoodTruckFeed(int page) { //put query string
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
-
         Map<String,String> queryParams = new HashMap<>();
         queryParams.put(PARAM_LOCATION,"95112");
         queryParams.put(PARAM_CATEGORIES,FOODTRUCK);
+        //put page number
         if(query!=null && !TextUtils.isEmpty(query)) queryParams.put(PARAM_TERM,query);
         Call<SearchResults> callResults = services.getSearchResults(queryParams);
         callResults.enqueue(new Callback<SearchResults>() {

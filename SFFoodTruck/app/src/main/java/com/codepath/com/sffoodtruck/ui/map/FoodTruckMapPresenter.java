@@ -70,7 +70,7 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
 
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, context);
-        Call<SearchResults> callResults = services.getSearchResults(location,FOODTRUCK);
+        Call<SearchResults> callResults = services.getSearchResults(location,FOODTRUCK,0);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call,
