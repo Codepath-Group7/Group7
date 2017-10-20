@@ -60,4 +60,27 @@ public class QueryPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_CURRENT_LOCATION,null);
     }
+
+    public static void storePlacePref(Context context , Place place){
+        String jsonStr = JsonUtils.toJson(place);
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(context.getString(R.string.pref_location_picker_place_key), jsonStr)
+                .apply();
+    }
+
+    @Nullable
+    public static Place getPlacePref(Context context){
+        String jsonStr = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.pref_location_picker_place_key), "");
+        if (TextUtils.isEmpty(jsonStr)) return null;
+
+        Place place = null;
+        try {
+            place = JsonUtils.fromJson(jsonStr, PlaceEntity.class);
+        } catch (Exception ex) {
+            Log.e(TAG, Log.getStackTraceString(ex));
+        }
+        return place;
+    }
 }
