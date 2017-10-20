@@ -96,8 +96,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     private void startLocationUpdates() {
         String perms[] = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
-        if(EasyPermissions.hasPermissions(getActivity(),perms)) {
-            Log.d(TAG,"Calling startLocationUpdates");
+
+        if(mGoogleApiClient.isConnected() && EasyPermissions.hasPermissions(getActivity(),perms)) {
             checkLocationSettings();
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -196,8 +196,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                 case LocationSettingsStatusCodes.SUCCESS:
                     // All location settings are satisfied. The client can
                     // initialize location requests here.
-                  //  Log.d(TAG,"All Location settings are granted ");
-                  //  startLocationUpdates();
+                    Log.d(TAG,"All Location settings are granted ");
+                    //startLocationUpdates();
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     // Location settings are not satisfied, but this can be fixed

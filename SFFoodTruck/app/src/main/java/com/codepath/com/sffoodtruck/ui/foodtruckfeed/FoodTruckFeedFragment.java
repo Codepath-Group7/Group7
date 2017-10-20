@@ -36,15 +36,21 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     private FragmentFoodTruckFeedBinding mBinding;
     private FoodTruckFeedAdapter mAdapter;
     private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
+    private static final String ARG_QUERY = "query";
+    private String mQuery = null;
     private SharedPreferences mSharedPreferences;
-
+  
     public FoodTruckFeedFragment() {
         // Required empty public constructor
     }
 
 
-    public static FoodTruckFeedFragment newInstance(){
-        return new FoodTruckFeedFragment();
+    public static FoodTruckFeedFragment newInstance(String queryString){
+        FoodTruckFeedFragment foodTruckFeedFragment = new FoodTruckFeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_QUERY,queryString);
+        foodTruckFeedFragment.setArguments(bundle);
+        return foodTruckFeedFragment;
     }
 
 
@@ -56,6 +62,9 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null){
+            mQuery = getArguments().getString(ARG_QUERY);
+        }
         mAdapter = new FoodTruckFeedAdapter(new ArrayList<>());
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
@@ -86,7 +95,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
                 (new EndlessRecyclerViewScrollListener(layoutManager){
                     @Override
                     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        getPresenter().loadFoodTruckFeed(page);
+                        getPresenter().loadFoodTruckFeed(mQuery, page);
                     }
                 });
     }
@@ -96,7 +105,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         if(getPresenter() != null && isAdded()){
-            getPresenter().initialLoad();
+            getPresenter().initialLoad(mQuery); //add query String
         }else{
             Log.d("PRESENTER","it is null");
         }
@@ -112,8 +121,6 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     public void showFoodTruckList(List<Business> businessList) {
         mAdapter.addData(businessList);
     }
-
-
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

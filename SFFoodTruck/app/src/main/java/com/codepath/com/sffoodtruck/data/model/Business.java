@@ -129,7 +129,7 @@ public class Business implements Parcelable {
      */
     public String getAllCategories(){
         if(categories == null || categories.size() == 0){
-            return null;
+            return "";
         }else{
             StringBuilder categoryStringBuilder = new StringBuilder();
             for(Category category : categories){
@@ -139,7 +139,8 @@ public class Business implements Parcelable {
                 }
             }
             String categoryString = categoryStringBuilder.toString();
-            return categoryString.substring(0,categoryString.length()-2);
+            if(categoryString.length()>0) return categoryString.substring(0,categoryString.length()-2);
+            else return "";
         }
     }
     /* End of changes*/

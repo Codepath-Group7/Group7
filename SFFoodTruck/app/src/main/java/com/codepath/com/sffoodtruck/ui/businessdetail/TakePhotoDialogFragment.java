@@ -94,7 +94,7 @@ public class TakePhotoDialogFragment extends DialogFragment {
         if(getTargetFragment()!=null){
             Intent photoData = new Intent();
             photoData.putExtra(EXTRA_PHOTO_URI,mCurrentPhotoPath);
-            getTargetFragment().onActivityResult(BusinessDetailFragment.REQUEST_PHOTO,Activity.RESULT_OK,photoData);
+            getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK,photoData);
             dismiss();
         }
 
