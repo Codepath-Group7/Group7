@@ -56,7 +56,7 @@ implements FoodTruckFeedContract.Presenter{
                 }
 
                 List<Business> businesses = searchResults.getBusinesses();
-                getView().showFoodTruckList(businesses);
+                if(getView()!= null) getView().showFoodTruckList(businesses);
             }
 
             @Override
