@@ -90,7 +90,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
                 (new EndlessRecyclerViewScrollListener(layoutManager){
                     @Override
                     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        getPresenter().loadFoodTruckFeed(page);
+                        getPresenter().loadFoodTruckFeed(mQuery, page);
                     }
                 });
     }
@@ -99,7 +99,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     public void onResume() {
         super.onResume();
         if(getPresenter() != null && isAdded()){
-            getPresenter().initialLoad(); //add query String
+            getPresenter().initialLoad(mQuery); //add query String
         }else{
             Log.d("PRESENTER","it is null");
         }

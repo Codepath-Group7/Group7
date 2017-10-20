@@ -34,24 +34,26 @@ implements FoodTruckFeedContract.Presenter{
     private static final String PARAM_LOCATION = "location";
     private static final String PARAM_CATEGORIES = "categories";
     private static final String PARAM_TERM = "term";
+    private static final String PARAM_OFFSET = "offset";
 
     public FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
         this.authToken = authToken;
     }
     
-    public void initialLoad() { //add query string
-        loadFoodTruckFeed(0);
+    public void initialLoad(String query) { //add query string
+        loadFoodTruckFeed(query, 0);
     }
    
     @Override
-    public void loadFoodTruckFeed(int page) { //put query string
+    public void loadFoodTruckFeed(String query, int page) {
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
         Map<String,String> queryParams = new HashMap<>();
         queryParams.put(PARAM_LOCATION,"95112");
         queryParams.put(PARAM_CATEGORIES,FOODTRUCK);
         //put page number
+        queryParams.put(PARAM_OFFSET,String.valueOf(page*20));
         if(query!=null && !TextUtils.isEmpty(query)) queryParams.put(PARAM_TERM,query);
         Call<SearchResults> callResults = services.getSearchResults(queryParams);
         callResults.enqueue(new Callback<SearchResults>() {
