@@ -11,7 +11,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedContract;
+import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
+import com.codepath.com.sffoodtruck.ui.util.MapUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -22,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.firebase.database.Query;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,8 +50,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     protected String mLocationAddress;
     private static final String TAG = BaseLocationFragment.class.getSimpleName();
     private static final int RC_LOCATION = 10;
-    private static final int LOC_INTERVAL = 10000;
-    private static final int LOC_FAST_INTERVAL = 5000;
+    private static final int LOC_INTERVAL = 300000;
+    private static final int LOC_FAST_INTERVAL = 300000;
     private LocationRequest mLocationRequest;
     private boolean mRequestingLocationUpdates= true;
 
@@ -82,7 +86,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "Connected to Google API Client");
-        //getLastKnownLocation();
+        getLastKnownLocation();
         if(mRequestingLocationUpdates){
             startLocationUpdates();
         }
@@ -92,6 +96,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     private void startLocationUpdates() {
         String perms[] = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
+
         if(mGoogleApiClient.isConnected() && EasyPermissions.hasPermissions(getActivity(),perms)) {
             checkLocationSettings();
             LocationServices.FusedLocationApi
@@ -104,8 +109,11 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleApiClient, this);
+        }
+
     }
 
     @Override
@@ -126,9 +134,27 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         if(mLastLocation != null){
+            String storedLastLocation = QueryPreferences.getCurrentLocation(getActivity());
+            Log.d(TAG,"Stored last Location: " + storedLastLocation);
+            if(storedLastLocation == null){
+                QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));
+            }else{
+                Location lastLoc = JsonUtils.fromJson(storedLastLocation,Location.class);
+                Log.d(TAG,"Stored location: lat: " + lastLoc.getLatitude() + " , long: "
+                        +lastLoc.getLongitude());
+                if(mLastLocation.getLatitude() != lastLoc.getLatitude() ||
+                        mLastLocation.getLongitude() != lastLoc.getLongitude()){
+                    QueryPreferences.storeCurrentLocation(getActivity(),
+                            JsonUtils.toJson(mLastLocation));
+                    Log.d(TAG,"Updating the stored location with: "
+                            + JsonUtils.toJson(mLastLocation));
+                }else{
+                    Log.d(TAG,"current location and stored location are equal");
+                }
+            }
             Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                     +mLastLocation.getLongitude());
-            mLocationAddress = findLocation(mLastLocation);
+            mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
         }
     }
 
@@ -142,7 +168,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
             if(mLastLocation != null){
                 Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                         +mLastLocation.getLongitude());
-                mLocationAddress = findLocation(mLastLocation);
+                mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+                QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));
             }else{
                 Log.d(TAG,"Last known location is null");
             }
@@ -224,28 +251,10 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
     }
 
-    private String findLocation( Location location) {
-        if (location == null) return null;
-
-        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-
-        // lat,lng, your current location
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(), location.getLongitude(), 1);
-            if (addresses == null || addresses.isEmpty()) return null;
-
-            return addresses.get(0).getPostalCode();
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-        return null;
-    }
-
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(LOC_INTERVAL);
+        mLocationRequest.setFastestInterval(LOC_FAST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 

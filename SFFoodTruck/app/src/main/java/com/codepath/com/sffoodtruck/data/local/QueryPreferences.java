@@ -12,6 +12,7 @@ import com.codepath.com.sffoodtruck.R;
 public class QueryPreferences {
 
     private static final String PREF_KEY_AUTHORIZATION = "PREF_KEY_AUTHORIZATION";
+    public static final String PREF_CURRENT_LOCATION = "PREF_CURRENT_LOCATION";
 
 
     public static void storeAccessToken(Context context, String accessToken, String tokenType){
@@ -39,5 +40,17 @@ public class QueryPreferences {
     public static String getLocationPref(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(context.getString(R.string.pref_location_picker_key),"");
+    }
+
+    public static void storeCurrentLocation(Context context, String location){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREF_CURRENT_LOCATION,location)
+                .apply();
+    }
+
+    public static String getCurrentLocation(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_CURRENT_LOCATION,null);
     }
 }
