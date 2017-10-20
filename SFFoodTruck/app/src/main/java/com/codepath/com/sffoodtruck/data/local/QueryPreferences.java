@@ -20,6 +20,8 @@ public class QueryPreferences {
 
     private static final String PREF_KEY_AUTHORIZATION = "PREF_KEY_AUTHORIZATION";
     public static final String PREF_CURRENT_LOCATION = "PREF_CURRENT_LOCATION";
+    private static final String PREF_PLACE = "PREF_PLACE";
+
 
 
     public static void storeAccessToken(Context context, String accessToken, String tokenType){
@@ -65,14 +67,14 @@ public class QueryPreferences {
         String jsonStr = JsonUtils.toJson(place);
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putString(context.getString(R.string.pref_location_picker_place_key), jsonStr)
+                .putString(PREF_PLACE, jsonStr)
                 .apply();
     }
 
     @Nullable
     public static Place getPlacePref(Context context){
         String jsonStr = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(context.getString(R.string.pref_location_picker_place_key), "");
+                .getString(PREF_PLACE, "");
         if (TextUtils.isEmpty(jsonStr)) return null;
 
         Place place = null;
