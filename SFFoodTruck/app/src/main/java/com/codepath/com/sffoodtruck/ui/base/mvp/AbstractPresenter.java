@@ -7,5 +7,5 @@ package com.codepath.com.sffoodtruck.ui.base.mvp;
  */
 
 public abstract class AbstractPresenter<V extends MvpBaseView>
-        extends com.hannesdorfmann.mosby3.mvp.MvpBasePresenter<V> {
+        extends com.hannesdorfmann.mosby3.mvp.MvpNullObjectBasePresenter<V> {
 }

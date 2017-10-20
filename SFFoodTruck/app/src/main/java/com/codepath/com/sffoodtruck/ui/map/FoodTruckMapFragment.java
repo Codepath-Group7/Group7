@@ -1,21 +1,31 @@
 package com.codepath.com.sffoodtruck.ui.map;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
+import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
+import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
 import com.codepath.com.sffoodtruck.ui.common.ActivityRequestCodeGenerator;
 import com.codepath.com.sffoodtruck.ui.util.MapUtils;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -27,7 +37,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.ui.IconGenerator;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -37,10 +50,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContract.MvpView
         , FoodTruckMapContract.Presenter> implements OnMapReadyCallback
-        , EasyPermissions.PermissionCallbacks, FoodTruckMapContract.MvpView {
+        , EasyPermissions.PermissionCallbacks, FoodTruckMapContract.MvpView, GoogleMap.OnInfoWindowClickListener {
 
     private static final int REQUEST_CODE_LOCATION = ActivityRequestCodeGenerator.getFreshInt();
-
+    private Map<String, FoodTruckMapViewModel> viewModelMap = new HashMap<>();
     private MapView mapView;
     private GoogleMap map;
     private Bundle bundle;
@@ -58,7 +71,13 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
     @Override
     public FoodTruckMapContract.Presenter createPresenter() {
-        return new FoodTruckMapPresenter();
+        SearchApi searchApi = RetrofitClient
+                .createService(SearchApi.class, getContext());
+        final FusedLocationProviderClient client =
+                LocationServices.getFusedLocationProviderClient(getContext());
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        Place placePref = QueryPreferences.getPlacePref(getContext());
+        return new FoodTruckMapPresenter(searchApi, client, geocoder, placePref);
     }
 
     @Nullable
@@ -140,8 +159,9 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+        this.map.setOnInfoWindowClickListener(this);
         enableMapMyLocation(map);
-        getPresenter().loadFoodTrucks(getContext());
+        getPresenter().loadFoodTrucks();
     }
 
     private void enableMapMyLocation(GoogleMap map) {
@@ -157,6 +177,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     @Override
     public void renderFoodTrucks(List<FoodTruckMapViewModel> viewModels) {
         if (viewModels.isEmpty()) return;
+
+        viewModelMap.clear();
 
         for (FoodTruckMapViewModel viewModel : viewModels) {
             addFoodTruckToMap(viewModel);
@@ -188,5 +210,22 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
         LatLng point = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
         Marker marker = MapUtils.addMarker(map, point, name, "", icon);
+
+        String id = viewModel.getId();
+        marker.setTag(id);
+        viewModelMap.put(id, viewModel);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        String id = (String) marker.getTag();
+        if (TextUtils.isEmpty(id)) return;
+
+        FoodTruckMapViewModel viewModel = viewModelMap.get(id);
+        if (viewModel == null) return;
+
+        Intent intent = BusinessDetailActivity.newIntent(getContext()
+                , viewModel.getBusiness());
+        startActivity(intent);
     }
 }
