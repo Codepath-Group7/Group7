@@ -95,6 +95,22 @@
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable"/>
         </activity>
+
+        <service android:name=".data.remote.service.FirebaseRegistrationIntentService" android:exported="false"/>
+        <service
+            android:name=".data.remote.service.AppInstanceIdListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".data.remote.service.FCMMessageHandlerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
