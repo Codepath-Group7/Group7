@@ -57,10 +57,9 @@ dependencies {
     }
 
     //social login dependencies
-    
 
     // Plain MVP
-    
+
     final GOOGLE_PLAY_SERVICES_VERSION = '11.0.4'
     final FIREBASE_VERSION = '11.0.4'
     final SUPPORT_VERSION = '25.3.1'
@@ -75,22 +74,22 @@ dependencies {
     compile "com.android.support:support-v4:$SUPPORT_VERSION"
     compile "com.android.support:preference-v7:$SUPPORT_VERSION"
 
+    compile "com.google.firebase:firebase-auth:$FIREBASE_VERSION"
+    compile "com.google.firebase:firebase-storage:$FIREBASE_VERSION"
+    compile "com.google.firebase:firebase-database:$FIREBASE_VERSION"
+
+
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
-    compile "com.google.firebase:firebase-auth:$FIREBASE_VERSION"
-    compile "com.google.firebase:firebase-storage:$FIREBASE_VERSION"
-    compile "com.google.firebase:firebase-database:$FIREBASE_VERSION"
     compile 'com.facebook.android:facebook-login:4.27.0'
     compile 'pub.devrel:easypermissions:1.0.1'
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4'
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5'
-
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

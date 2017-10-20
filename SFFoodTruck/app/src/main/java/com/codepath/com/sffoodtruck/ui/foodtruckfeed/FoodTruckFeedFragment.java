@@ -33,14 +33,19 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     private FragmentFoodTruckFeedBinding mBinding;
     private FoodTruckFeedAdapter mAdapter;
     private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
-
+    private static final String ARG_QUERY = "query";
+    private String mQuery = null;
     public FoodTruckFeedFragment() {
         // Required empty public constructor
     }
 
 
-    public static FoodTruckFeedFragment newInstance(){
-        return new FoodTruckFeedFragment();
+    public static FoodTruckFeedFragment newInstance(String queryString){
+        FoodTruckFeedFragment foodTruckFeedFragment = new FoodTruckFeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_QUERY,queryString);
+        foodTruckFeedFragment.setArguments(bundle);
+        return foodTruckFeedFragment;
     }
 
 
@@ -52,6 +57,9 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null){
+            mQuery = getArguments().getString(ARG_QUERY);
+        }
         mAdapter = new FoodTruckFeedAdapter(new ArrayList<>());
 
     }
@@ -82,7 +90,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
                 (new EndlessRecyclerViewScrollListener(layoutManager){
                     @Override
                     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        getPresenter().loadFoodTruckFeed(page);
+                        getPresenter().loadFoodTruckFeed(mQuery, page);
                     }
                 });
     }
@@ -91,7 +99,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements FoodT
     public void onResume() {
         super.onResume();
         if(getPresenter() != null && isAdded()){
-            getPresenter().initialLoad();
+            getPresenter().initialLoad(mQuery); //add query String
         }else{
             Log.d("PRESENTER","it is null");
         }

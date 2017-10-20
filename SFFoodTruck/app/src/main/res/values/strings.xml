@@ -69,5 +69,8 @@
     <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It…</string>
     <string name="label_submit">submit</string>
     <string name="hint_review_text">Review</string>
+    <string name="search_hint">Search Food Trucks</string>
+    <string name="label_search">Search</string>
+    <string name="error_empty_review">Review Text cannot be empty</string>
 
 </resources>
