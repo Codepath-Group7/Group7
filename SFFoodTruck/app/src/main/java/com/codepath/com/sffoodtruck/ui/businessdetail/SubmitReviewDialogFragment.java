@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 
 import com.codepath.com.sffoodtruck.R;
@@ -41,7 +42,10 @@ public class SubmitReviewDialogFragment extends DialogFragment {
     }
 
     private void submitReview() {
-
+        if(TextUtils.isEmpty(mBinding.etReviewText.getText())){
+            mBinding.layoutReviewText.setError(getString(R.string.error_empty_review));
+            return;
+        }
         Review newReview = new Review();
         User user = new User();
         FirebaseUser firebaseUser = FirebaseUtils.getCurrentUser();

@@ -1,6 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBasePresenter;
@@ -15,13 +16,15 @@ import java.util.List;
 public interface FoodTruckFeedContract {
 
     interface MvpView extends MvpBaseView{
-        void showFoodTruckList(List<Business> businessList);
+        void appendFoodTruckList(List<Business> businessList);
+        void loadInitialFoodTruckList(List<Business> businessList);
     }
 
 
     interface Presenter extends MvpBasePresenter<MvpView>{
-        void initialLoad();
-        void loadFoodTruckFeed(int page);
+        void initialLoad(String query);
+        void loadFoodTruckFeed(String location, String query, int page);
+        void updateLocation(String location, String query);
     }
 
 }

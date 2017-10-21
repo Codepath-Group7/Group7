@@ -4,6 +4,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +23,6 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -126,7 +125,9 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
         mBinding.rbFoodTruckRating.setRating(data.getRating());
         mBinding.tvPrice.setText(data.getPrice());
-        mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
+        if(data.getHours()!=null && data.getHours().size()>0){
+            mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
+        }
         mPhotosAdapter.addPhotos(data.getPhotos());
         getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
         Picasso.with(getActivity())
@@ -143,8 +144,9 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
-            Log.d(TAG, "From photo dialog fragment " + data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI));
-            getPresenter().uploadPhotoToStorage(data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI), mBusiness.getId());
+            Uri photoUri = data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI);
+            Log.d(TAG, "From photo dialog fragment " + photoUri);
+            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri, mBusiness.getId());
         }
         else if(requestCode == REQUEST_REVIEW && resultCode == Activity.RESULT_OK){
             Review review = data.getParcelableExtra(SubmitReviewDialogFragment.EXTRA_REVIEW);

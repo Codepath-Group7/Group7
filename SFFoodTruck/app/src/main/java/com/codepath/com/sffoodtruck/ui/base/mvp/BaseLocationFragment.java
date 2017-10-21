@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedContract;
+import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
+import com.codepath.com.sffoodtruck.ui.util.MapUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -22,6 +26,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.firebase.database.Query;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,10 +51,10 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     protected String mLocationAddress;
     private static final String TAG = BaseLocationFragment.class.getSimpleName();
     private static final int RC_LOCATION = 10;
-    private static final int LOC_INTERVAL = 10000;
-    private static final int LOC_FAST_INTERVAL = 5000;
+    private static final int LOC_INTERVAL = 3000;
+    private static final int LOC_FAST_INTERVAL = 3000;
     private LocationRequest mLocationRequest;
-    private boolean mRequestingLocationUpdates= true;
+    private static boolean mRequestingLocationUpdates= true;
 
 
     @Override
@@ -82,18 +87,19 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "Connected to Google API Client");
-        //getLastKnownLocation();
-        if(mRequestingLocationUpdates){
+        getLastKnownLocation();
+        /*if(mRequestingLocationUpdates){
             startLocationUpdates();
-        }
+        }*/
     }
 
     @AfterPermissionGranted(RC_LOCATION)
     private void startLocationUpdates() {
         String perms[] = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
+
         if(mGoogleApiClient.isConnected() && EasyPermissions.hasPermissions(getActivity(),perms)) {
-            checkLocationSettings();
+            Log.d(TAG,"Requesting location updates");
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }else{
@@ -104,7 +110,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     }
 
     protected void stopLocationUpdates() {
-        if(mGoogleApiClient.isConnected()){
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
@@ -120,17 +126,48 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     public void onResume() {
         super.onResume();
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
+            Log.d(TAG,"Calling location updates in onResume");
             startLocationUpdates();
+        }else{
+            Log.d(TAG,"Google Api client: " +mGoogleApiClient.isConnected() +
+            "mRequestLocationUpdate: " + mRequestingLocationUpdates);
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(TAG,"On Location changed called");
         mLastLocation = location;
         if(mLastLocation != null){
+            storeCurrentLocation(mLastLocation);
             Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                     +mLastLocation.getLongitude());
-            mLocationAddress = findLocation(mLastLocation);
+            mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+        }else{
+            Log.d(TAG,"On Location received got null");
+        }
+    }
+
+    private void storeCurrentLocation(Location currentLocation){
+        String storedLastLocation = QueryPreferences.getCurrentLocation(getActivity());
+        Log.d(TAG,"Stored last Location: " + storedLastLocation);
+        if(storedLastLocation == null){
+            QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(currentLocation));
+        }else{
+            Location lastLoc = JsonUtils.fromJson(storedLastLocation,Location.class);
+            Log.d(TAG,"Stored location: lat: " + lastLoc.getLatitude() + " , long: "
+                    +lastLoc.getLongitude());
+            float distanceBetween = lastLoc.distanceTo(currentLocation);
+            Log.d(TAG,"Distance between: " + distanceBetween);
+            //Toast.makeText(getCAc)
+            if(distanceBetween >= 100){
+                QueryPreferences.storeCurrentLocation(getActivity(),
+                        JsonUtils.toJson(currentLocation));
+                Log.d(TAG,"Updating the stored location with: "
+                        + JsonUtils.toJson(currentLocation));
+            }else{
+                Log.d(TAG,"current location and stored location are less than 150 meters apart");
+            }
         }
     }
 
@@ -144,7 +181,9 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
             if(mLastLocation != null){
                 Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                         +mLastLocation.getLongitude());
-                mLocationAddress = findLocation(mLastLocation);
+                mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+                /*QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));*/
+                storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");
             }
@@ -226,28 +265,10 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
     }
 
-    private String findLocation( Location location) {
-        if (location == null) return null;
-
-        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-
-        // lat,lng, your current location
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(), location.getLongitude(), 1);
-            if (addresses == null || addresses.isEmpty()) return null;
-
-            return addresses.get(0).getPostalCode();
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-        return null;
-    }
-
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(LOC_INTERVAL);
+        mLocationRequest.setFastestInterval(LOC_FAST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 

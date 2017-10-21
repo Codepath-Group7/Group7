@@ -1,29 +1,31 @@
-package com.codepath.com.sffoodtruck;
+package com.codepath.com.sffoodtruck.ui.search;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.codepath.com.sffoodtruck.HomeActivity;
+import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.databinding.ActivitySearchBinding;
+import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailFragment;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
-import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
-import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
-import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
-import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
-import com.crashlytics.android.Crashlytics;
-
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -33,75 +35,97 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
-import io.fabric.sdk.android.Fabric;
-
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class SearchActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;
-    private final static String TAG = HomeActivity.class.getSimpleName();
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-                changeFragment(item.getItemId());
-                return true;
-            };
-
+    private final static String TAG = SearchActivity.class.getSimpleName();
+    private ActivitySearchBinding mBinding;
+    private String mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_home);
+        //setContentView(R.layout.activity_search);
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_search);
+        setSupportActionBar(mBinding.toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        handleIntent(getIntent());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        changeFragment(R.id.navigation_home);
     }
 
-    private void changeFragment(int itemViewId) {
-        Fragment newFragment = null;
+    private void initialize() {
 
-        switch (itemViewId) {
-            case R.id.navigation_map:
-                newFragment = FoodTruckMapFragment.newInstance();
-                break;
-            case R.id.navigation_home:
-                newFragment = FoodTruckFeedFragment.newInstance(null);
-                break;
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fl_food_truck_feed);
+        if (fragment!=null) {
+            fragment = FoodTruckFeedFragment.newInstance(mQuery);
+            fm.beginTransaction()
+                    .replace(R.id.fl_food_truck_feed, fragment)
+                    .commit();
+        } else {
+            fragment = FoodTruckFeedFragment.newInstance(mQuery);
+            fm.beginTransaction()
+                    .add(R.id.fl_food_truck_feed, fragment)
+                    .commit();
         }
+    }
 
-        if (newFragment == null) return;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
 
-        Fragment currentFragment = getSupportFragmentManager()
-                .findFragmentById(R.id.content);
-        if (newFragment.getClass().isInstance(currentFragment)) return;
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doMySearch(query);
+        }
+    }
 
-        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                newFragment,R.id.content);
+    private void doMySearch(String query) {
+        Log.d(TAG,"The search query is--> "+query);
+        mQuery = query;
+        initialize();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_home_screen,menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(HomeActivity.this, SearchActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                return true;
-            }
-        });
+        inflater.inflate(R.menu.menu_search_screen,menu);
         // Get the SearchView and set the searchable configuration
-        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default*/
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        // If query String is not empty set the value to the search view.
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        searchItem.expandActionView();
+        searchView.requestFocus();
+        if (!TextUtils.isEmpty(mQuery)) {
+            Log.d(TAG, "Setting query");
+
+            searchView.setQuery(mQuery, false);
+        }
+
+        //Close the Search results fragment when home button on app bar is pressed.
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Log.d(TAG,"Search view back pressed");
+                finish();
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -116,10 +140,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                         new Intent(this, SettingsActivity.class);
                 startActivity(startSettingsActivity);
                 return true;
-            case R.id.action_account:
-                Intent accountIntent =
-                        new Intent(this, UserProfileActivity.class);
-                startActivity(accountIntent);
+            case R.id.menu_search:
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -175,5 +201,4 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 }
