@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
+import com.codepath.com.sffoodtruck.ui.nearby.NearByActivity;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
@@ -115,6 +116,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent startSettingsActivity =
                         new Intent(this, SettingsActivity.class);
                 startActivity(startSettingsActivity);
+                return true;
+            case R.id.action_nearby:
+                startActivity(new Intent(this, NearByActivity.class));
                 return true;
             case R.id.action_account:
                 Intent accountIntent =

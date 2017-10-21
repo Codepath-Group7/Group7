@@ -1,0 +1,58 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.codepath.com.sffoodtruck.ui.nearby.NearByFragment">
+    <RelativeLayout
+         android:id="@+id/rlNearBy"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+
+        <android.support.v7.widget.Toolbar
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@color/colorTextColor"
+            app:title="@string/group_chat"
+            android:id="@+id/toolbar"
+            />
+
+        <LinearLayout
+            android:id="@+id/llGroupChat"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:id="@+id/etSendMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/send_message_hint"
+                />
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_send_message"
+                app:elevation="@dimen/defaultElevation"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvGroupChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/llGroupChat"
+            android:layout_marginBottom="@dimen/margin4"
+            />
+
+    </RelativeLayout>
+
+</layout>

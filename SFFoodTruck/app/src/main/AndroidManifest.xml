@@ -73,8 +73,13 @@
             android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key"/>
+            android:value="@string/google_api_key_enabled"/>
 
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="@string/google_api_key_enabled" />
+
+        <activity android:name=".ui.nearby.NearByActivity"/>
         <activity android:name=".ui.businessdetail.BusinessDetailActivity"/>
 
         <provider
