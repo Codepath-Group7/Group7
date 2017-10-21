@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.data.remote.service;
+package com.codepath.com.sffoodtruck.infrastructure.service;
 
 import android.app.IntentService;
 import android.content.Context;

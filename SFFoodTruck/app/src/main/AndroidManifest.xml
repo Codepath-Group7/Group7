@@ -96,16 +96,16 @@
                        android:resource="@xml/searchable"/>
         </activity>
 
-        <service android:name=".data.remote.service.FirebaseRegistrationIntentService" android:exported="false"/>
+        <service android:name=".infrastructure.service.FirebaseRegistrationIntentService" android:exported="false"/>
         <service
-            android:name=".data.remote.service.AppInstanceIdListenerService"
+            android:name=".infrastructure.service.AppInstanceIdListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".data.remote.service.FCMMessageHandlerService"
+            android:name=".infrastructure.service.FCMMessageHandlerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

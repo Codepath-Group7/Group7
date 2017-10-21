@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.data.remote.service;
+package com.codepath.com.sffoodtruck.infrastructure.service;
 
 import com.google.firebase.iid.FirebaseInstanceIdService;
 

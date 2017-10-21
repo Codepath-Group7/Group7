@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.codepath.com.sffoodtruck.data.remote.service.FirebaseRegistrationIntentService;
+import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
