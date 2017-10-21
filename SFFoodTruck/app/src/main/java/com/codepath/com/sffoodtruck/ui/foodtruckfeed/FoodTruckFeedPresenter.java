@@ -1,16 +1,15 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.location.Location;
 import android.util.Log;
-import android.view.View;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
+import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +34,7 @@ implements FoodTruckFeedContract.Presenter{
     private static final String PARAM_CATEGORIES = "categories";
     private static final String PARAM_TERM = "term";
     private static final String PARAM_OFFSET = "offset";
+    private static boolean sInitialLoad = false;
 
     public FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
@@ -42,15 +42,24 @@ implements FoodTruckFeedContract.Presenter{
     }
     
     public void initialLoad(String query) { //add query string
-        loadFoodTruckFeed(query, 0);
+        sInitialLoad = true;
+        loadFoodTruckFeed(null,query,0);
     }
-   
+
+
     @Override
-    public void loadFoodTruckFeed(String query, int page) {
+    public void loadFoodTruckFeed(String location, String query, int page) {
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, authToken);
         Map<String,String> queryParams = new HashMap<>();
-        queryParams.put(PARAM_LOCATION,"95112");
+        if(location != null){
+            Location loc = JsonUtils.fromJson(location,Location.class);
+            queryParams.put("latitude",String.valueOf(loc.getLatitude()));
+            queryParams.put("longitude",String.valueOf(loc.getLongitude()));
+        }else{
+            queryParams.put(PARAM_LOCATION,"San Jose, California");
+        }
+        //queryParams.put(PARAM_LOCATION,"95112");
         queryParams.put(PARAM_CATEGORIES,FOODTRUCK);
         //put page number
         queryParams.put(PARAM_OFFSET,String.valueOf(page*20));
@@ -61,13 +70,19 @@ implements FoodTruckFeedContract.Presenter{
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
                 SearchResults searchResults = response.body();
                 if (searchResults == null || searchResults.getBusinesses() == null
-                        || searchResults.getBusinesses().isEmpty()) {
+                        || searchResults.getBusinesses().isEmpty() || getView() == null) {
                     Log.e(TAG, "response has failed " + response.code());
                     return;
                 }
 
                 List<Business> businesses = searchResults.getBusinesses();
-                getView().showFoodTruckList(businesses);
+                if(sInitialLoad){
+                    getView().loadInitialFoodTruckList(businesses);
+                }else{
+                    getView().appendFoodTruckList(businesses);
+                }
+                sInitialLoad = false;
+
             }
 
             @Override
@@ -76,5 +91,12 @@ implements FoodTruckFeedContract.Presenter{
             }
         });
     }
+
+    @Override
+    public void updateLocation(String location, String query) {
+        sInitialLoad = true;
+        loadFoodTruckFeed(location,query,0);
+    }
+
 
 }

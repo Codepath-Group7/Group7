@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
-import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.base.mvp.BaseLocationFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
 import com.codepath.com.sffoodtruck.ui.util.EndlessRecyclerViewScrollListener;
@@ -38,6 +39,8 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
     private static final String ARG_QUERY = "query";
     private String mQuery = null;
+    private static String sLocation = null;
+
     private SharedPreferences mSharedPreferences;
   
     public FoodTruckFeedFragment() {
@@ -95,7 +98,8 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
                 (new EndlessRecyclerViewScrollListener(layoutManager){
                     @Override
                     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        getPresenter().loadFoodTruckFeed(mQuery, page);
+                        Log.d(TAG,"Calling load more");
+                        getPresenter().loadFoodTruckFeed(sLocation,mQuery, page);
                     }
                 });
     }
@@ -118,7 +122,13 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     }
 
     @Override
-    public void showFoodTruckList(List<Business> businessList) {
+    public void appendFoodTruckList(List<Business> businessList) {
+        mAdapter.addData(businessList);
+    }
+
+    @Override
+    public void loadInitialFoodTruckList(List<Business> businessList) {
+        mAdapter.clearData();
         mAdapter.addData(businessList);
     }
 
@@ -126,7 +136,19 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if(key.equals(QueryPreferences.PREF_CURRENT_LOCATION)){
-            //Handle location updates accordingly
+            //Handle sLocation updates accordingly
+            Log.d(TAG,"Location: " + QueryPreferences.getCurrentLocation(getActivity()));
+            sLocation = QueryPreferences.getCurrentLocation(getActivity());
+            Toast.makeText(getActivity(),"Current Location is: " +
+                    QueryPreferences.getCurrentLocation(getActivity()),Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(mBinding.getRoot(),
+                    getString(R.string.new_location),Snackbar.LENGTH_LONG);
+
+            snackbar.setAction(getString(R.string.load_new_results), view -> {
+                if(getPresenter() != null){
+                    getPresenter().updateLocation(sLocation,mQuery);
+                }
+            }).show();
         }
     }
 }

@@ -45,6 +45,10 @@ public class FoodTruckFeedAdapter extends SingleLayoutAdapter {
         notifyItemRangeInserted(oldSize, mBusinesses.size());
     }
 
+    public void clearData(){
+        mBusinesses.clear();
+    }
+
     public Business getBusinessForPos(int pos){
         if(pos >= 0 && pos < mBusinesses.size())
             return mBusinesses.get(pos);
