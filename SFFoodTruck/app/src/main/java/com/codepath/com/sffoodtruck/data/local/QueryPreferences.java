@@ -18,11 +18,22 @@ import com.google.android.gms.location.places.internal.PlaceEntity;
 public class QueryPreferences {
     private static final String TAG = QueryPreferences.class.getSimpleName();
 
-    private static final String PREF_KEY_AUTHORIZATION = "PREF_KEY_AUTHORIZATION";
+    public static final String PREF_FCM_TOKEN = "PREF_FCM_TOKEN";
     public static final String PREF_CURRENT_LOCATION = "PREF_CURRENT_LOCATION";
+    private static final String PREF_KEY_AUTHORIZATION = "PREF_KEY_AUTHORIZATION";
     private static final String PREF_PLACE = "PREF_PLACE";
 
+    public static void storeString(Context context, String key, String value) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(key, value)
+                .apply();
+    }
 
+    public static String getStoredString(Context context, String key) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(key, "");
+    }
 
     public static void storeAccessToken(Context context, String accessToken, String tokenType){
         PreferenceManager.getDefaultSharedPreferences(context)
