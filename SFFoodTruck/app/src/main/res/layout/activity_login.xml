@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="@dimen/btn_horizontal_margin"
         android:layout_marginLeft="@dimen/btn_horizontal_margin"
-        android:elevation="@dimen/elevation10">
+        android:elevation="@dimen/elevation5">
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"

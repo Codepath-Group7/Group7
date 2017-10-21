@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by saip92 on 10/11/2017.
  */
@@ -32,6 +34,14 @@ public class Location implements Parcelable {
     @SerializedName("zip_code")
     @Expose
     private String zipCode;
+    /*Start of fields required for Business Details*/
+    @SerializedName("display_address")
+    @Expose
+    private List<String> displayAddress = null;
+    @SerializedName("cross_streets")
+    @Expose
+    private String crossStreets;
+    /*End of fields required for Business Details*/
 
     public String getCity() {
         return city;
@@ -89,6 +99,37 @@ public class Location implements Parcelable {
         this.zipCode = zipCode;
     }
 
+    /*Start of methods required for Business Details*/
+
+    public List<String> getDisplayAddress() {
+        return displayAddress;
+    }
+
+    public String getCompleteAddress() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String address : this.displayAddress){
+            stringBuilder.append(address);
+            stringBuilder.append(", ");
+        }
+        String completeAddress = stringBuilder.toString();
+        if(completeAddress.length()>0) return completeAddress.substring(0,completeAddress.length()-2);
+        else return "";
+    }
+
+    public void setDisplayAddress(List<String> displayAddress) {
+        this.displayAddress = displayAddress;
+    }
+
+    public String getCrossStreets() {
+        return crossStreets;
+    }
+
+    public void setCrossStreets(String crossStreets) {
+        this.crossStreets = crossStreets;
+    }
+
+    /*End of methods required for Business Details*/
+
 
     @Override
     public int describeContents() {
@@ -104,6 +145,8 @@ public class Location implements Parcelable {
         dest.writeString(this.state);
         dest.writeString(this.address1);
         dest.writeString(this.zipCode);
+        dest.writeStringList(this.displayAddress);
+        dest.writeString(this.crossStreets);
     }
 
     public Location() {
@@ -117,6 +160,8 @@ public class Location implements Parcelable {
         this.state = in.readString();
         this.address1 = in.readString();
         this.zipCode = in.readString();
+        this.displayAddress = in.createStringArrayList();
+        this.crossStreets = in.readString();
     }
 
     public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {

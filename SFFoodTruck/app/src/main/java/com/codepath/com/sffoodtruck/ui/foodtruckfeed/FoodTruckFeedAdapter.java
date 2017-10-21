@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
+import android.util.Log;
+
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.base.mvp.SingleLayoutAdapter;
@@ -13,6 +15,7 @@ import java.util.List;
 public class FoodTruckFeedAdapter extends SingleLayoutAdapter {
 
     private List<Business> mBusinesses;
+    private static final String TAG = FoodTruckFeedAdapter.class.getSimpleName();
 
     public FoodTruckFeedAdapter(List<Business> businesses) {
         super(R.layout.foodtruck_feed_item_layout);
@@ -29,10 +32,21 @@ public class FoodTruckFeedAdapter extends SingleLayoutAdapter {
         return mBusinesses.size();
     }
 
-    public void addAll(List<Business> businesses){
-        mBusinesses.clear();
+    public void addData(List<Business> businesses){
+        if(mBusinesses.size() == 0){
+            Log.d(TAG,"Adding data for the first time to the adapter");
+            mBusinesses.addAll(businesses);
+            notifyDataSetChanged();
+            return;
+        }
+        Log.d(TAG,"Appending data to existing list of businesses in the adapter");
+        int oldSize = mBusinesses.size();
         mBusinesses.addAll(businesses);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(oldSize, mBusinesses.size());
+    }
+
+    public void clearData(){
+        mBusinesses.clear();
     }
 
     public Business getBusinessForPos(int pos){

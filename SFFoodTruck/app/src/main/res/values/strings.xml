@@ -51,13 +51,41 @@
     <string name="tools_business_desc"><![CDATA[Lounges, American, Venue & Event Spaces]]></string>
     <string name="tools_business_hrs">12 PM - 10 PM</string>
     <string name="tools_business_address">101 E San Fernando St, San Jose, CA 95112</string>
-    <string name="tools_business_phone">408-714-9133</string>
+    <string name="tools_business_phone">408–714-9133</string>
     <string name="label_call">Call</string>
     <string name="label_directions">Get Directions</string>
+
     <string name="nearby">Nearby</string>
     <string name="group_chat">Group Chat</string>
     <string name="send_message_hint">Send Message</string>
     <string name="btn_send_message">Send</string>
     <string name="profile_other">Other Profile</string>
+
+    <string name="tools_price">$$$</string>
+    <string name="label_hrs_today">Hours Today (24-hour):</string>
+    <string name="label_photos">Photos</string>
+    <string name="label_upload">Upload</string>
+    <string name="label_cancel">cancel</string>
+    <string name="label_reviews">Reviews</string>
+    <string name="label_add_review">Add review</string>
+    <string name="tools_user_name">Akshay Mathur</string>
+    <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It…</string>
+    <string name="label_submit">submit</string>
+    <string name="hint_review_text">Review</string>
+
+    <string name="search_hint">Search Food Trucks</string>
+    <string name="label_search">Search</string>
+    <string name="error_empty_review">Review Text cannot be empty</string>
+    <string name="new_location">New Location Identified</string>
+    <string name="load_new_results">Load New Results</string>
+
+    <string name="username_string">Jogn Doe</string>
+    <string name="action_account">Profile</string>
+    <string name="likes_text">likes</string>
+    <string name="likes_count">45</string>
+    <string name="likes_count_text">20</string>
+    <string name="username">John Doe</string>
+
+
 
 </resources>

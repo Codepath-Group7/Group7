@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,7 +18,9 @@ import android.view.MenuItem;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByActivity;
+import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
+import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.crashlytics.android.Crashlytics;
@@ -65,7 +70,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 newFragment = FoodTruckMapFragment.newInstance();
                 break;
             case R.id.navigation_home:
-                newFragment = FoodTruckFeedFragment.newInstance();
+                newFragment = FoodTruckFeedFragment.newInstance(null);
                 break;
         }
 
@@ -83,6 +88,21 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home_screen,menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                startActivity(new Intent(HomeActivity.this, SearchActivity.class));
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                return true;
+            }
+        });
+        // Get the SearchView and set the searchable configuration
+        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default*/
         return true;
     }
 
@@ -100,6 +120,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
             case R.id.action_nearby:
                 startActivity(new Intent(this, NearByActivity.class));
                 return true;
+            case R.id.action_account:
+                Intent accountIntent =
+                        new Intent(this, UserProfileActivity.class);
+                startActivity(accountIntent);
         }
         return super.onOptionsItemSelected(item);
     }

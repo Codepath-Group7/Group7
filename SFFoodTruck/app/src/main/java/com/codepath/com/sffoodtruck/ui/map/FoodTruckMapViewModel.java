@@ -16,14 +16,16 @@ public class FoodTruckMapViewModel {
     private final Location location;
     private final Float rating;
     private final Coordinates coordinates;
-    private String name;
+    private final String name;
+    private final Business business;
 
-    public FoodTruckMapViewModel(String id, String name, Coordinates coordinates, Location location, Float rating) {
+    public FoodTruckMapViewModel(String id, String name, Coordinates coordinates, Location location, Float rating, Business business) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
         this.location = location;
         this.rating = rating;
+        this.business = business;
     }
 
     public String getId() {
@@ -46,13 +48,18 @@ public class FoodTruckMapViewModel {
         return coordinates;
     }
 
+    public Business getBusiness() {
+        return business;
+    }
+
     public static FoodTruckMapViewModel convert(Business business) {
         return new FoodTruckMapViewModel(
                 business.getId(),
                 business.getName(),
                 business.getCoordinates(),
                 business.getLocation(),
-                business.getRating()
+                business.getRating(),
+                business
         );
     }
 

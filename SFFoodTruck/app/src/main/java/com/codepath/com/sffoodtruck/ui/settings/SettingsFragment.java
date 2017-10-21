@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
+import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -72,9 +73,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             if(resultCode == Activity.RESULT_OK){
                 Place place = PlacePicker.getPlace(getActivity(),data);
                 locationPref.setSummary(place.getAddress());
+                String jsonString = JsonUtils.toJson(place);
                 //Updating the preference of location manually
                 QueryPreferences.storeLocationPref(getActivity(),
-                        place.getAddress().toString());
+                        jsonString);
+
+                QueryPreferences.storePlacePref(getActivity(), place);
                 LatLng latLng = place.getLatLng();
                 Log.d(TAG,"LatLng " + latLng.latitude + ", " +latLng.longitude);
             }

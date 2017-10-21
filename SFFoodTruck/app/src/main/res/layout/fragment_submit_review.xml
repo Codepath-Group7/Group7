@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_review_text">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_review_text"
+                android:hint="@string/hint_review_text"
+                android:minLines="@integer/min_lines"
+                android:maxLines="@integer/min_lines">
+
+            </android.support.v7.widget.AppCompatEditText>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/rbFoodTruckRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?attr/ratingBarStyle"
+            android:stepSize="0.5"
+            android:isIndicator="false"
+            tools:rating="3"
+            android:layout_marginTop="@dimen/margin8"
+            android:layout_marginBottom="@dimen/margin8"
+            android:layout_marginStart="@dimen/margin4"
+            android:layout_marginLeft="@dimen/margin4"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_cancel"
+                android:text="@string/label_cancel"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_submit"
+                android:text="@string/label_submit"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
