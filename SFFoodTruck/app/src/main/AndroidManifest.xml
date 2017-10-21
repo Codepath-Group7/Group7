@@ -94,6 +94,8 @@
             </intent-filter>
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable"/>
+
+        <activity android:name=".ui.userprofile.UserProfileActivity">
         </activity>
     </application>
 

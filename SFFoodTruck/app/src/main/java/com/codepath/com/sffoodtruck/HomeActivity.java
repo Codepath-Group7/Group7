@@ -19,6 +19,7 @@ import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
+import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.crashlytics.android.Crashlytics;
@@ -115,6 +116,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                         new Intent(this, SettingsActivity.class);
                 startActivity(startSettingsActivity);
                 return true;
+            case R.id.action_account:
+                Intent accountIntent =
+                        new Intent(this, UserProfileActivity.class);
+                startActivity(accountIntent);
         }
         return super.onOptionsItemSelected(item);
     }

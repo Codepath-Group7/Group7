@@ -114,7 +114,6 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
-
     }
 
     @Override
@@ -212,7 +211,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                     // All location settings are satisfied. The client can
                     // initialize location requests here.
                     Log.d(TAG,"All Location settings are granted ");
-                    startLocationUpdates();
+                   // startLocationUpdates();
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     // Location settings are not satisfied, but this can be fixed

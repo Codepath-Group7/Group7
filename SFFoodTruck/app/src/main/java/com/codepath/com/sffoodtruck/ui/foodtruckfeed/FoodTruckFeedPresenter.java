@@ -82,6 +82,7 @@ implements FoodTruckFeedContract.Presenter{
                     getView().appendFoodTruckList(businesses);
                 }
                 sInitialLoad = false;
+
             }
 
             @Override
