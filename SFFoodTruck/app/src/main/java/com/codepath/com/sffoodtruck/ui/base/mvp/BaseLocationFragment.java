@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
@@ -50,10 +51,10 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     protected String mLocationAddress;
     private static final String TAG = BaseLocationFragment.class.getSimpleName();
     private static final int RC_LOCATION = 10;
-    private static final int LOC_INTERVAL = 300000;
-    private static final int LOC_FAST_INTERVAL = 300000;
+    private static final int LOC_INTERVAL = 3000;
+    private static final int LOC_FAST_INTERVAL = 3000;
     private LocationRequest mLocationRequest;
-    private boolean mRequestingLocationUpdates= true;
+    private static boolean mRequestingLocationUpdates= true;
 
 
     @Override
@@ -87,9 +88,9 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "Connected to Google API Client");
         getLastKnownLocation();
-        if(mRequestingLocationUpdates){
+        /*if(mRequestingLocationUpdates){
             startLocationUpdates();
-        }
+        }*/
     }
 
     @AfterPermissionGranted(RC_LOCATION)
@@ -98,7 +99,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
         if(mGoogleApiClient.isConnected() && EasyPermissions.hasPermissions(getActivity(),perms)) {
-            checkLocationSettings();
+            Log.d(TAG,"Requesting location updates");
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }else{
@@ -126,35 +127,48 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
     public void onResume() {
         super.onResume();
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
+            Log.d(TAG,"Calling location updates in onResume");
             startLocationUpdates();
+        }else{
+            Log.d(TAG,"Google Api client: " +mGoogleApiClient.isConnected() +
+            "mRequestLocationUpdate: " + mRequestingLocationUpdates);
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(TAG,"On Location changed called");
         mLastLocation = location;
         if(mLastLocation != null){
-            String storedLastLocation = QueryPreferences.getCurrentLocation(getActivity());
-            Log.d(TAG,"Stored last Location: " + storedLastLocation);
-            if(storedLastLocation == null){
-                QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));
-            }else{
-                Location lastLoc = JsonUtils.fromJson(storedLastLocation,Location.class);
-                Log.d(TAG,"Stored location: lat: " + lastLoc.getLatitude() + " , long: "
-                        +lastLoc.getLongitude());
-                if(mLastLocation.getLatitude() != lastLoc.getLatitude() ||
-                        mLastLocation.getLongitude() != lastLoc.getLongitude()){
-                    QueryPreferences.storeCurrentLocation(getActivity(),
-                            JsonUtils.toJson(mLastLocation));
-                    Log.d(TAG,"Updating the stored location with: "
-                            + JsonUtils.toJson(mLastLocation));
-                }else{
-                    Log.d(TAG,"current location and stored location are equal");
-                }
-            }
+            storeCurrentLocation(mLastLocation);
             Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                     +mLastLocation.getLongitude());
             mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+        }else{
+            Log.d(TAG,"On Location received got null");
+        }
+    }
+
+    private void storeCurrentLocation(Location currentLocation){
+        String storedLastLocation = QueryPreferences.getCurrentLocation(getActivity());
+        Log.d(TAG,"Stored last Location: " + storedLastLocation);
+        if(storedLastLocation == null){
+            QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(currentLocation));
+        }else{
+            Location lastLoc = JsonUtils.fromJson(storedLastLocation,Location.class);
+            Log.d(TAG,"Stored location: lat: " + lastLoc.getLatitude() + " , long: "
+                    +lastLoc.getLongitude());
+            float distanceBetween = lastLoc.distanceTo(currentLocation);
+            Log.d(TAG,"Distance between: " + distanceBetween);
+            //Toast.makeText(getCAc)
+            if(distanceBetween >= 100){
+                QueryPreferences.storeCurrentLocation(getActivity(),
+                        JsonUtils.toJson(currentLocation));
+                Log.d(TAG,"Updating the stored location with: "
+                        + JsonUtils.toJson(currentLocation));
+            }else{
+                Log.d(TAG,"current location and stored location are less than 150 meters apart");
+            }
         }
     }
 
@@ -169,7 +183,8 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                 Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                         +mLastLocation.getLongitude());
                 mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
-                QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));
+                /*QueryPreferences.storeCurrentLocation(getActivity(),JsonUtils.toJson(mLastLocation));*/
+                storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");
             }
@@ -197,7 +212,7 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
                     // All location settings are satisfied. The client can
                     // initialize location requests here.
                     Log.d(TAG,"All Location settings are granted ");
-                    //startLocationUpdates();
+                    startLocationUpdates();
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     // Location settings are not satisfied, but this can be fixed
