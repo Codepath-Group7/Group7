@@ -28,6 +28,7 @@ import com.google.android.gms.nearby.messages.PublishOptions;
 import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
     private MessageListener mMessageListener;
     private NearByAdapter mAdapter;
     private List<MessagePayload> messagePayloads = new ArrayList<>();
-    private String userId;
+    private FirebaseUser mFirebaseUser;
 
     public NearByFragment() {
         // Required empty public constructor
@@ -56,8 +57,8 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d(TAG,"UserID is " + userId);
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d(TAG,"UserID is " + mFirebaseUser.getUid());
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks(this)
@@ -102,7 +103,7 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
     private void setupChatView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
-        mAdapter = new NearByAdapter(getActivity(),messagePayloads, userId);
+        mAdapter = new NearByAdapter(getActivity(),messagePayloads, mFirebaseUser.getUid());
         mBinding.rvGroupChat.setAdapter(mAdapter);
         mBinding.rvGroupChat.setLayoutManager(linearLayoutManager);
     }
@@ -134,10 +135,12 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
         if(mGoogleApiClient.isConnected()){
             MessagePayload payload = new MessagePayload();
             Log.d(TAG,"Current session user id is : "
-                    + userId);
+                    + mFirebaseUser.getUid());
 
-            payload.setUserId(userId);
+            if(mFirebaseUser == null) return;
+            payload.setUserId(mFirebaseUser.getUid());
             payload.setMessage(message);
+            payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
 
             mActiveMessage = new Message(ParcelableUtil.marshall(payload));
             //mActiveMessage = new Message(message.getBytes());
