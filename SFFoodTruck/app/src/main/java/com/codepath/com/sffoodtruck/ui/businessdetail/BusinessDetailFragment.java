@@ -195,6 +195,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public void showAsFavorite(boolean isFavorite) {
+        if(mFavoriteItem == null) return;
         if(!isFavorite){
             mFavoriteItem.setIcon(ContextCompat.getDrawable(getActivity(),
                     R.drawable.ic_favorite_border_white_24px));
