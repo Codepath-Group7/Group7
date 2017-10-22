@@ -39,7 +39,6 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     private static Business sBusiness;
     private DatabaseReference mDatabaseReference;
     private static final int DELAYED_CONST = 5000;
-    private static int count = 0;
 
     public BusinessDetailPresenter(String token){
         this.token = token;
@@ -63,10 +62,9 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void uploadBusinessDetail() {
-        mDatabaseReference = FirebaseUtils.getCurrentUserDatabaseRef();
+        mDatabaseReference = FirebaseUtils.getPreviousTripsDatabaseRef();
         if(mDatabaseReference != null){
-            mDatabaseReference.child("previousTrips")
-                    .child(String.valueOf(System.currentTimeMillis()))
+            mDatabaseReference.child(String.valueOf(System.currentTimeMillis()))
                     .setValue(sBusiness)
                     .addOnCompleteListener(task -> {
                         Log.d(TAG,"uploading data to server into previousTrips");
