@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 /**
  * Created by saip92 on 10/15/2017.
  */
@@ -26,12 +28,15 @@ public class LoadImageBindingAdapter {
     @BindingAdapter({"bind:imageUrl"})
     public static void loadSmallImage(ImageView view, String url){
         Picasso.Builder builder = new Picasso.Builder(view.getContext());
-        builder.listener(new Picasso.Listener() {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                exception.printStackTrace();
-            }});
-
+        builder.listener((picasso, uri, exception) -> exception.printStackTrace());
         builder.build().load(url).into(view);
+    }
+
+    @BindingAdapter({"bind:roundedCornersImageUrl"})
+    public static void loadRoundedCorners(ImageView view,String url){
+        Picasso.with(view.getContext())
+                .load(url)
+                .transform(new RoundedCornersTransformation(12,12))
+                .into(view);
     }
 }

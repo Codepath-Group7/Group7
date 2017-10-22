@@ -9,16 +9,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
@@ -45,6 +50,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     private BusinessPhotosRecyclerViewAdapter mPhotosAdapter;
     private BusinessReviewsRecyclerViewAdapter mReviewsAdapter;
     private LinearLayoutManager mPhotosLayoutManager, mReviewsLayoutManager;
+    private MenuItem mFavoriteItem;
 
     public BusinessDetailFragment() {
         // Required empty public constructor
@@ -52,7 +58,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public BusinessDetailContract.Presenter createPresenter() {
-        return new BusinessDetailPresenter();
+        return new BusinessDetailPresenter(QueryPreferences.getAccessToken(getActivity()));
     }
 
     public static Fragment newInstance(Business business) {
@@ -66,6 +72,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mBusiness = getArguments().getParcelable(BUSINESS_KEY);
         mPhotoList = new ArrayList<>();
         mPhotosAdapter = new BusinessPhotosRecyclerViewAdapter(mPhotoList);
@@ -85,11 +92,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerViews();
-        mBinding.btnAddPhotos.setOnClickListener(v -> openTakePhotoDialog());
-        mBinding.btnAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
-        getPresenter().loadBusiness(getActivity(), mBusiness.getId());
-        getPresenter().loadReviews(getActivity(), mBusiness.getId());
+        getPresenter().initialLoad(mBusiness);
     }
 
     private void openTakePhotoDialog() {
@@ -118,6 +121,13 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     }
 
     @Override
+    public void renderBusinessDetail() {
+        setupRecyclerViews();
+        mBinding.btnAddPhotos.setOnClickListener(v -> openTakePhotoDialog());
+        mBinding.btnAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
+    }
+
+    @Override
     public void renderBusiness(Business data) {
         mBinding.tvBusinessName.setText(data.getName());
         mBinding.tvBusinessAddress.setText(data.getLocation().getCompleteAddress());
@@ -129,7 +139,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
         }
         mPhotosAdapter.addPhotos(data.getPhotos());
-        getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
+        getPresenter().fetchPhotosFromFirebase();
         Picasso.with(getActivity())
                 .load(data.getImageUrl())
                 .fit()
@@ -146,23 +156,57 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri photoUri = data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI);
             Log.d(TAG, "From photo dialog fragment " + photoUri);
-            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri, mBusiness.getId());
+            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri);
         }
         else if(requestCode == REQUEST_REVIEW && resultCode == Activity.RESULT_OK){
             Review review = data.getParcelableExtra(SubmitReviewDialogFragment.EXTRA_REVIEW);
             Log.d(TAG, "From review dialog fragment " + review.getText());
-            getPresenter().submitReviewToFirebase(mBusiness.getId(),review);
+            getPresenter().submitReviewToFirebase(review);
         }
     }
 
     @Override
     public void renderReviews(List<Review> reviews) {
         mReviewsAdapter.addReviews(reviews);
-        getPresenter().fetchReviewsFromFirebase(mBusiness.getId());
+        getPresenter().fetchReviewsFromFirebase();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_business_detail,menu);
+        mFavoriteItem = menu.findItem(R.id.action_favorite);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_favorite:
+                getPresenter().addToFavorites();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void addReviewToAdapter(Review review) {
         mReviewsAdapter.addReview(review);
+    }
+
+    @Override
+    public void showAsFavorite(boolean isFavorite) {
+        if(mFavoriteItem == null) return;
+        if(!isFavorite){
+            mFavoriteItem.setIcon(ContextCompat.getDrawable(getActivity(),
+                    R.drawable.ic_favorite_border_white_24px));
+        }else{
+            mFavoriteItem.setIcon(ContextCompat.getDrawable(getActivity(),
+                    R.drawable.ic_favorite_white_24px));
+        }
+    }
+
+    @Override
+    public boolean isAttached() {
+        return isAdded();
     }
 }

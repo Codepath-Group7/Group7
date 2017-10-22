@@ -61,9 +61,55 @@ public class FirebaseUtils {
         }
         return null;
     }
+
+    private static DatabaseReference getBaseUserDatabaseRef(){
+        return getBaseDatabaseRef().child("user");
+    }
+
+    public static DatabaseReference getUserDatabaseRef(String userId){
+        return getBaseUserDatabaseRef().child(userId);
+    }
+
+    public static DatabaseReference getCurrentUserDatabaseRef(){
+        if(getCurrentUserId() == null) return null;
+        return getBaseUserDatabaseRef().child(getCurrentUserId());
+    }
+
+    public static DatabaseReference getCurrentUserFavoriteDatabaseRef(){
+        if(getCurrentUserDatabaseRef() == null) return null;
+        return getCurrentUserDatabaseRef().child("favorite");
+    }
+
+    public static DatabaseReference getFavoriteDatabaseRef(String userId){
+        if(getUserDatabaseRef(userId) == null) return null;
+        return getUserDatabaseRef(userId).child("favorite");
+    }
+
+    public static DatabaseReference getReviewDatabaseRef(String userId){
+        if(getUserDatabaseRef(userId) == null) return null;
+        return getUserDatabaseRef(userId).child("reviews");
+    }
+
+    public static DatabaseReference getCurrentUserReviewDatabaseRef(){
+        if(getCurrentUserDatabaseRef() == null) return null;
+        return getCurrentUserDatabaseRef().child("reviews");
+    }
+
+    public static DatabaseReference getPreviousTripsDatabaseRef(){
+        if(getCurrentUserDatabaseRef() == null) return null;
+        return getCurrentUserDatabaseRef().child("previousTrips");
+    }
     /* End of Database References */
 
     public static FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public static String getCurrentUserId(){
+        if(getCurrentUser() != null){
+            FirebaseUser user = getCurrentUser();
+            return user.getUid();
+        }
+        return null;
     }
 }

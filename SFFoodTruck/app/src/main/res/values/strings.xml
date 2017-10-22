@@ -85,7 +85,13 @@
     <string name="likes_count">45</string>
     <string name="likes_count_text">20</string>
     <string name="username">John Doe</string>
-
+    <string name="action_favorite">Favorite</string>
+    <string name="see_all_text">See All</string>
+    <string name="user_profile_cardview_title">Recent Visits</string>
+    <string name="reviews_count">156 Reviews</string>
+    <string name="recent_visits_title">Recent Visits</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="reviews_title">Reviews</string>
 
 
 </resources>

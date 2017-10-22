@@ -70,7 +70,22 @@ public class Business implements Parcelable {
     @SerializedName("hours")
     @Expose
     private List<Hour> hours = null;
+    //Field to identify it as a favorite of user or not
+    private boolean isFavorite;
     /* End of fields needed for business detail */
+
+
+    public Boolean getClosed() {
+        return isClosed;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public Float getRating() {
         return rating;
@@ -249,6 +264,11 @@ public class Business implements Parcelable {
      /* End of fields needed for business detail view */
 
 
+    public Business() {
+        isFavorite = false;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -274,9 +294,7 @@ public class Business implements Parcelable {
         dest.writeString(this.displayPhone);
         dest.writeStringList(this.photos);
         dest.writeTypedList(this.hours);
-    }
-
-    public Business() {
+        dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
     }
 
     protected Business(Parcel in) {
@@ -298,9 +316,10 @@ public class Business implements Parcelable {
         this.displayPhone = in.readString();
         this.photos = in.createStringArrayList();
         this.hours = in.createTypedArrayList(Hour.CREATOR);
+        this.isFavorite = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Business> CREATOR = new Parcelable.Creator<Business>() {
+    public static final Creator<Business> CREATOR = new Creator<Business>() {
         @Override
         public Business createFromParcel(Parcel source) {
             return new Business(source);

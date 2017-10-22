@@ -11,6 +11,7 @@ public class MessagePayload implements Parcelable {
 
     private String userId;
     private String message;
+    private String imageUrl;
 
     public String getUserId() {
         return userId;
@@ -28,6 +29,22 @@ public class MessagePayload implements Parcelable {
         this.message = message;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
+    @Override
+    public String toString() {
+        return "MessagePayload{" +
+                "userId='" + userId + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 
     @Override
     public int describeContents() {
@@ -38,6 +55,7 @@ public class MessagePayload implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userId);
         dest.writeString(this.message);
+        dest.writeString(this.imageUrl);
     }
 
     public MessagePayload() {
@@ -46,6 +64,7 @@ public class MessagePayload implements Parcelable {
     protected MessagePayload(Parcel in) {
         this.userId = in.readString();
         this.message = in.readString();
+        this.imageUrl = in.readString();
     }
 
     public static final Parcelable.Creator<MessagePayload> CREATOR = new Parcelable.Creator<MessagePayload>() {
@@ -59,12 +78,4 @@ public class MessagePayload implements Parcelable {
             return new MessagePayload[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "MessagePayload{" +
-                "userId='" + userId + '\'' +
-                ", message='" + message + '\'' +
-                '}';
-    }
 }
