@@ -1,8 +1,8 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
-import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,13 +13,10 @@ import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -37,22 +34,41 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     public static final String TAG = BusinessDetailPresenter.class.getSimpleName();
     private final String token;
     private static String mBusinessId;
+    private static Business sBusiness;
+    private DatabaseReference mDatabaseReference;
+    private static final int DELAYED_CONST = 5000;
 
     public BusinessDetailPresenter(String token){
         this.token = token;
     }
 
     @Override
-    public void initialLoad(String businessId) {
-        mBusinessId = businessId;
+    public void initialLoad(Business business) {
+        mBusinessId = business.getId();
+        sBusiness = business;
         getView().renderBusinessDetail();
         loadBusiness();
         loadReviews();
+        new Handler().postDelayed(() -> {
+            if(getView().isAttached()){
+                uploadBusinessDetail();
+            }
+        },DELAYED_CONST);
+
     }
 
     @Override
     public void uploadBusinessDetail() {
-
+        mDatabaseReference = FirebaseUtils.getCurrentUserDatabaseRef();
+        if(mDatabaseReference != null){
+            mDatabaseReference.child("previousTrips")
+                    .child(String.valueOf(System.currentTimeMillis()))
+                    .setValue(sBusiness)
+                    .addOnCompleteListener(task -> {
+                        Log.d(TAG,"uploading data to server into previousTrips");
+                        Log.d(TAG,"Task of uploading business detail: " + task.isSuccessful());
+            });
+        }
     }
 
     @Override
@@ -85,9 +101,8 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void fetchPhotosFromFirebase() {
-        DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
-
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        mDatabaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
+        mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String photoName = dataSnapshot.getValue(String.class);
@@ -121,7 +136,8 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void uploadPhotoToStorage(Uri photoUri) {
-        StorageReference photoRef = FirebaseUtils.getBusinessPhotoReference(photoUri.getLastPathSegment());
+        StorageReference photoRef = FirebaseUtils
+                .getBusinessPhotoReference(photoUri.getLastPathSegment());
         UploadTask mUploadTask = photoRef.putFile(photoUri);
         mUploadTask.addOnFailureListener(exception -> {
             // Handle unsuccessful uploads
@@ -172,16 +188,16 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void submitReviewToFirebase(Review review) {
-        DatabaseReference  databaseReference = FirebaseUtils
+        mDatabaseReference = FirebaseUtils
                 .getBusinessDatabaseReviewsRef(mBusinessId);
-        databaseReference.push().setValue(review);
+        mDatabaseReference.push().setValue(review);
     }
 
     @Override
     public void fetchReviewsFromFirebase() {
-        DatabaseReference  databaseReference = FirebaseUtils
+        mDatabaseReference = FirebaseUtils
                 .getBusinessDatabaseReviewsRef(mBusinessId);
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Review review = dataSnapshot.getValue(Review.class);

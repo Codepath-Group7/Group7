@@ -72,6 +72,11 @@ public class Business implements Parcelable {
     private List<Hour> hours = null;
     /* End of fields needed for business detail */
 
+
+    public Boolean getClosed() {
+        return isClosed;
+    }
+
     public Float getRating() {
         return rating;
     }
@@ -277,6 +282,7 @@ public class Business implements Parcelable {
     }
 
     public Business() {
+
     }
 
     protected Business(Parcel in) {

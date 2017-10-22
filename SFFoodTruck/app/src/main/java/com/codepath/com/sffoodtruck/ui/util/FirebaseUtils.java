@@ -72,7 +72,7 @@ public class FirebaseUtils {
 
     public static DatabaseReference getCurrentUserDatabaseRef(){
         if(getCurrentUserId() == null) return null;
-        return getBaseDatabaseRef().child(getCurrentUserId());
+        return getBaseUserDatabaseRef().child(getCurrentUserId());
     }
     /* End of Database References */
 

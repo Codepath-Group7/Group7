@@ -22,10 +22,11 @@ public class BusinessDetailContract {
         void addPhotoToAdapter(String photo);
         void renderReviews(List<Review> reviews);
         void addReviewToAdapter(Review review);
+        boolean isAttached();
     }
 
     interface Presenter extends MvpBasePresenter<MvpView> {
-        void initialLoad(String businessId);
+        void initialLoad(Business business);
         void uploadBusinessDetail();
         void loadBusiness();
         void fetchPhotosFromFirebase();

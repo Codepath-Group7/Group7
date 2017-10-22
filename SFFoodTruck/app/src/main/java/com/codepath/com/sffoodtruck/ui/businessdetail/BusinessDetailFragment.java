@@ -86,7 +86,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPresenter().initialLoad(mBusiness.getId());
+        getPresenter().initialLoad(mBusiness);
     }
 
     private void openTakePhotoDialog() {
@@ -165,8 +165,15 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         getPresenter().fetchReviewsFromFirebase();
     }
 
+
+
     @Override
     public void addReviewToAdapter(Review review) {
         mReviewsAdapter.addReview(review);
+    }
+
+    @Override
+    public boolean isAttached() {
+        return isAdded();
     }
 }
