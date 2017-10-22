@@ -85,7 +85,7 @@
     <string name="likes_count">45</string>
     <string name="likes_count_text">20</string>
     <string name="username">John Doe</string>
-
+    <string name="action_favorite">Favorite</string>
 
 
 </resources>

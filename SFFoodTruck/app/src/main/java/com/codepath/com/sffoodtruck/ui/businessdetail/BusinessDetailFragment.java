@@ -9,12 +9,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,6 +50,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     private BusinessPhotosRecyclerViewAdapter mPhotosAdapter;
     private BusinessReviewsRecyclerViewAdapter mReviewsAdapter;
     private LinearLayoutManager mPhotosLayoutManager, mReviewsLayoutManager;
+    private MenuItem mFavoriteItem;
 
     public BusinessDetailFragment() {
         // Required empty public constructor
@@ -67,6 +72,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mBusiness = getArguments().getParcelable(BUSINESS_KEY);
         mPhotoList = new ArrayList<>();
         mPhotosAdapter = new BusinessPhotosRecyclerViewAdapter(mPhotoList);
@@ -165,11 +171,37 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         getPresenter().fetchReviewsFromFirebase();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_business_detail,menu);
+        mFavoriteItem = menu.findItem(R.id.action_favorite);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_favorite:
+                getPresenter().addToFavorites();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void addReviewToAdapter(Review review) {
         mReviewsAdapter.addReview(review);
+    }
+
+    @Override
+    public void showAsFavorite(boolean isFavorite) {
+        if(!isFavorite){
+            mFavoriteItem.setIcon(ContextCompat.getDrawable(getActivity(),
+                    R.drawable.ic_favorite_border_white_24px));
+        }else{
+            mFavoriteItem.setIcon(ContextCompat.getDrawable(getActivity(),
+                    R.drawable.ic_favorite_white_24px));
+        }
     }
 
     @Override

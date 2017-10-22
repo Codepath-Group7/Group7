@@ -22,6 +22,7 @@ public class BusinessDetailContract {
         void addPhotoToAdapter(String photo);
         void renderReviews(List<Review> reviews);
         void addReviewToAdapter(Review review);
+        void showAsFavorite(boolean isFavorite);
         boolean isAttached();
     }
 
@@ -34,5 +35,6 @@ public class BusinessDetailContract {
         void loadReviews();
         void submitReviewToFirebase(Review review);
         void fetchReviewsFromFirebase();
+        void addToFavorites();
     }
 }

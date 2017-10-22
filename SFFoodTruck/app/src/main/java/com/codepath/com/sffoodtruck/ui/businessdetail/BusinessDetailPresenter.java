@@ -2,7 +2,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail;
 
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Message;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,6 +26,7 @@ import retrofit2.Response;
 
 /**
  * Created by akshaymathur on 10/14/17.
+ * Modified by saip
  */
 
 public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailContract.MvpView>
@@ -33,10 +34,11 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     public static final String TAG = BusinessDetailPresenter.class.getSimpleName();
     private final String token;
-    private static String mBusinessId;
+    private static String sBusinessId;
     private static Business sBusiness;
     private DatabaseReference mDatabaseReference;
     private static final int DELAYED_CONST = 5000;
+    private static int count = 0;
 
     public BusinessDetailPresenter(String token){
         this.token = token;
@@ -44,7 +46,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void initialLoad(Business business) {
-        mBusinessId = business.getId();
+        sBusinessId = business.getId();
         sBusiness = business;
         getView().renderBusinessDetail();
         loadBusiness();
@@ -74,15 +76,15 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     @Override
     public void loadBusiness() {
 
-        if (TextUtils.isEmpty(mBusinessId)) return;
+        if (TextUtils.isEmpty(sBusinessId)) return;
 
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, token);
-        Call<Business> callResults = services.getBusiness(mBusinessId);
+        Call<Business> callResults = services.getBusiness(sBusinessId);
         callResults.enqueue(new Callback<Business>() {
             @Override
-            public void onResponse(Call<Business> call,
-                                   Response<Business> response) {
+            public void onResponse(@NonNull Call<Business> call,
+                                   @NonNull Response<Business> response) {
                 Business businessDetails = response.body();
                 if (businessDetails == null) {
                     Log.w(TAG, "response has failed " + response.code());
@@ -93,7 +95,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             }
 
             @Override
-            public void onFailure(Call<Business> call, Throwable t) {
+            public void onFailure(@NonNull Call<Business> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed", t);
             }
         });
@@ -101,7 +103,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
     @Override
     public void fetchPhotosFromFirebase() {
-        mDatabaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
+        mDatabaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -153,23 +155,24 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             //Uri downloadUrl = taskSnapshot.getDownloadUrl();
             Log.d(TAG,"File upload successfully");
-            DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
-            databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
+            DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
+            if(taskSnapshot.getDownloadUrl()!= null)
+                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
             //progressDialog.dismiss();
         });
     }
 
     @Override
     public void loadReviews() {
-        if (TextUtils.isEmpty(mBusinessId)) return;
+        if (TextUtils.isEmpty(sBusinessId)) return;
 
         final SearchApi services = RetrofitClient
                 .createService(SearchApi.class, token);
-        Call<ReviewsResponse> callResults = services.getBusinessReviews(mBusinessId);
+        Call<ReviewsResponse> callResults = services.getBusinessReviews(sBusinessId);
         callResults.enqueue(new Callback<ReviewsResponse>() {
             @Override
-            public void onResponse(Call<ReviewsResponse> call,
-                                   Response<ReviewsResponse> response) {
+            public void onResponse(@NonNull Call<ReviewsResponse> call,
+                                   @NonNull Response<ReviewsResponse> response) {
                 ReviewsResponse reviewsResponse = response.body();
                 if (reviewsResponse == null) {
                     Log.w(TAG, "response has failed " + response.code());
@@ -180,7 +183,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             }
 
             @Override
-            public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ReviewsResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed", t);
             }
         });
@@ -189,14 +192,14 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     @Override
     public void submitReviewToFirebase(Review review) {
         mDatabaseReference = FirebaseUtils
-                .getBusinessDatabaseReviewsRef(mBusinessId);
+                .getBusinessDatabaseReviewsRef(sBusinessId);
         mDatabaseReference.push().setValue(review);
     }
 
     @Override
     public void fetchReviewsFromFirebase() {
         mDatabaseReference = FirebaseUtils
-                .getBusinessDatabaseReviewsRef(mBusinessId);
+                .getBusinessDatabaseReviewsRef(sBusinessId);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -224,5 +227,19 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
 
             }
         });
+    }
+
+    @Override
+    public void addToFavorites() {
+        boolean isFavorite = sBusiness.isFavorite();
+        mDatabaseReference = FirebaseUtils.getCurrentUserFavoriteDatabaseRef();
+        if(isFavorite){
+            sBusiness.setFavorite(false);
+            mDatabaseReference.child(sBusinessId).removeValue();
+        }else{
+            sBusiness.setFavorite(true);
+            mDatabaseReference.child(sBusinessId).setValue(sBusiness);
+        }
+        getView().showAsFavorite(sBusiness.isFavorite());
     }
 }
