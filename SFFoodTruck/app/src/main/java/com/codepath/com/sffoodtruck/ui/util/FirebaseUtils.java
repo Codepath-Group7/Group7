@@ -84,6 +84,16 @@ public class FirebaseUtils {
         if(getUserDatabaseRef(userId) == null) return null;
         return getUserDatabaseRef(userId).child("favorite");
     }
+
+    public static DatabaseReference getReviewDatabaseRef(String userId){
+        if(getUserDatabaseRef(userId) == null) return null;
+        return getUserDatabaseRef(userId).child("reviews");
+    }
+
+    public static DatabaseReference getCurrentUserReviewDatabaseRef(){
+        if(getCurrentUserDatabaseRef() == null) return null;
+        return getCurrentUserDatabaseRef().child("reviews");
+    }
     /* End of Database References */
 
     public static FirebaseUser getCurrentUser(){

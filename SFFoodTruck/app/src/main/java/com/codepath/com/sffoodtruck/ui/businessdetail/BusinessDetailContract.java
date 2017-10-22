@@ -36,5 +36,6 @@ public class BusinessDetailContract {
         void submitReviewToFirebase(Review review);
         void fetchReviewsFromFirebase();
         void addToFavorites();
+        void checkIsFavorite();
     }
 }

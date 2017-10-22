@@ -17,6 +17,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -51,6 +52,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
         getView().renderBusinessDetail();
         loadBusiness();
         loadReviews();
+        checkIsFavorite();
         new Handler().postDelayed(() -> {
             if(getView().isAttached()){
                 uploadBusinessDetail();
@@ -193,7 +195,12 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     public void submitReviewToFirebase(Review review) {
         mDatabaseReference = FirebaseUtils
                 .getBusinessDatabaseReviewsRef(sBusinessId);
+        DatabaseReference userReviewRef = FirebaseUtils
+                .getCurrentUserReviewDatabaseRef();
         mDatabaseReference.push().setValue(review);
+        if(userReviewRef != null)
+            userReviewRef.child(sBusinessId).setValue(sBusiness);
+
     }
 
     @Override
@@ -241,5 +248,31 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
             mDatabaseReference.child(sBusinessId).setValue(sBusiness);
         }
         getView().showAsFavorite(sBusiness.isFavorite());
+    }
+
+    @Override
+    public void checkIsFavorite() {
+        mDatabaseReference = FirebaseUtils.getCurrentUserFavoriteDatabaseRef();
+        if(mDatabaseReference != null){
+            mDatabaseReference.child(sBusinessId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Business business = dataSnapshot.getValue(Business.class);
+                    if(business == null){
+                        getView().showAsFavorite(false);
+                        return;
+                    }
+                    getView().showAsFavorite(business.isFavorite());
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d(TAG,"Database error for checking favorite" + databaseError.getDetails());
+                }
+            });
+        }
+
     }
 }
