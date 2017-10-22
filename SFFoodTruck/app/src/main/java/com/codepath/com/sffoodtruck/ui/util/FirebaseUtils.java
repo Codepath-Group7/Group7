@@ -61,9 +61,30 @@ public class FirebaseUtils {
         }
         return null;
     }
+
+    private static DatabaseReference getBaseUserDatabaseRef(){
+        return getBaseDatabaseRef().child("user");
+    }
+
+    public static DatabaseReference getUserDatabaseRef(String userId){
+        return getBaseUserDatabaseRef().child(userId);
+    }
+
+    public static DatabaseReference getCurrentUserDatabaseRef(){
+        if(getCurrentUserId() == null) return null;
+        return getBaseDatabaseRef().child(getCurrentUserId());
+    }
     /* End of Database References */
 
     public static FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public static String getCurrentUserId(){
+        if(getCurrentUser() != null){
+            FirebaseUser user = getCurrentUser();
+            return user.getUid();
+        }
+        return null;
     }
 }

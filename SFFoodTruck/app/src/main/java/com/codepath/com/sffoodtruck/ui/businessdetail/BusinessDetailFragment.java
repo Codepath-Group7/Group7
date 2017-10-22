@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
@@ -52,7 +53,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public BusinessDetailContract.Presenter createPresenter() {
-        return new BusinessDetailPresenter();
+        return new BusinessDetailPresenter(QueryPreferences.getAccessToken(getActivity()));
     }
 
     public static Fragment newInstance(Business business) {
@@ -85,11 +86,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerViews();
-        mBinding.btnAddPhotos.setOnClickListener(v -> openTakePhotoDialog());
-        mBinding.btnAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
-        getPresenter().loadBusiness(getActivity(), mBusiness.getId());
-        getPresenter().loadReviews(getActivity(), mBusiness.getId());
+        getPresenter().initialLoad(mBusiness.getId());
     }
 
     private void openTakePhotoDialog() {
@@ -118,6 +115,13 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     }
 
     @Override
+    public void renderBusinessDetail() {
+        setupRecyclerViews();
+        mBinding.btnAddPhotos.setOnClickListener(v -> openTakePhotoDialog());
+        mBinding.btnAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
+    }
+
+    @Override
     public void renderBusiness(Business data) {
         mBinding.tvBusinessName.setText(data.getName());
         mBinding.tvBusinessAddress.setText(data.getLocation().getCompleteAddress());
@@ -129,7 +133,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
         }
         mPhotosAdapter.addPhotos(data.getPhotos());
-        getPresenter().fetchPhotosFromFirebase(mBusiness.getId());
+        getPresenter().fetchPhotosFromFirebase();
         Picasso.with(getActivity())
                 .load(data.getImageUrl())
                 .fit()
@@ -146,19 +150,19 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri photoUri = data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI);
             Log.d(TAG, "From photo dialog fragment " + photoUri);
-            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri, mBusiness.getId());
+            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri);
         }
         else if(requestCode == REQUEST_REVIEW && resultCode == Activity.RESULT_OK){
             Review review = data.getParcelableExtra(SubmitReviewDialogFragment.EXTRA_REVIEW);
             Log.d(TAG, "From review dialog fragment " + review.getText());
-            getPresenter().submitReviewToFirebase(mBusiness.getId(),review);
+            getPresenter().submitReviewToFirebase(review);
         }
     }
 
     @Override
     public void renderReviews(List<Review> reviews) {
         mReviewsAdapter.addReviews(reviews);
-        getPresenter().fetchReviewsFromFirebase(mBusiness.getId());
+        getPresenter().fetchReviewsFromFirebase();
     }
 
     @Override

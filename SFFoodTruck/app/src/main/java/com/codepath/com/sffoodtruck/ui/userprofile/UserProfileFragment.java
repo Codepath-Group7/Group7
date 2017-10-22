@@ -8,15 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract.MvpView,
+        UserProfileContract.Presenter> implements
+        UserProfileContract.MvpView{
 
 
     public UserProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public UserProfileContract.Presenter createPresenter() {
+        return null;
     }
 
 
@@ -27,4 +35,18 @@ public class UserProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
+    @Override
+    public void showRecentVisits() {
+
+    }
+
+    @Override
+    public void showFavoriteFoodTrucks() {
+
+    }
+
+    @Override
+    public void showReviews() {
+
+    }
 }

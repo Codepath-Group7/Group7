@@ -31,17 +31,38 @@ import retrofit2.Response;
  * Created by akshaymathur on 10/14/17.
  */
 
-public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailContract.MvpView> implements BusinessDetailContract.Presenter {
+public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailContract.MvpView>
+        implements BusinessDetailContract.Presenter {
 
     public static final String TAG = BusinessDetailPresenter.class.getSimpleName();
-    @Override
-    public void loadBusiness(Context context, String businessId) {
+    private final String token;
+    private static String mBusinessId;
 
-        if (TextUtils.isEmpty(businessId)) return;
+    public BusinessDetailPresenter(String token){
+        this.token = token;
+    }
+
+    @Override
+    public void initialLoad(String businessId) {
+        mBusinessId = businessId;
+        getView().renderBusinessDetail();
+        loadBusiness();
+        loadReviews();
+    }
+
+    @Override
+    public void uploadBusinessDetail() {
+
+    }
+
+    @Override
+    public void loadBusiness() {
+
+        if (TextUtils.isEmpty(mBusinessId)) return;
 
         final SearchApi services = RetrofitClient
-                .createService(SearchApi.class, context);
-        Call<Business> callResults = services.getBusiness(businessId);
+                .createService(SearchApi.class, token);
+        Call<Business> callResults = services.getBusiness(mBusinessId);
         callResults.enqueue(new Callback<Business>() {
             @Override
             public void onResponse(Call<Business> call,
@@ -63,8 +84,8 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     }
 
     @Override
-    public void fetchPhotosFromFirebase(String businessId) {
-        DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(businessId);
+    public void fetchPhotosFromFirebase() {
+        DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -99,45 +120,36 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     }
 
     @Override
-    public void uploadPhotoToStorage(Uri photoUri, final String businessId) {
+    public void uploadPhotoToStorage(Uri photoUri) {
         StorageReference photoRef = FirebaseUtils.getBusinessPhotoReference(photoUri.getLastPathSegment());
         UploadTask mUploadTask = photoRef.putFile(photoUri);
-        mUploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.e(TAG,"File upload failed");
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                @SuppressWarnings("VisibleForTests")
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
-                        getTotalByteCount();
-                Log.d(TAG,"Upload is " + progress + "% done");
-                //progressDialog.setProgress((int) progress);
+        mUploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            Log.e(TAG,"File upload failed");
+        }).addOnProgressListener(taskSnapshot -> {
+            @SuppressWarnings("VisibleForTests")
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
+                    getTotalByteCount();
+            Log.d(TAG,"Upload is " + progress + "% done");
+            //progressDialog.setProgress((int) progress);
 
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Log.d(TAG,"File upload successfully");
-                DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(businessId);
-                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
-                //progressDialog.dismiss();
-            }
+        }).addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+            //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            Log.d(TAG,"File upload successfully");
+            DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(mBusinessId);
+            databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
+            //progressDialog.dismiss();
         });
     }
 
     @Override
-    public void loadReviews(Context context, String businessId) {
-        if (TextUtils.isEmpty(businessId)) return;
+    public void loadReviews() {
+        if (TextUtils.isEmpty(mBusinessId)) return;
 
         final SearchApi services = RetrofitClient
-                .createService(SearchApi.class, context);
-        Call<ReviewsResponse> callResults = services.getBusinessReviews(businessId);
+                .createService(SearchApi.class, token);
+        Call<ReviewsResponse> callResults = services.getBusinessReviews(mBusinessId);
         callResults.enqueue(new Callback<ReviewsResponse>() {
             @Override
             public void onResponse(Call<ReviewsResponse> call,
@@ -159,14 +171,16 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     }
 
     @Override
-    public void submitReviewToFirebase(String businessId, Review review) {
-        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabaseReviewsRef(businessId);
+    public void submitReviewToFirebase(Review review) {
+        DatabaseReference  databaseReference = FirebaseUtils
+                .getBusinessDatabaseReviewsRef(mBusinessId);
         databaseReference.push().setValue(review);
     }
 
     @Override
-    public void fetchReviewsFromFirebase(String businessId) {
-        DatabaseReference  databaseReference = FirebaseUtils.getBusinessDatabaseReviewsRef(businessId);
+    public void fetchReviewsFromFirebase() {
+        DatabaseReference  databaseReference = FirebaseUtils
+                .getBusinessDatabaseReviewsRef(mBusinessId);
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

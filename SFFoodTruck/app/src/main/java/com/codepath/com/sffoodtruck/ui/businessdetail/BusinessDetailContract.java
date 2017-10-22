@@ -17,6 +17,7 @@ import java.util.List;
 
 public class BusinessDetailContract {
     interface MvpView extends MvpBaseView {
+        void renderBusinessDetail();
         void renderBusiness(Business data);
         void addPhotoToAdapter(String photo);
         void renderReviews(List<Review> reviews);
@@ -24,11 +25,13 @@ public class BusinessDetailContract {
     }
 
     interface Presenter extends MvpBasePresenter<MvpView> {
-        void loadBusiness(Context context, String businessId);
-        void fetchPhotosFromFirebase(String businessId);
-        void uploadPhotoToStorage(Uri photoUri,String businessId);
-        void loadReviews(Context context, String businessId);
-        void submitReviewToFirebase(String businessId, Review review);
-        void fetchReviewsFromFirebase(String businessId);
+        void initialLoad(String businessId);
+        void uploadBusinessDetail();
+        void loadBusiness();
+        void fetchPhotosFromFirebase();
+        void uploadPhotoToStorage(Uri photoUri);
+        void loadReviews();
+        void submitReviewToFirebase(Review review);
+        void fetchReviewsFromFirebase();
     }
 }
