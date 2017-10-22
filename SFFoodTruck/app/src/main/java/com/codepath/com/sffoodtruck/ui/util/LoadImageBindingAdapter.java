@@ -2,7 +2,6 @@ package com.codepath.com.sffoodtruck.ui.util;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -39,5 +38,6 @@ public class LoadImageBindingAdapter {
                 .fit()
                 .transform(new RoundedCornersTransformation(12,12))
                 .into(view);
+
     }
 }
