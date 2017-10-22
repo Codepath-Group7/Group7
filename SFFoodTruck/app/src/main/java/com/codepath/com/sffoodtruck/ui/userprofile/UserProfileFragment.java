@@ -82,7 +82,15 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
                 .transform(new CircleTransform())
                 .error(ContextCompat.getDrawable(getActivity(),R.mipmap.ic_camera_launcher))
                 .into(mBinding.ivProfile);
-        mBinding.tvUserName.setText(mUser.getDisplayName());
+        mBinding.tvProfileUserName.setText(mUser.getDisplayName());
+        mBinding.collapsingToolbarLayout
+                .setExpandedTitleColor(ContextCompat.getColor(getActivity(),
+                        android.R.color.transparent));
+        mBinding.collapsingToolbarLayout.setTitle(mUser.getDisplayName());
+        mBinding.collapsingToolbarLayout
+                .setCollapsedTitleTextColor(ContextCompat.getColor(getActivity(),
+                android.R.color.white));
+
     }
 
     @Override
