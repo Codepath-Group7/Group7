@@ -4,12 +4,8 @@
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="client_key">FC95QmoTCZxQjkvDJQdCaQ</string>
-    <string name="client_secret">lAbNWQBzW7KbjnRiE3llCAJuJKpeexkil34zf1joudfqz0D6YWKoDBGInUXVqDxb</string>
-
     <string name="facebook_app_id">349378388841351</string>
     <string name="fb_login_protocol_scheme">fb349378388841351</string>
-    <string name="google_web_client_id">1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com</string>
     <string name="label_logout">Logout</string>
     <string name="label_loggin_in">Loggin In</string>
     <string name="google_btn_text">Sign in with Google</string>
@@ -58,6 +54,13 @@
     <string name="tools_business_phone">408–714-9133</string>
     <string name="label_call">Call</string>
     <string name="label_directions">Get Directions</string>
+
+    <string name="nearby">Nearby</string>
+    <string name="group_chat">Group Chat</string>
+    <string name="send_message_hint">Send Message</string>
+    <string name="btn_send_message">Send</string>
+    <string name="profile_other">Other Profile</string>
+
     <string name="tools_price">$$$</string>
     <string name="label_hrs_today">Hours Today (24-hour):</string>
     <string name="label_photos">Photos</string>
@@ -69,8 +72,20 @@
     <string name="tools_review_text">I had the crispy and the super (regular) tacos and the billy burrito. The billy burrito is just a Cali burrito but beware, because there is beans in it. It…</string>
     <string name="label_submit">submit</string>
     <string name="hint_review_text">Review</string>
+
     <string name="search_hint">Search Food Trucks</string>
     <string name="label_search">Search</string>
     <string name="error_empty_review">Review Text cannot be empty</string>
+    <string name="new_location">New Location Identified</string>
+    <string name="load_new_results">Load New Results</string>
+
+    <string name="username_string">Jogn Doe</string>
+    <string name="action_account">Profile</string>
+    <string name="likes_text">likes</string>
+    <string name="likes_count">45</string>
+    <string name="likes_count_text">20</string>
+    <string name="username">John Doe</string>
+
+
 
 </resources>

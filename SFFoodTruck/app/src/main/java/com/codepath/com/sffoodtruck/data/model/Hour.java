@@ -70,7 +70,8 @@ public class Hour implements Parcelable {
             }
         }
         String hoursString = hourBuilder.toString();
-        return hoursString.substring(0,hoursString.length()-2);
+        if(hoursString.length()>0) return hoursString.substring(0,hoursString.length()-2);
+        else return "";
     }
     /*End of changes*/
 
