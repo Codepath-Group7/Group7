@@ -50,7 +50,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContract.MvpView
         , FoodTruckMapContract.Presenter> implements OnMapReadyCallback
-        , EasyPermissions.PermissionCallbacks, FoodTruckMapContract.MvpView, GoogleMap.OnInfoWindowClickListener {
+        , EasyPermissions.PermissionCallbacks, FoodTruckMapContract.MvpView
+        , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final int REQUEST_CODE_LOCATION = ActivityRequestCodeGenerator.getFreshInt();
     private Map<String, FoodTruckMapViewModel> viewModelMap = new HashMap<>();
@@ -160,6 +161,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         this.map.setOnInfoWindowClickListener(this);
+        this.map.setOnMyLocationButtonClickListener(this);
         enableMapMyLocation(map);
         getPresenter().loadFoodTrucks();
     }
@@ -227,5 +229,11 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         Intent intent = BusinessDetailActivity.newIntent(getContext()
                 , viewModel.getBusiness());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        getPresenter().loadFoodTrucks(true);
+        return false;
     }
 }
