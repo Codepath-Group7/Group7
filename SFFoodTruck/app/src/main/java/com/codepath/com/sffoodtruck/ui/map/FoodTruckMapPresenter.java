@@ -53,7 +53,12 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
 
     @Override
     public void loadFoodTrucks() {
-        if (placePreference != null && placePreference.getLatLng() != null) {
+        loadFoodTrucks(false);
+    }
+
+    @Override
+    public void loadFoodTrucks(boolean useCurrentLocation) {
+        if (!useCurrentLocation && placePreference != null && placePreference.getLatLng() != null) {
             LatLng latLng = placePreference.getLatLng();
             Location location = new Location("Place");
             location.setLatitude(latLng.latitude);

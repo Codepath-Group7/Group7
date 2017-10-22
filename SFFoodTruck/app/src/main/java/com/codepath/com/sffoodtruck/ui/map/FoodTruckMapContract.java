@@ -18,6 +18,7 @@ public class FoodTruckMapContract {
     }
 
     interface Presenter extends MvpBasePresenter<MvpView>{
+        void loadFoodTrucks(boolean useCurrentLocation);
         void loadFoodTrucks();
     }
 }
