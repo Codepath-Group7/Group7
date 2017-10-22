@@ -36,6 +36,7 @@ public class LoadImageBindingAdapter {
     public static void loadRoundedCorners(ImageView view,String url){
         Picasso.with(view.getContext())
                 .load(url)
+                .fit()
                 .transform(new RoundedCornersTransformation(12,12))
                 .into(view);
     }
