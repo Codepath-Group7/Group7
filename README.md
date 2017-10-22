@@ -8,21 +8,21 @@ The following **required** functionality is completed:
 * [X] User should be able to see a list of food trucks on the home screen.
 * [X] User should be able to see the food trucks in a map view.
 * [X] The list of food trucks should sorted based on user’s location.
-* [ ] User should be able to search a cuisine or a specific food truck.
+* [X] User should be able to search a cuisine or a specific food truck.
 * [X] User can click on a food truck in list view or map view to see the details of the food trucks. The following should be shown:
-  * [ ] Business hours
+  * [X] Business hours
   * [X] Pictures
   * [X] Ratings
-  * [ ] Reviews
+  * [X] Reviews
   * [X] Address
-  * [ ] Cuisine
-* [ ] User can post photos and reviews about the food truck.
+  * [X] Cuisine
+* [X] User can post photos and reviews about the food truck.
 * [X] User can store his cuisine and location preferences in application settings.
 
 The following **optional** functionality is completed:
 * [ ] Autocomplete keywords for search feature.
 * [ ] Filter results in the list view.
-* [ ] User in similar geo location can connect with each other through a chat room.
+* [X] User in similar geo location can connect with each other through a chat room and discuss about food trucks in the area.
 
 ## Video Walkthrough
 
