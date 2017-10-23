@@ -2,11 +2,21 @@ package com.codepath.com.sffoodtruck.ui.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.annotation.DrawableRes;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.codepath.com.sffoodtruck.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -35,6 +45,30 @@ public class MapUtils {
         return bitmapDescriptor;
     }
 
+    public static Bitmap getMarkerBitmapFromView(Context context, @DrawableRes int resId, String iconText) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View customMarkerView = inflater.inflate(R.layout.view_food_truck_map_marker, null);
+
+        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.image_icon);
+        markerImageView.setImageResource(resId);
+
+        TextView iconTextView = (TextView) customMarkerView.findViewById(R.id.text_name);
+        iconTextView.setText(iconText);
+
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null) drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+        return returnedBitmap;
+    }
+
     public static Marker addMarker(GoogleMap map, LatLng point, String title,
                                    String snippet,
                                    BitmapDescriptor icon) {
@@ -50,7 +84,7 @@ public class MapUtils {
         return marker;
     }
 
-    public static String findLocation(Context context,Location location) {
+    public static String findLocation(Context context, Location location) {
         if (location == null) return null;
 
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());

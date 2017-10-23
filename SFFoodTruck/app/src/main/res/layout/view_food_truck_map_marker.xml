@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bgd_rounded_button"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:padding="2dp"
+        android:textColor="@color/colorPrimaryText"
+        tool:text="Movable dsfasdfs" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-2dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:srcCompat="@drawable/ic_map_pin" />
+
+        <ImageView
+            android:id="@+id/image_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:paddingRight="2dp"
+            app:srcCompat="@drawable/ic_truck" />
+    </RelativeLayout>
+</RelativeLayout>
