@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.ui.businessdetail;
+package com.codepath.com.sffoodtruck.ui.businessdetail.reviews;
 
 import android.app.Activity;
 import android.app.Dialog;

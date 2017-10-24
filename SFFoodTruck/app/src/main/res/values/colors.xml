@@ -9,4 +9,5 @@
     <color name="colorDivider">#bdbdbd</color>
     <color name="colorTextColor">#ffffff</color>
     <color name="facebookBlue">#3b5998</color>
+    <color name="colorPrimary_Alpha">#0500796b</color>
 </resources>

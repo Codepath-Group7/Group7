@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.ui.businessdetail;
+package com.codepath.com.sffoodtruck.ui.businessdetail.reviews;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Review;
