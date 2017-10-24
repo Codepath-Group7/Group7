@@ -48,6 +48,7 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     public void initialLoad(Business business) {
         sBusinessId = business.getId();
         sBusiness = business;
+        sBusiness.setTimestamp(String.valueOf(System.currentTimeMillis()));
         getView().renderBusinessDetail();
         loadBusiness();
         loadReviews();

@@ -98,8 +98,10 @@ public abstract class BaseLocationFragment extends AbstractMvpFragment<FoodTruck
         String perms[] = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(mGoogleApiClient.isConnected() && EasyPermissions.hasPermissions(getActivity(),perms)) {
+        if(mGoogleApiClient.isConnected()
+                && EasyPermissions.hasPermissions(getActivity(),perms)) {
             Log.d(TAG,"Requesting location updates");
+            createLocationRequest();
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }else{

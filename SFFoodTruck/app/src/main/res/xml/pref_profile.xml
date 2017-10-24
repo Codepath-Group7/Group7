@@ -10,14 +10,6 @@
             android:summaryOn="@string/pref_suggestion_on"
             android:title="@string/pref_suggestion_label"
             />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="@bool/pref_default_new_deals"
-            android:key="@string/pref_deals_key"
-            android:summaryOff="@string/pref_new_deals_summary_off"
-            android:summaryOn="@string/pref_new_deals_summary_on"
-            android:title="@string/pref_new_deals_label"
-            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_location">
@@ -34,7 +26,5 @@
             android:summary="@string/pref_location_picker_summary"
             />
     </PreferenceCategory>
-
-
 
 </PreferenceScreen>

@@ -99,6 +99,8 @@ public class FirebaseUtils {
         if(getCurrentUserDatabaseRef() == null) return null;
         return getCurrentUserDatabaseRef().child("previousTrips");
     }
+
+
     /* End of Database References */
 
     public static FirebaseUser getCurrentUser(){
