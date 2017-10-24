@@ -10,4 +10,6 @@
     <color name="colorTextColor">#ffffff</color>
     <color name="facebookBlue">#3b5998</color>
     <color name="colorPrimary_Alpha">#0500796b</color>
+    <color name="white_alpha_50">#32ffffff</color>
+    <color name="white_alpha_226">#e2ffffff</color>
 </resources>

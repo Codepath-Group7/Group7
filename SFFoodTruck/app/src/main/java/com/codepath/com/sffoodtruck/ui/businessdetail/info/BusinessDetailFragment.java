@@ -14,18 +14,27 @@ import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailContract.MvpView
-        , BusinessDetailContract.Presenter> implements BusinessDetailContract.MvpView {
+        , BusinessDetailContract.Presenter> implements BusinessDetailContract.MvpView, OnMapReadyCallback{
 
     public static final String TAG = BusinessDetailFragment.class.getSimpleName();
     public static final String BUSINESS_KEY = "business_key";
     private Business mBusiness;
     private FragmentBusinessDetailBinding mBinding;
-
+    private GoogleMap mMap;
+    //private static final LatLng BRISBANE = new LatLng(-27.47093, 153.0235);
+    private LatLng mBusinessCoordinates;
     public BusinessDetailFragment() {
         // Required empty public constructor
     }
@@ -66,13 +75,35 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public void renderBusiness(Business data) {
-        mBinding.tvBusinessAddress.setText(data.getLocation().getCompleteAddress());
+        mBinding.tvAddress.setText(data.getLocation().getCompleteAddress());
         mBinding.tvBusinessDesc.setText(data.getAllCategories());
         mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
         mBinding.rbFoodTruckRating.setRating(data.getRating());
         mBinding.tvPrice.setText(data.getPrice());
         if(data.getHours()!=null && data.getHours().size()>0){
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
+        }
+        mBusinessCoordinates = new LatLng(data.getCoordinates().getLatitude(),data.getCoordinates().getLongitude());
+        initializeMapView();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(getActivity());
+        mMap = googleMap;
+        if(mBusinessCoordinates == null) return;
+        mMap.addMarker(new MarkerOptions()
+                .position(mBusinessCoordinates));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mBusinessCoordinates,16f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
+
+    public void initializeMapView() {
+        if (mBinding.liteMap != null) {
+            // Initialise the MapView
+            mBinding.liteMap.onCreate(null);
+            // Set the map ready callback to receive the GoogleMap object
+            mBinding.liteMap.getMapAsync(this);
         }
     }
 }
