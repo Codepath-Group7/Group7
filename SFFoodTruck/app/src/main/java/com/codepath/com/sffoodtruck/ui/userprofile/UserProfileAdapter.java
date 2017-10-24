@@ -26,7 +26,7 @@ public class UserProfileAdapter extends SingleLayoutAdapter{
 
     @Override
     public int getItemCount() {
-        if(mBusinesses.size() <= 5){
+        if(mBusinesses.size() < 5){
             return mBusinesses.size();
         }else{
             return 5;

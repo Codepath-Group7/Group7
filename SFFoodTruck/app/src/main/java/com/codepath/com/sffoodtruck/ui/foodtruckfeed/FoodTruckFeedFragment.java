@@ -139,8 +139,6 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
             //Handle sLocation updates accordingly
             Log.d(TAG,"Location: " + QueryPreferences.getCurrentLocation(getActivity()));
             sLocation = QueryPreferences.getCurrentLocation(getActivity());
-            Toast.makeText(getActivity(),"Current Location is: " +
-                    QueryPreferences.getCurrentLocation(getActivity()),Toast.LENGTH_SHORT).show();
             Snackbar snackbar = Snackbar.make(mBinding.getRoot(),
                     getString(R.string.new_location),Snackbar.LENGTH_LONG);
 

@@ -72,8 +72,22 @@ public class Business implements Parcelable {
     private List<Hour> hours = null;
     //Field to identify it as a favorite of user or not
     private boolean isFavorite;
+
+    private String timestamp;
     /* End of fields needed for business detail */
 
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setClosed(Boolean closed) {
+        isClosed = closed;
+    }
 
     public Boolean getClosed() {
         return isClosed;
@@ -266,6 +280,7 @@ public class Business implements Parcelable {
 
     public Business() {
         isFavorite = false;
+        timestamp = String.valueOf(System.currentTimeMillis());
     }
 
 
@@ -295,6 +310,7 @@ public class Business implements Parcelable {
         dest.writeStringList(this.photos);
         dest.writeTypedList(this.hours);
         dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeString(this.timestamp);
     }
 
     protected Business(Parcel in) {
@@ -317,6 +333,7 @@ public class Business implements Parcelable {
         this.photos = in.createStringArrayList();
         this.hours = in.createTypedArrayList(Hour.CREATOR);
         this.isFavorite = in.readByte() != 0;
+        this.timestamp = in.readString();
     }
 
     public static final Creator<Business> CREATOR = new Creator<Business>() {
@@ -330,4 +347,30 @@ public class Business implements Parcelable {
             return new Business[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Business{" +
+                "rating=" + rating +
+                ", price='" + price + '\'' +
+                ", phone='" + phone + '\'' +
+                ", id='" + id + '\'' +
+                ", isClosed=" + isClosed +
+                ", categories=" + categories +
+                ", reviewCount=" + reviewCount +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", coordinates=" + coordinates +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", location=" + location +
+                ", distance=" + distance +
+                ", transactions=" + transactions +
+                ", isClaimed=" + isClaimed +
+                ", displayPhone='" + displayPhone + '\'' +
+                ", photos=" + photos +
+                ", hours=" + hours +
+                ", isFavorite=" + isFavorite +
+                ", timestamp='" + timestamp + '\'' +
+                '}';
+    }
 }
