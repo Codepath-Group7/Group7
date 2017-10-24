@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
     private List<String> mPhotoList;
     private BusinessPhotosRecyclerViewAdapter mPhotosAdapter;
     private FragmentBusinessPhotosBinding mBinding;
-    private GridLayoutManager mPhotosLayoutManager;
+    private StaggeredGridLayoutManager mPhotosLayoutManager;
     public BusinessPhotosFragment() {
         // Required empty public constructor
     }
@@ -77,7 +78,7 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
     }
 
     private void setupView() {
-        mPhotosLayoutManager = new GridLayoutManager(getActivity(),2);
+        mPhotosLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mBinding.rvPhotosList.setLayoutManager(mPhotosLayoutManager);
         mBinding.rvPhotosList.setAdapter(mPhotosAdapter);
         mBinding.fabAddPhoto.setOnClickListener(v -> openTakePhotoDialog());

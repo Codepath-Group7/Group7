@@ -13,6 +13,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 
@@ -90,7 +91,8 @@ dependencies {
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4'
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
