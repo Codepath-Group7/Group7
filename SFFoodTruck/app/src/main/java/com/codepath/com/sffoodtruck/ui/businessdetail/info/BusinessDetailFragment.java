@@ -23,7 +23,6 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     public static final String TAG = BusinessDetailFragment.class.getSimpleName();
     public static final String BUSINESS_KEY = "business_key";
-    public static final int REQUEST_REVIEW = 44;
     private Business mBusiness;
     private FragmentBusinessDetailBinding mBinding;
 
@@ -47,7 +46,6 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         mBusiness = getArguments().getParcelable(BUSINESS_KEY);
     }
 

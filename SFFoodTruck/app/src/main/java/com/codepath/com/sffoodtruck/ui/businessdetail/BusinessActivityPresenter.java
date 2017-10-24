@@ -42,8 +42,8 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
     public void initialLoad(Business business) {
         sBusinessId = business.getId();
         sBusiness = business;
-        checkIsFavorite();
         loadBusiness();
+        checkIsFavorite();
         new Handler().postDelayed(() -> {
             if(getView().isAttached()){
                 uploadBusinessDetail();
