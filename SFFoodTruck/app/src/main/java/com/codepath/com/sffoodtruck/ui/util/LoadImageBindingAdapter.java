@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.codepath.com.sffoodtruck.R;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
@@ -28,7 +29,11 @@ public class LoadImageBindingAdapter {
     public static void loadSmallImage(ImageView view, String url){
         Picasso.Builder builder = new Picasso.Builder(view.getContext());
         builder.listener((picasso, uri, exception) -> exception.printStackTrace());
-        builder.build().load(url).resize(330,0).into(view);
+        builder.build()
+                .load(url)
+                .placeholder(R.drawable.placeholder160x160)
+                .resize(344,0)
+                .into(view);
     }
 
     @BindingAdapter({"bind:roundedCornersImageUrl"})
