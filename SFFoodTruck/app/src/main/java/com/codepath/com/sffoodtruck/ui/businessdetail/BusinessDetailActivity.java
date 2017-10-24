@@ -74,6 +74,9 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             case R.id.action_favorite:
                 getPresenter().addToFavorites();
                 return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
