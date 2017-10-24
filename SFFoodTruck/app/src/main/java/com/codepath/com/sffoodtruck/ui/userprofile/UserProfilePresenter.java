@@ -38,24 +38,24 @@ implements UserProfileContract.Presenter{
     public void loadRecentVisits() {
         mDatabaseReference= FirebaseUtils.getPreviousTripsDatabaseRef();
         if(mDatabaseReference != null){
-            mDatabaseReference.limitToLast(20)
+            mDatabaseReference.limitToLast(LIMIT_COUNT)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     LinkedList<Business> businesses = new LinkedList<>();
 
                     //update for handling duplicates
-                    Iterable<DataSnapshot> it = dataSnapshot.getChildren();
-                    for (DataSnapshot businessSnapshot : it) {
+                    for (DataSnapshot businessSnapshot : dataSnapshot.getChildren()) {
                         Business business = businessSnapshot.getValue(Business.class);
                         if (business != null) {
                             Log.d(TAG, "Recent visits list :" + business.getName());
-                            if ( businesses.size()> 0 &&
+                            //duplicates handled from BusinessDetailPresenter
+                            /*if ( businesses.size()> 0 &&
                                     businesses.getFirst().getId().equals(business.getId())){
                                 Log.d(TAG,"First: " + businesses.getFirst().getName()
                                         + ", duplicate: " + business.getName());
                                 continue;
-                            }
+                            }*/
 
                             businesses.addFirst(business);
                         }

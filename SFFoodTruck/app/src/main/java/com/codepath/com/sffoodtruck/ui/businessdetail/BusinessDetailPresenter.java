@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail;
 
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,12 +68,40 @@ public class BusinessDetailPresenter extends AbstractPresenter<BusinessDetailCon
     public void uploadBusinessDetail() {
         mDatabaseReference = FirebaseUtils.getPreviousTripsDatabaseRef();
         if(mDatabaseReference != null){
-            mDatabaseReference.child(String.valueOf(System.currentTimeMillis()))
-                    .setValue(sBusiness)
-                    .addOnCompleteListener(task -> {
-                        Log.d(TAG,"uploading data to server into previousTrips");
-                        Log.d(TAG,"Task of uploading business detail: " + task.isSuccessful());
+            mDatabaseReference.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getChildrenCount() > 0){
+                        for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                            Business business = snapshot.getValue(Business.class);
+                            if(business != null && business.getId().equals(sBusinessId)){
+                                mDatabaseReference = mDatabaseReference.child(snapshot.getKey());
+                                Log.d(TAG,"Got the duplicate: " + business.getTimestamp());
+                            }else{
+                                mDatabaseReference = mDatabaseReference
+                                        .child(sBusiness.getTimestamp());
+                            }
+                            mDatabaseReference.setValue(sBusiness)
+                                    .addOnCompleteListener(task -> {
+                                        Log.d(TAG,"uploading data to server into previousTrips");
+                                        Log.d(TAG,"Task of uploading business detail: "
+                                                + task.isSuccessful());
+                                    });
+                        }
+
+                    }else{
+                        mDatabaseReference.child(sBusiness.getTimestamp())
+                                .setValue(sBusiness);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
             });
+
+
         }
     }
 

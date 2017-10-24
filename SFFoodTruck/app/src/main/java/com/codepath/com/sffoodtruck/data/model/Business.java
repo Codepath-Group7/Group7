@@ -347,4 +347,30 @@ public class Business implements Parcelable {
             return new Business[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Business{" +
+                "rating=" + rating +
+                ", price='" + price + '\'' +
+                ", phone='" + phone + '\'' +
+                ", id='" + id + '\'' +
+                ", isClosed=" + isClosed +
+                ", categories=" + categories +
+                ", reviewCount=" + reviewCount +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", coordinates=" + coordinates +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", location=" + location +
+                ", distance=" + distance +
+                ", transactions=" + transactions +
+                ", isClaimed=" + isClaimed +
+                ", displayPhone='" + displayPhone + '\'' +
+                ", photos=" + photos +
+                ", hours=" + hours +
+                ", isFavorite=" + isFavorite +
+                ", timestamp='" + timestamp + '\'' +
+                '}';
+    }
 }
