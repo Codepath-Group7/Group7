@@ -1,12 +1,15 @@
 package com.codepath.com.sffoodtruck.ui.foodtruckfeed;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.com.sffoodtruck.R;
@@ -91,8 +95,21 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
                 {
                     Log.d(TAG,"Opening detail view for "
                             + mAdapter.getBusinessForPos(position).getName());
-                    startActivity(BusinessDetailActivity
-                            .newIntent(getActivity(),mAdapter.getBusinessForPos(position)));
+                    Intent intent = BusinessDetailActivity
+                            .newIntent(getActivity(),mAdapter.getBusinessForPos(position));
+                    // Check if we're running on Android 5.0 or higher
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        // Call some material design APIs here
+                        ImageView ivBanner = (ImageView) v.findViewById(R.id.ivBanner);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(getActivity(), (View)ivBanner, "businessImage");
+
+                        startActivity(intent,options.toBundle());
+                    } else {
+                        // Implement this feature without material design
+                        startActivity(intent);
+                    }
+
                 });
         mBinding.rvFoodTruckFeed.addOnScrollListener
                 (new EndlessRecyclerViewScrollListener(layoutManager){

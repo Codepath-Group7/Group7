@@ -99,7 +99,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                 //getPresenter().addToFavorites();
                 return true;
             case android.R.id.home:
-                finish();
+                supportFinishAfterTransition();
                 return true;
         }
         return super.onOptionsItemSelected(item);

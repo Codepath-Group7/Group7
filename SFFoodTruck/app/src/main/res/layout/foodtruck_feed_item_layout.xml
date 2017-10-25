@@ -28,6 +28,7 @@
                 android:src="@color/colorPrimary"
                 app:imageUrl="@{obj.imageUrl}"
                 app:error="@{@drawable/placeholder_1000x200}"
+                android:transitionName="businessImage"
                 />
             <View
                 android:layout_width="wrap_content"
