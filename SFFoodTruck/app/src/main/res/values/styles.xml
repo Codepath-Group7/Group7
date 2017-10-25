@@ -17,7 +17,14 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     </style>
 
+
+    <style name="AppBarTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/colorPrimary_Alpha</item>
+    </style>
+
     <dimen name="ratingBarMinHeight">20dp</dimen>
     <dimen name="ratingBarMaxHeight">24dp</dimen>
     <color name="white">#ffffff</color>
+    <color name="white._a">#64ffffff</color>
+    <color name="colorPrimary_Alpha">#1f00796b</color>
 </resources>
