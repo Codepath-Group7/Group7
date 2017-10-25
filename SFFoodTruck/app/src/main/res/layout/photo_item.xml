@@ -15,7 +15,6 @@
         android:id="@+id/iv_photo"
         tools:src="@drawable/placeholder160x160"
         app:imageUrl="@{obj}"
-        android:padding="@dimen/padding4"
-        />
+android:padding="@dimen/padding4"        />
 </LinearLayout>
 </layout>
