@@ -1,12 +1,16 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -22,11 +26,13 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.ActivityBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpActivity;
-import com.codepath.com.sffoodtruck.ui.businessdetail.photos.BusinessPhotosFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.photos.TakePhotoDialogFragment;
-import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.BusinessReviewsFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.SubmitReviewDialogFragment;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivityContract.MvpView
         , BusinessActivityContract.Presenter> implements BusinessActivityContract.MvpView,
@@ -40,6 +46,8 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     private Business mBusiness;
     private MenuItem mFavoriteItem;
     private BusinessDetailPagerAdapter mViewPagerAdapter;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Uri mCurrentPhotoPath = null;
 
     public static Intent newIntent(Context context, Business business){
         Intent intent = new Intent(context, BusinessDetailActivity.class);
@@ -53,6 +61,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_business_detail);
         mBusiness = getIntent().getParcelableExtra(EXTRA_BUSINESS);
         setToolbar();
+        getPresenter().initialLoad(mBusiness);
     }
 
     private void setToolbar() {
@@ -69,7 +78,6 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     @Override
     protected void onStart() {
         super.onStart();
-        getPresenter().initialLoad(mBusiness);
     }
 
     @Override
@@ -85,7 +93,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
         switch (item.getItemId()){
             case R.id.action_favorite:
-                getPresenter().addToFavorites();
+                //getPresenter().addToFavorites();
                 return true;
             case android.R.id.home:
                 finish();
@@ -120,13 +128,15 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             public void onPageSelected(int position) {
                 switch (position){
                     case 0:
-                        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
+                        getPresenter().checkIsFavorite();
                         break;
                     case 1:
-                        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(BusinessDetailActivity.this,R.drawable.ic_add_a_photo_black_24dp));
+                        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                                BusinessDetailActivity.this,R.drawable.ic_add_a_photo_black_24dp));
                         break;
                     case 2:
-                        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(BusinessDetailActivity.this,R.drawable.ic_rate_review_black_24dp));
+                        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                                BusinessDetailActivity.this,R.drawable.ic_rate_review_black_24dp));
                         break;
                 }
             }
@@ -158,7 +168,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                 getPresenter().addToFavorites();
                 break;
             case 1:
-                openTakePhotoDialog();
+                dispatchTakePictureIntent();
                 break;
             case 2:
                 openSubmitReviewDialog();
@@ -172,7 +182,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     }
 
     public void openTakePhotoDialog() {
-        DialogFragment fragment = new TakePhotoDialogFragment();
+        DialogFragment fragment = TakePhotoDialogFragment.newInstance(mCurrentPhotoPath);
         fragment.show(getSupportFragmentManager(), TakePhotoDialogFragment.TAG);
     }
 
@@ -188,6 +198,15 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             mFavoriteItem.setIcon(ContextCompat.getDrawable(this,
                     R.drawable.ic_favorite_white_24px));
         }
+        if(mBinding.tabViewpager.getCurrentItem() == 0){
+            if(!isFavorite){
+                mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                        BusinessDetailActivity.this,R.drawable.ic_favorite_border_white_24px));
+            }else{
+                mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                        BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
+            }
+        }
     }
 
     @Override
@@ -197,12 +216,57 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     @Override
     public void OnPhotoSubmit(Uri photoPath) {
-        if(photoPath!=null && !TextUtils.isEmpty(photoPath.toString())) getPresenter().uploadPhotoToStorage(photoPath);
+        if(photoPath!=null && !TextUtils.isEmpty(photoPath.toString()))
+            getPresenter().uploadPhotoToStorage(photoPath);
     }
 
     @Override
     public void onReviewSubmit(Review review) {
         Log.d(TAG, "From review dialog fragment " + review.getText());
         getPresenter().submitReviewToFirebase(review);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.codepath.com.sffoodtruck.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String imageFileName = UUID.randomUUID().toString();
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = Uri.fromFile(image);
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Log.d(TAG, "From Camera " + mCurrentPhotoPath);
+            openTakePhotoDialog();
+        }
     }
 }

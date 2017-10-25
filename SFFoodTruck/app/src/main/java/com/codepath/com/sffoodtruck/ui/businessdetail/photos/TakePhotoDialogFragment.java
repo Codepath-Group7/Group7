@@ -9,15 +9,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatRatingBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.databinding.FragmentTakePhotoLayoutBinding;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,83 +35,54 @@ import java.util.UUID;
  * Created by akshaymathur on 10/17/17.
  */
 
-public class TakePhotoDialogFragment extends DialogFragment {
-    private FragmentTakePhotoLayoutBinding mBinding;
+public class TakePhotoDialogFragment extends BottomSheetDialogFragment {
     public final static String TAG = TakePhotoDialogFragment.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final String EXTRA_PHOTO_URI = "photo_uri";
     private Uri mCurrentPhotoPath = null;
+    private ImageView mImageView;
+    private boolean isPhotoCaptured = false;
+    public static final String EXTRA_PHOTO_URI = "photo_uri";
 
     public interface TakePhotoListner {
         void OnPhotoSubmit(Uri photoPath);
+    }
+
+    public static DialogFragment newInstance(Uri photoPath){
+        TakePhotoDialogFragment fragment = new TakePhotoDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_PHOTO_URI,photoPath);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private TakePhotoListner mTakePhotoListner;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo_layout, null, false);
-        //View v = inflater.inflate(R.layout.fragment_take_photo_layout,null);
-        mBinding.ivAddNewPhoto.setOnClickListener(view -> dispatchTakePictureIntent());
-        mBinding.btnUpload.setOnClickListener(view -> uploadPhoto());
-        mBinding.btnCancel.setOnClickListener(view -> dismiss());
-        alertDialog.setView(mBinding.getRoot());
-        return alertDialog.create();
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "com.codepath.com.sffoodtruck.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.upload_photo)
+                .customView(R.layout.fragment_take_photo_layout, true)
+                .positiveText(R.string.label_upload)
+                .onPositive((dialog1, which) -> uploadPhoto())
+                .negativeText(R.string.label_cancel)
+                .onNegative((dialog1, which) -> dismiss())
+                .build();
+        View view = dialog.getCustomView();
+        if(view!=null) {
+            mImageView = (ImageView) view.findViewById(R.id.iv_add_new_photo);
         }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String imageFileName = UUID.randomUUID().toString();
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = Uri.fromFile(image);
-        return image;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            Log.d(TAG, "From Camera " + mCurrentPhotoPath);
-            mBinding.ivNewImagePlaceholder.setVisibility(View.GONE);
-            mBinding.ivAddNewPhoto.setImageURI(mCurrentPhotoPath);
-        }
+        //mImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_photo_black_24dp));
+        mCurrentPhotoPath = getArguments().getParcelable(EXTRA_PHOTO_URI);
+        Picasso.with(getActivity())
+                .load(mCurrentPhotoPath)
+                .placeholder(R.drawable.ic_photo_black_24dp)
+                .into(mImageView);
+        //dispatchTakePictureIntent();
+        return dialog;
     }
 
     private void uploadPhoto() {
-        //photoData.putExtra(EXTRA_PHOTO_URI, mCurrentPhotoPath);
         mTakePhotoListner.OnPhotoSubmit(mCurrentPhotoPath);
-        dismiss();
-
-
     }
 
     @Override
