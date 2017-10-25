@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
@@ -48,6 +49,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     private BusinessDetailPagerAdapter mViewPagerAdapter;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Uri mCurrentPhotoPath = null;
+    private MaterialDialog mProgressDialog;
 
     public static Intent newIntent(Context context, Business business){
         Intent intent = new Intent(context, BusinessDetailActivity.class);
@@ -72,7 +74,8 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             actionBar.setTitle(mBusiness.getName());
         }
         Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
-        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
+        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
     }
 
     @Override
@@ -215,6 +218,20 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     }
 
     @Override
+    public void showProgressDialog(int stringResource) {
+        mProgressDialog = new MaterialDialog.Builder(this)
+                .title(stringResource)
+                .content(R.string.please_wait)
+                .progress(true, 0).build();
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if(mProgressDialog.isShowing()) mProgressDialog.hide();
+    }
+
+    @Override
     public void OnPhotoSubmit(Uri photoPath) {
         if(photoPath!=null && !TextUtils.isEmpty(photoPath.toString()))
             getPresenter().uploadPhotoToStorage(photoPath);
@@ -264,6 +281,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Log.d(TAG, "From Camera " + mCurrentPhotoPath);
             openTakePhotoDialog();

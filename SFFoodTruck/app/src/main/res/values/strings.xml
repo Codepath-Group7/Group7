@@ -96,6 +96,9 @@
     <string name="label_hrs_format">(24-hour)</string>
     <string name="submit_review">Submit Review</string>
     <string name="upload_photo">Upload Photo</string>
+    <string name="label_loading">Loading</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="label_uploading">Uploading</string>
 
 
 </resources>

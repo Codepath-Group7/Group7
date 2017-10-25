@@ -16,6 +16,8 @@ public class BusinessActivityContract {
         void renderBusiness(Business data);
         void showAsFavorite(boolean isFavorite);
         boolean isAttached();
+        void showProgressDialog(int stringResource);
+        void hideProgressDialog();
     }
 
     interface Presenter extends MvpBasePresenter<MvpView> {

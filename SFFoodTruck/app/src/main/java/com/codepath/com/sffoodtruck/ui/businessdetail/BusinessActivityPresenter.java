@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
@@ -46,6 +47,7 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
     public void initialLoad(Business business) {
         sBusinessId = business.getId();
         sBusiness = business;
+        getView().showProgressDialog(R.string.label_loading);
         loadBusiness();
         checkIsFavorite();
         new Handler().postDelayed(() -> {
@@ -87,6 +89,7 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
                 }
 
                 getView().renderBusiness(businessDetails);
+                getView().hideProgressDialog();
             }
 
             @Override
@@ -138,6 +141,7 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
 
     @Override
     public void uploadPhotoToStorage(Uri photoUri) {
+        getView().showProgressDialog(R.string.label_uploading);
         StorageReference photoRef = FirebaseUtils
                 .getBusinessPhotoReference(photoUri.getLastPathSegment());
         UploadTask mUploadTask = photoRef.putFile(photoUri);
@@ -158,7 +162,7 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
             DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
             if(taskSnapshot.getDownloadUrl()!= null)
                 databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
-            //progressDialog.dismiss();
+            getView().hideProgressDialog();
         });
     }
 
