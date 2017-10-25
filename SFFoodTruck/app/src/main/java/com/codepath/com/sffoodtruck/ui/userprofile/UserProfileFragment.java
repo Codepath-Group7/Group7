@@ -34,13 +34,9 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
     private static final String TAG = UserProfileFragment.class.getSimpleName();
     private FragmentUserProfileBinding mBinding;
     private FirebaseUser mUser;
-
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
-
     private boolean mIsTheTitleVisible          = false;
-    private boolean mIsTheTitleContainerVisible = true;
 
 
     public UserProfileFragment() {
@@ -90,6 +86,8 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
                 .into(mBinding.ivProfile);*/
 
         startAlphaAnimation(mBinding.toolbar,0,View.INVISIBLE);
+        mBinding.collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getActivity(),
+                android.R.color.black));
         mBinding.collapsingToolbarLayout
                 .setCollapsedTitleTextColor(ContextCompat.getColor(getActivity(),
                 android.R.color.white));
