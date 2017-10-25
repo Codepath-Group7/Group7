@@ -83,13 +83,6 @@ public class BusinessReviewsFragment extends AbstractMvpFragment<BusinessReviews
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         mBinding.rvReviewList.addItemDecoration(itemDecoration);
-        mBinding.fabAddReview.setOnClickListener((view1 -> openSubmitReviewDialog()));
-    }
-
-    private void openSubmitReviewDialog() {
-        DialogFragment fragment = new SubmitReviewDialogFragment();
-        fragment.setTargetFragment(this, REQUEST_REVIEW);
-        fragment.show(getFragmentManager(), SubmitReviewDialogFragment.TAG);
     }
 
     @Override
@@ -106,14 +99,5 @@ public class BusinessReviewsFragment extends AbstractMvpFragment<BusinessReviews
     @Override
     public BusinessReviewsContract.Presenter createPresenter() {
         return new BusinessReviewsPresenter(QueryPreferences.getAccessToken(getActivity()));
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_REVIEW && resultCode == Activity.RESULT_OK){
-            Review review = data.getParcelableExtra(SubmitReviewDialogFragment.EXTRA_REVIEW);
-            Log.d(TAG, "From review dialog fragment " + review.getText());
-            getPresenter().submitReviewToFirebase(review);
-        }
     }
 }

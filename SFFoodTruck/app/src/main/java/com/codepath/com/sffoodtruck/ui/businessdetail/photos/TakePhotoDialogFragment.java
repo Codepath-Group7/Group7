@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail.photos;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -31,12 +32,19 @@ public class TakePhotoDialogFragment extends DialogFragment {
     public final static String TAG = TakePhotoDialogFragment.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final String EXTRA_PHOTO_URI = "photo_uri";
-    private Uri mCurrentPhotoPath=null;
+    private Uri mCurrentPhotoPath = null;
+
+    public interface TakePhotoListner {
+        void OnPhotoSubmit(Uri photoPath);
+    }
+
+    private TakePhotoListner mTakePhotoListner;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_take_photo_layout,null,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo_layout, null, false);
         //View v = inflater.inflate(R.layout.fragment_take_photo_layout,null);
         mBinding.ivAddNewPhoto.setOnClickListener(view -> dispatchTakePictureIntent());
         mBinding.btnUpload.setOnClickListener(view -> uploadPhoto());
@@ -90,13 +98,19 @@ public class TakePhotoDialogFragment extends DialogFragment {
         }
     }
 
-    private void uploadPhoto(){
-        if(getTargetFragment()!=null){
-            Intent photoData = new Intent();
-            photoData.putExtra(EXTRA_PHOTO_URI,mCurrentPhotoPath);
-            getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK,photoData);
-            dismiss();
-        }
+    private void uploadPhoto() {
+        //photoData.putExtra(EXTRA_PHOTO_URI, mCurrentPhotoPath);
+        mTakePhotoListner.OnPhotoSubmit(mCurrentPhotoPath);
+        dismiss();
 
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TakePhotoListner) {
+            mTakePhotoListner = (TakePhotoListner) context;
+        }
     }
 }

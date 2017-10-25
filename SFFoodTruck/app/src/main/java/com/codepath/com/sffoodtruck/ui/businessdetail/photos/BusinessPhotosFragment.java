@@ -81,16 +81,7 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
         mPhotosLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mBinding.rvPhotosList.setLayoutManager(mPhotosLayoutManager);
         mBinding.rvPhotosList.setAdapter(mPhotosAdapter);
-        mBinding.fabAddPhoto.setOnClickListener(v -> openTakePhotoDialog());
-
     }
-
-    private void openTakePhotoDialog() {
-        DialogFragment fragment = new TakePhotoDialogFragment();
-        fragment.setTargetFragment(this, REQUEST_PHOTO);
-        fragment.show(getFragmentManager(), TakePhotoDialogFragment.TAG);
-    }
-
 
     @Override
     public void renderPhotos(List<String> photoList) {
@@ -103,12 +94,4 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
         mPhotosAdapter.addPhoto(photo);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
-            Uri photoUri = data.getParcelableExtra(TakePhotoDialogFragment.EXTRA_PHOTO_URI);
-            Log.d(TAG, "From photo dialog fragment " + photoUri);
-            if(photoUri!=null && !TextUtils.isEmpty(photoUri.toString())) getPresenter().uploadPhotoToStorage(photoUri);
-        }
-    }
 }

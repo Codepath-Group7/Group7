@@ -9,12 +9,13 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.businessdetail.info.BusinessDetailFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.photos.BusinessPhotosFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.BusinessReviewsFragment;
+import com.codepath.com.sffoodtruck.ui.util.SmartFragmentStatePagerAdapter;
 
 /**
  * Created by akshaymathur on 10/23/17.
  */
 
-public class BusinessDetailPagerAdapter extends FragmentPagerAdapter {
+public class BusinessDetailPagerAdapter extends SmartFragmentStatePagerAdapter {
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "Info","Photos","Reviews"};
     private Context context;

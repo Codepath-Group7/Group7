@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail.reviews;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -28,6 +29,10 @@ public class SubmitReviewDialogFragment extends DialogFragment {
     private FragmentSubmitReviewBinding mBinding;
     public final static String EXTRA_REVIEW = "review_extra";
     public final static String TAG = SubmitReviewDialogFragment.class.getSimpleName();
+    public interface SubmitReviewListener{
+        void onReviewSubmit(Review review);
+    }
+    private SubmitReviewListener mSubmitReviewListener;
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -54,13 +59,15 @@ public class SubmitReviewDialogFragment extends DialogFragment {
         newReview.setText(mBinding.etReviewText.getText().toString());
         newReview.setRating(mBinding.rbFoodTruckRating.getRating());
         newReview.setUser(user);
-
-        if(getTargetFragment()!=null){
-            Fragment fragment = getTargetFragment();
-            Intent reviewData = new Intent();
-            reviewData.putExtra(EXTRA_REVIEW,newReview);
-            fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,reviewData);
-        }
+        mSubmitReviewListener.onReviewSubmit(newReview);
         dismiss();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof SubmitReviewListener){
+            mSubmitReviewListener = (SubmitReviewListener) context;
+        }
     }
 }

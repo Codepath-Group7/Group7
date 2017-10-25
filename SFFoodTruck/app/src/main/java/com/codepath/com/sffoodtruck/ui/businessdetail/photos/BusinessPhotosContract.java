@@ -22,6 +22,5 @@ public class BusinessPhotosContract {
     interface Presenter extends MvpBasePresenter<MvpView> {
         void initialLoad(Business business);
         void fetchPhotosFromFirebase();
-        void uploadPhotoToStorage(Uri photoUri);
     }
 }

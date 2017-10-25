@@ -11,14 +11,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin8">
     </android.support.v7.widget.RecyclerView>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_photo"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/margin16"
-        android:layout_marginRight="@dimen/margin16"
-        android:layout_marginBottom="@dimen/margin16"
-        app:srcCompat="@drawable/ic_add_a_photo_black_24dp"/>
 </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -1,11 +1,13 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
@@ -15,6 +17,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -130,5 +134,42 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
                     });
         }
 
+    }
+
+    @Override
+    public void uploadPhotoToStorage(Uri photoUri) {
+        StorageReference photoRef = FirebaseUtils
+                .getBusinessPhotoReference(photoUri.getLastPathSegment());
+        UploadTask mUploadTask = photoRef.putFile(photoUri);
+        mUploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            Log.e(TAG,"File upload failed");
+        }).addOnProgressListener(taskSnapshot -> {
+            @SuppressWarnings("VisibleForTests")
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
+                    getTotalByteCount();
+            Log.d(TAG,"Upload is " + progress + "% done");
+            //progressDialog.setProgress((int) progress);
+
+        }).addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+            //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            Log.d(TAG,"File upload successfully");
+            DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
+            if(taskSnapshot.getDownloadUrl()!= null)
+                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
+            //progressDialog.dismiss();
+        });
+    }
+
+    @Override
+    public void submitReviewToFirebase(Review review) {
+        mDatabaseReference = FirebaseUtils
+                .getBusinessDatabaseReviewsRef(sBusinessId);
+        DatabaseReference userReviewRef = FirebaseUtils
+                .getCurrentUserReviewDatabaseRef();
+        mDatabaseReference.push().setValue(review);
+        if(userReviewRef != null)
+            userReviewRef.child(sBusinessId).setValue(sBusiness);
     }
 }

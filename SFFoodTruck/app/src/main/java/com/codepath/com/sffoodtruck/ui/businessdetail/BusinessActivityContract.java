@@ -1,6 +1,9 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
+import android.net.Uri;
+
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBasePresenter;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBaseView;
 
@@ -21,5 +24,7 @@ public class BusinessActivityContract {
         void loadBusiness();
         void addToFavorites();
         void checkIsFavorite();
+        void uploadPhotoToStorage(Uri photoUri);
+        void submitReviewToFirebase(Review review);
     }
 }

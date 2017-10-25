@@ -12,14 +12,5 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_review"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/margin16"
-        android:layout_marginRight="@dimen/margin16"
-        android:layout_marginBottom="@dimen/margin16"
-        app:srcCompat="@drawable/ic_rate_review_black_24dp"/>
 </android.support.design.widget.CoordinatorLayout>
 </layout>

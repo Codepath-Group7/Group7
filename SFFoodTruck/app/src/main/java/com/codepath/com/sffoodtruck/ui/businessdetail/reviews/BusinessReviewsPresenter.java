@@ -71,17 +71,6 @@ public class BusinessReviewsPresenter extends AbstractPresenter<BusinessReviewsC
     }
 
     @Override
-    public void submitReviewToFirebase(Review review) {
-        mDatabaseReference = FirebaseUtils
-                .getBusinessDatabaseReviewsRef(sBusinessId);
-        DatabaseReference userReviewRef = FirebaseUtils
-                .getCurrentUserReviewDatabaseRef();
-        mDatabaseReference.push().setValue(review);
-        if(userReviewRef != null)
-            userReviewRef.child(sBusinessId).setValue(sBusiness);
-    }
-
-    @Override
     public void fetchReviewsFromFirebase() {
         mDatabaseReference = FirebaseUtils
                 .getBusinessDatabaseReviewsRef(sBusinessId);

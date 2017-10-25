@@ -20,7 +20,6 @@ public class BusinessReviewsContract {
     interface Presenter extends MvpBasePresenter<MvpView> {
         void initialLoad(Business business);
         void loadReviews();
-        void submitReviewToFirebase(Review review);
         void fetchReviewsFromFirebase();
     }
 }

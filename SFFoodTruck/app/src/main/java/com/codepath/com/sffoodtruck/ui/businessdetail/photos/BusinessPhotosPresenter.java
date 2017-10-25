@@ -71,29 +71,4 @@ public class BusinessPhotosPresenter extends AbstractPresenter<BusinessPhotosCon
 
     }
 
-    @Override
-    public void uploadPhotoToStorage(Uri photoUri) {
-        StorageReference photoRef = FirebaseUtils
-                .getBusinessPhotoReference(photoUri.getLastPathSegment());
-        UploadTask mUploadTask = photoRef.putFile(photoUri);
-        mUploadTask.addOnFailureListener(exception -> {
-            // Handle unsuccessful uploads
-            Log.e(TAG,"File upload failed");
-        }).addOnProgressListener(taskSnapshot -> {
-            @SuppressWarnings("VisibleForTests")
-            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
-                    getTotalByteCount();
-            Log.d(TAG,"Upload is " + progress + "% done");
-            //progressDialog.setProgress((int) progress);
-
-        }).addOnSuccessListener(taskSnapshot -> {
-            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-            //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-            Log.d(TAG,"File upload successfully");
-            DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
-            if(taskSnapshot.getDownloadUrl()!= null)
-                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
-            //progressDialog.dismiss();
-        });
-    }
 }
