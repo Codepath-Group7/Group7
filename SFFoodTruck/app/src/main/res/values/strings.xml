@@ -62,7 +62,7 @@
     <string name="profile_other">Other Profile</string>
 
     <string name="tools_price">$$$</string>
-    <string name="label_hrs_today">Hours Today (24-hour):</string>
+    <string name="label_hrs_today">Hours Today</string>
     <string name="label_photos">Photos</string>
     <string name="label_upload">Upload</string>
     <string name="label_cancel">cancel</string>
@@ -92,6 +92,13 @@
     <string name="recent_visits_title">Recent Visits</string>
     <string name="favorites_title">Favorites</string>
     <string name="reviews_title">Reviews</string>
+    <string name="label_address">Address</string>
+    <string name="label_hrs_format">(24-hour)</string>
+    <string name="submit_review">Submit Review</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="label_loading">Loading</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="label_uploading">Uploading</string>
 
 
 </resources>
