@@ -1,7 +1,9 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail.info;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -85,6 +87,14 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         }
         mBusinessCoordinates = new LatLng(data.getCoordinates().getLatitude(),data.getCoordinates().getLongitude());
         initializeMapView();
+        mBinding.llCallBusiness.setOnClickListener(view -> callBusiness(data.getPhone()));
+    }
+
+    private void callBusiness(String phoneNumber) {
+        String uri = "tel:" + phoneNumber.trim() ;
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
     }
 
     @Override
