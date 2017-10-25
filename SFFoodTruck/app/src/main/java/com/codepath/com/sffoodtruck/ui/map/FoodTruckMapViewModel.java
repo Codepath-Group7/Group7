@@ -17,14 +17,18 @@ public class FoodTruckMapViewModel {
     private final Float rating;
     private final Coordinates coordinates;
     private final String name;
+    private final String imageUrl;
     private final Business business;
+    private final String price;
 
-    public FoodTruckMapViewModel(String id, String name, Coordinates coordinates, Location location, Float rating, Business business) {
+    public FoodTruckMapViewModel(String id, String name, Coordinates coordinates, Location location, Float rating, String imageUrl, String price, Business business) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
         this.location = location;
         this.rating = rating;
+        this.imageUrl = imageUrl;
+        this.price = price;
         this.business = business;
     }
 
@@ -48,6 +52,14 @@ public class FoodTruckMapViewModel {
         return coordinates;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
     public Business getBusiness() {
         return business;
     }
@@ -59,6 +71,8 @@ public class FoodTruckMapViewModel {
                 business.getCoordinates(),
                 business.getLocation(),
                 business.getRating(),
+                business.getImageUrl(),
+                business.getPrice(),
                 business
         );
     }
@@ -72,4 +86,5 @@ public class FoodTruckMapViewModel {
         }
         return viewModels;
     }
+
 }

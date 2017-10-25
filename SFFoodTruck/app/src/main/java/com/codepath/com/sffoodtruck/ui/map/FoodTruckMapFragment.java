@@ -56,6 +56,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     private MapView mapView;
     private GoogleMap map;
     private Bundle bundle;
+    private FoodTruckMapInfoWindowAdapter infoWindowAdapter;
 
     public static FoodTruckMapFragment newInstance() {
         FoodTruckMapFragment fragment = new FoodTruckMapFragment();
@@ -66,6 +67,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bundle = savedInstanceState;
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        infoWindowAdapter = new FoodTruckMapInfoWindowAdapter(inflater, viewModelMap);
     }
 
     @Override
@@ -160,6 +163,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         this.map = googleMap;
         this.map.setOnInfoWindowClickListener(this);
         this.map.setOnMyLocationButtonClickListener(this);
+        this.map.setInfoWindowAdapter(infoWindowAdapter);
         enableMapMyLocation(map);
         getPresenter().loadFoodTrucks();
     }
@@ -177,12 +181,18 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     @Override
     public void renderFoodTrucks(List<FoodTruckMapViewModel> viewModels) {
         if (viewModels.isEmpty()) return;
+        getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewModelMap.clear();
+                clearOverlays();
 
-        viewModelMap.clear();
+                for (FoodTruckMapViewModel viewModel : viewModels) {
+                    addFoodTruckToMap(viewModel);
+                }
+            }
+        }, 1000);
 
-        for (FoodTruckMapViewModel viewModel : viewModels) {
-            addFoodTruckToMap(viewModel);
-        }
     }
 
     @Override
@@ -212,6 +222,11 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         viewModelMap.put(id, viewModel);
     }
 
+    private void clearOverlays(){
+        if (map == null) return;
+        map.clear();
+    }
+
     @Override
     public void onInfoWindowClick(Marker marker) {
         String id = (String) marker.getTag();
@@ -223,6 +238,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         Intent intent = BusinessDetailActivity.newIntent(getContext()
                 , viewModel.getBusiness());
         startActivity(intent);
+        getActivity().overridePendingTransition(
+                R.anim.slide_up, R.anim.hold);
     }
 
     @Override
