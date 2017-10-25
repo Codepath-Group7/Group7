@@ -81,7 +81,8 @@
             android:value="@string/google_api_key_enabled" />
 
         <activity android:name=".ui.nearby.NearByActivity"/>
-        <activity android:name=".ui.businessdetail.BusinessDetailActivity"/>
+        <activity android:name=".ui.businessdetail.BusinessDetailActivity"
+            android:theme="@style/AppTheme.DetailView"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

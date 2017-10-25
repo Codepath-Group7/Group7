@@ -36,7 +36,11 @@ public class LoadImageBindingAdapter {
     public static void loadSmallImage(ImageView view, String url){
         Picasso.Builder builder = new Picasso.Builder(view.getContext());
         builder.listener((picasso, uri, exception) -> exception.printStackTrace());
-        builder.build().load(url).into(view);
+        builder.build()
+                .load(url)
+                .placeholder(R.drawable.placeholder160x160)
+                .resize(344,0)
+                .into(view);
     }
 
     @BindingAdapter({"bind:roundedCornersImageUrl"})

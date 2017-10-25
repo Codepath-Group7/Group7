@@ -10,10 +10,10 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
     <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/iv_photo"
-        android:src="@drawable/foodtruck"
+        tools:src="@drawable/placeholder160x160"
         app:imageUrl="@{obj}"
         android:padding="@dimen/padding4"
         />

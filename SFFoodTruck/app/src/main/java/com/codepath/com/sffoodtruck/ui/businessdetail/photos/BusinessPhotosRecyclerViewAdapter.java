@@ -1,4 +1,4 @@
-package com.codepath.com.sffoodtruck.ui.businessdetail;
+package com.codepath.com.sffoodtruck.ui.businessdetail.photos;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
