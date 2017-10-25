@@ -8,13 +8,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
@@ -66,6 +69,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         changeFragment(R.id.navigation_home);
+        ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presentActivity(view);
+            }
+        });
     }
 
     private void changeFragment(int itemViewId) {
@@ -94,13 +104,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home_screen,menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        //MenuItem searchItem = menu.findItem(R.id.menu_search);
+        //SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         /*searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 //startActivity(new Intent(HomeActivity.this, SearchActivity.class));
                 //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                presentActivity(menuItemView);
+                presentActivity(searchView);
                 return true;
             }
         });*/
@@ -129,12 +140,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        View menuItemView = findViewById(R.id.menu_search);
-        Log.d(TAG,"Menu item view is-->"+ menuItemView);
         switch (item.getItemId()){
-            case R.id.menu_search:
-                presentActivity(menuItemView);
-                return true;
             case R.id.menu_logout:
                 logout();
                 return true;
