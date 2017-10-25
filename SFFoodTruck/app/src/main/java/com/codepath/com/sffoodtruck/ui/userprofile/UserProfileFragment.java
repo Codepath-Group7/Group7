@@ -3,7 +3,7 @@ package com.codepath.com.sffoodtruck.ui.userprofile;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,19 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
-import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -33,11 +29,18 @@ import java.util.List;
  */
 public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract.MvpView,
         UserProfileContract.Presenter> implements
-        UserProfileContract.MvpView{
+        UserProfileContract.MvpView,  AppBarLayout.OnOffsetChangedListener{
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
     private FragmentUserProfileBinding mBinding;
     private FirebaseUser mUser;
+
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
 
 
     public UserProfileFragment() {
@@ -77,16 +80,16 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
 
     @Override
     public void updateUI() {
-        Picasso.with(getActivity())
+        mBinding.setUser(mUser);
+        mBinding.executePendingBindings();
+        mBinding.appBarLayout.addOnOffsetChangedListener(this);
+        /*Picasso.with(getActivity())
                 .load(mUser.getPhotoUrl())
                 .transform(new CircleTransform())
                 .error(ContextCompat.getDrawable(getActivity(),R.mipmap.ic_camera_launcher))
-                .into(mBinding.ivProfile);
-        mBinding.tvProfileUserName.setText(mUser.getDisplayName());
-        mBinding.collapsingToolbarLayout
-                .setExpandedTitleColor(ContextCompat.getColor(getActivity(),
-                        android.R.color.transparent));
-        mBinding.collapsingToolbarLayout.setTitle(mUser.getDisplayName());
+                .into(mBinding.ivProfile);*/
+
+        startAlphaAnimation(mBinding.toolbar,0,View.INVISIBLE);
         mBinding.collapsingToolbarLayout
                 .setCollapsedTitleTextColor(ContextCompat.getColor(getActivity(),
                 android.R.color.white));
@@ -122,5 +125,42 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
         mBinding.reviews.rvUserProfile
                 .setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
+
+        Log.d(TAG,"Percentage: " + percentage);
+        handleToolbarVisibility(percentage);
+    }
+
+    private void handleToolbarVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(mBinding.toolbar, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(mBinding.toolbar, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
     }
 }
