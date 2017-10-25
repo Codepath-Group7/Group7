@@ -94,6 +94,7 @@
     <string name="reviews_title">Reviews</string>
     <string name="label_address">Address</string>
     <string name="label_hrs_format">(24-hour)</string>
+    <string name="submit_review">Submit Review</string>
 
 
 </resources>

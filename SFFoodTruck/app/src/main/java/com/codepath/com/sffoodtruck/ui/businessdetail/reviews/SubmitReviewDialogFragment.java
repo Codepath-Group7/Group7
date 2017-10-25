@@ -7,12 +7,18 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatRatingBar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.model.User;
@@ -26,9 +32,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SubmitReviewDialogFragment extends DialogFragment {
 
-    private FragmentSubmitReviewBinding mBinding;
-    public final static String EXTRA_REVIEW = "review_extra";
     public final static String TAG = SubmitReviewDialogFragment.class.getSimpleName();
+    private AppCompatEditText mReviewText;
+    private AppCompatRatingBar mRatingBar;
+    private TextInputLayout mInputLayout;
     public interface SubmitReviewListener{
         void onReviewSubmit(Review review);
     }
@@ -36,19 +43,26 @@ public class SubmitReviewDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_submit_review,null,false);
-        //View v = inflater.inflate(R.layout.fragment_take_photo_layout,null);
-        mBinding.btnSubmit.setOnClickListener(view -> submitReview());
-        mBinding.btnCancel.setOnClickListener(view -> dismiss());
-        alertDialog.setView(mBinding.getRoot());
-        return alertDialog.create();
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.submit_review)
+                .customView(R.layout.fragment_submit_review, true)
+                .positiveText(R.string.label_submit)
+                .onPositive((dialog1, which) -> submitReview())
+                .negativeText(R.string.label_cancel)
+                .onNegative((dialog1, which) -> dismiss())
+                .build();
+        View view = dialog.getCustomView();
+        if(view!=null) {
+            mReviewText = (AppCompatEditText) view.findViewById(R.id.et_review_text);
+            mRatingBar = (AppCompatRatingBar) view.findViewById(R.id.rbFoodTruckRating);
+            mInputLayout = (TextInputLayout) view.findViewById(R.id.layout_review_text);
+        }
+        return dialog;
     }
 
     private void submitReview() {
-        if(TextUtils.isEmpty(mBinding.etReviewText.getText())){
-            mBinding.layoutReviewText.setError(getString(R.string.error_empty_review));
+        if(TextUtils.isEmpty(mReviewText.getText())){
+            mInputLayout.setError(getString(R.string.error_empty_review));
             return;
         }
         Review newReview = new Review();
@@ -56,8 +70,8 @@ public class SubmitReviewDialogFragment extends DialogFragment {
         FirebaseUser firebaseUser = FirebaseUtils.getCurrentUser();
         user.setName(firebaseUser.getDisplayName());
         user.setImageUrl(firebaseUser.getPhotoUrl().toString());
-        newReview.setText(mBinding.etReviewText.getText().toString());
-        newReview.setRating(mBinding.rbFoodTruckRating.getRating());
+        newReview.setText(mReviewText.getText().toString());
+        newReview.setRating(mRatingBar.getRating());
         newReview.setUser(user);
         mSubmitReviewListener.onReviewSubmit(newReview);
         dismiss();
