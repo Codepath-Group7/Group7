@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
@@ -92,14 +95,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home_screen,menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        /*searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(HomeActivity.this, SearchActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                //startActivity(new Intent(HomeActivity.this, SearchActivity.class));
+                //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                presentActivity(menuItemView);
                 return true;
             }
-        });
+        });*/
         // Get the SearchView and set the searchable configuration
         /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
@@ -109,9 +113,28 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         return true;
     }
 
+    private void presentActivity(View view) {
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, view, "transition");
+        int revealX = (int) (view.getX() + view.getWidth() / 2);
+        int revealY = (int) (view.getY() + view.getHeight() / 2);
+
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.EXTRA_CIRCULAR_REVEAL_X, revealX);
+        intent.putExtra(SearchActivity.EXTRA_CIRCULAR_REVEAL_Y, revealY);
+
+        ActivityCompat.startActivity(this, intent, options.toBundle());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        View menuItemView = findViewById(R.id.menu_search);
+        Log.d(TAG,"Menu item view is-->"+ menuItemView);
         switch (item.getItemId()){
+            case R.id.menu_search:
+                presentActivity(menuItemView);
+                return true;
             case R.id.menu_logout:
                 logout();
                 return true;
