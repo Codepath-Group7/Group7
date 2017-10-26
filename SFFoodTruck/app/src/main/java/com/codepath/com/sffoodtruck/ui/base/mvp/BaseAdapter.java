@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.codepath.com.sffoodtruck.BR;
 
 /**
  * Created by saip92 on 10/15/2017.
