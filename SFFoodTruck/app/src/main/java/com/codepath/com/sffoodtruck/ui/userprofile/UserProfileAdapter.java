@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.userprofile;
 
+import android.support.annotation.LayoutRes;
+
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.base.mvp.SingleLayoutAdapter;
@@ -14,8 +16,13 @@ public class UserProfileAdapter extends SingleLayoutAdapter{
 
     private List<Business> mBusinesses;
 
+    @LayoutRes
+    protected static int getLayoutRes(){
+        return R.layout.userprofile_business_item_layout;
+    }
+
     public UserProfileAdapter(List<Business> businesses) {
-        super(R.layout.userprofile_business_item_layout);
+        super(getLayoutRes());
         mBusinesses = businesses;
     }
 
@@ -26,10 +33,11 @@ public class UserProfileAdapter extends SingleLayoutAdapter{
 
     @Override
     public int getItemCount() {
-        if(mBusinesses.size() <= 5){
-            return mBusinesses.size();
-        }else{
-            return 5;
-        }
+        return mBusinesses.size();
+    }
+
+    public void addFavorites(List<Business> businessList) {
+        mBusinesses.addAll(businessList);
+        notifyDataSetChanged();
     }
 }

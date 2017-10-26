@@ -12,6 +12,7 @@ import android.view.animation.AlphaAnimation;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.databinding.ActivityUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.common.CustomFragmentPagerAdapter;
+import com.codepath.com.sffoodtruck.ui.userprofile.favorites.FavoriteFragment;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -63,7 +64,7 @@ public class UserProfileActivity extends AppCompatActivity {
         CustomFragmentPagerAdapter pagerAdapter = new
                 CustomFragmentPagerAdapter(getSupportFragmentManager(),true);
 
-        pagerAdapter.addFragment(PageFragment.newInstance(1),"Page 1");
+        pagerAdapter.addFragment(new FavoriteFragment(),FAVORITES_TITLE);
         pagerAdapter.addFragment(PageFragment.newInstance(2),"Page 2");
         pagerAdapter.addFragment(PageFragment.newInstance(3),"Page 3");
         pagerAdapter.addFragment(PageFragment.newInstance(4),"Page 4");
