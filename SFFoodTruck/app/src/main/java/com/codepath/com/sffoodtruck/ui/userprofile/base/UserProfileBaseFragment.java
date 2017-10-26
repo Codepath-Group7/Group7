@@ -9,10 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.codepath.com.sffoodtruck.R;
-import com.codepath.com.sffoodtruck.databinding.FragmentFavoriteBinding;
+import com.codepath.com.sffoodtruck.databinding.FragmentUserProfileBinding;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 /**
@@ -24,10 +23,9 @@ public abstract class UserProfileBaseFragment extends
 
 
     private static final String TAG = UserProfileBaseFragment.class.getSimpleName();
-    protected FragmentFavoriteBinding mFavoriteBinding;
+    protected FragmentUserProfileBinding mFavoriteBinding;
     protected UserProfileBaseAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    private UserProfileBaseAdapter mUserProfileBaseAdapter;
 
     public UserProfileBaseFragment() {
         // Required empty public constructor
@@ -44,7 +42,7 @@ public abstract class UserProfileBaseFragment extends
                              Bundle savedInstanceState) {
 
         mFavoriteBinding = DataBindingUtil
-                .inflate(inflater,R.layout.fragment_favorite, container, false);
+                .inflate(inflater,R.layout.fragment_user_profile, container, false);
 
         return mFavoriteBinding.getRoot();
     }
@@ -52,9 +50,20 @@ public abstract class UserProfileBaseFragment extends
 
     @Override
     public void updateUI() {
+        showProgressBar(true);
         mLayoutManager = getLayoutManager();
         mFavoriteBinding.rvUserProfile.setAdapter(mAdapter);
         mFavoriteBinding.rvUserProfile.setLayoutManager(mLayoutManager);
+    }
+
+    protected void showProgressBar(boolean showProgress){
+        if(showProgress){
+            mFavoriteBinding.rvUserProfile.setVisibility(View.INVISIBLE);
+            mFavoriteBinding.progressBar.setVisibility(View.VISIBLE);
+        }else{
+            mFavoriteBinding.rvUserProfile.setVisibility(View.VISIBLE);
+            mFavoriteBinding.progressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
     protected abstract RecyclerView.LayoutManager getLayoutManager();
