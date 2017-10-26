@@ -13,6 +13,7 @@ import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.databinding.ActivityUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.common.CustomFragmentPagerAdapter;
 import com.codepath.com.sffoodtruck.ui.userprofile.favorites.FavoriteFragment;
+import com.codepath.com.sffoodtruck.ui.userprofile.photos.PhotosFragment;
 import com.codepath.com.sffoodtruck.ui.userprofile.recentvisits.RecentVisitsFragment;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,7 +68,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         pagerAdapter.addFragment(new FavoriteFragment(),FAVORITES_TITLE);
         pagerAdapter.addFragment(new RecentVisitsFragment(),RECENT_VISITS_TITLE);
-        pagerAdapter.addFragment(PageFragment.newInstance(3),"Page 3");
+        pagerAdapter.addFragment(new PhotosFragment(),PHOTOS_TITLE);
         pagerAdapter.addFragment(PageFragment.newInstance(4),"Page 4");
 
         mUserProfileBinding.viewpager.setAdapter(pagerAdapter);

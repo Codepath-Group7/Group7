@@ -20,9 +20,5 @@ class FavoritesAdapter extends UserProfileBaseAdapter<Business> {
         mBusinesses = businesses;
     }
 
-    void addFavorites(List<Business> businessList) {
-        mBusinesses.addAll(businessList);
-        notifyDataSetChanged();
-    }
 
 }

@@ -31,4 +31,9 @@ public class UserProfileBaseAdapter<T> extends SingleLayoutAdapter{
         return mList.size();
     }
 
+    public void addAll(List<T> extraItems){
+        mList.addAll(extraItems);
+        notifyDataSetChanged();
+    }
+
 }

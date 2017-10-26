@@ -3,6 +3,7 @@ package com.codepath.com.sffoodtruck.ui.userprofile.base;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -68,9 +69,10 @@ public abstract class UserProfileBaseFragment extends
 
     protected abstract RecyclerView.LayoutManager getLayoutManager();
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if(getPresenter() != null)
             getPresenter().initialLoad();
         else

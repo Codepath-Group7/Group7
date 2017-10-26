@@ -50,6 +50,6 @@ public class FavoriteFragment extends
     @Override
     public void showFavoriteFoodTrucks(List<Business> businessList) {
         showProgressBar(false);
-        mAdapter.addFavorites(businessList);
+        mAdapter.addAll(businessList);
     }
 }

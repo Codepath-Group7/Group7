@@ -21,8 +21,4 @@ class RecentVisitsAdapter extends UserProfileBaseAdapter<Business> {
         mBusinesses = list;
     }
 
-    void addRecentVisits(List<Business> businessList) {
-        mBusinesses.addAll(businessList);
-        notifyDataSetChanged();
-    }
 }

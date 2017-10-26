@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="obj" type="com.codepath.com.sffoodtruck.data.model.UserPostedPhoto"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin8"
+        android:layout_marginEnd="@dimen/margin8">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding4"
+            app:imageUrl="@{obj.imageUrl}"
+            tools:src="@drawable/placeholder160x160"
+            />
+
+        <TextView
+            android:id="@+id/tvBusinessName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin16"
+            android:padding="@dimen/padding8"
+            android:textColor="@color/colorTextColor"
+            android:text="@{obj.business.name}"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_photo"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_photo"
+            app:layout_constraintRight_toRightOf="@+id/iv_photo"
+            tools:text="@string/tools_business_name"
+            app:layout_constraintHorizontal_bias="0.454"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
