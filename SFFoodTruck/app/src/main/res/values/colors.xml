@@ -12,4 +12,5 @@
     <color name="colorPrimary_Alpha">#0500796b</color>
     <color name="white_alpha_50">#32ffffff</color>
     <color name="white_alpha_226">#e2ffffff</color>
+    <color name="black_alpha">#d8000000</color>
 </resources>

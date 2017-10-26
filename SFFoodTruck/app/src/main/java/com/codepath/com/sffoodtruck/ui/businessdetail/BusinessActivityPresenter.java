@@ -47,7 +47,6 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
     public void initialLoad(Business business) {
         sBusinessId = business.getId();
         sBusiness = business;
-        getView().showProgressDialog(R.string.label_loading);
         loadBusiness();
         checkIsFavorite();
         new Handler().postDelayed(() -> {
@@ -89,7 +88,6 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
                 }
 
                 getView().renderBusiness(businessDetails);
-                getView().hideProgressDialog();
             }
 
             @Override

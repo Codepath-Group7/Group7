@@ -81,6 +81,7 @@ dependencies {
     compile "com.google.firebase:firebase-database:$FIREBASE_VERSION"
 
     compile "com.google.firebase:firebase-messaging:$FIREBASE_VERSION"
+    //compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -91,7 +92,6 @@ dependencies {
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4'
     compile 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5'
-    //compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.3'
