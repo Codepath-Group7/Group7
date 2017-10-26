@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserProfileContract {
 
-    interface MvpView extends MvpBaseView{
+     interface MvpView extends MvpBaseView{
         void updateUI();
         void showRecentVisits(List<Business> businessList);
         void showFavoriteFoodTrucks(List<Business> businessList);
