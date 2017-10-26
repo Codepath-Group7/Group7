@@ -8,5 +8,5 @@ import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBasePresenter;
 
 public interface UserProfileBasePresenter<V extends UserProfileBaseView> extends
         com.hannesdorfmann.mosby3.mvp.MvpPresenter<V> {
-    void initialLoad();
+        void initialLoad();
 }

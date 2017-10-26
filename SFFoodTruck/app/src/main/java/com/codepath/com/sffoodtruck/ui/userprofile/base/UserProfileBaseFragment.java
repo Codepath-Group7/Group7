@@ -4,6 +4,7 @@ package com.codepath.com.sffoodtruck.ui.userprofile.base;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public abstract class UserProfileBaseFragment extends
     private static final String TAG = UserProfileBaseFragment.class.getSimpleName();
     protected FragmentFavoriteBinding mFavoriteBinding;
     protected UserProfileBaseAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
     private UserProfileBaseAdapter mUserProfileBaseAdapter;
 
     public UserProfileBaseFragment() {
@@ -46,6 +48,16 @@ public abstract class UserProfileBaseFragment extends
 
         return mFavoriteBinding.getRoot();
     }
+
+
+    @Override
+    public void updateUI() {
+        mLayoutManager = getLayoutManager();
+        mFavoriteBinding.rvUserProfile.setAdapter(mAdapter);
+        mFavoriteBinding.rvUserProfile.setLayoutManager(mLayoutManager);
+    }
+
+    protected abstract RecyclerView.LayoutManager getLayoutManager();
 
     @Override
     public void onResume() {

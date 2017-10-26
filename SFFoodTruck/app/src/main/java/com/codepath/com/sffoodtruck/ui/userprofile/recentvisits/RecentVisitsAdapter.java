@@ -1,5 +1,6 @@
-package com.codepath.com.sffoodtruck.ui.userprofile.favorites;
+package com.codepath.com.sffoodtruck.ui.userprofile.recentvisits;
 
+import android.support.annotation.LayoutRes;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
@@ -11,18 +12,17 @@ import java.util.List;
  * Created by saip92 on 10/26/2017.
  */
 
-class FavoritesAdapter extends UserProfileBaseAdapter<Business> {
+class RecentVisitsAdapter extends UserProfileBaseAdapter<Business> {
 
     private List<Business> mBusinesses;
 
-    FavoritesAdapter(List<Business> businesses) {
-        super(businesses, R.layout.userprofile_business_item_layout);
-        mBusinesses = businesses;
+    RecentVisitsAdapter(List<Business> list) {
+        super(list, R.layout.userprofile_business_item_layout);
+        mBusinesses = list;
     }
 
-    void addFavorites(List<Business> businessList) {
+    void addRecentVisits(List<Business> businessList) {
         mBusinesses.addAll(businessList);
         notifyDataSetChanged();
     }
-
 }
