@@ -41,6 +41,17 @@ public class LoadImageBindingAdapter {
                 .into(view);
     }
 
+    @BindingAdapter({"bind:userImageUrl"})
+    public static void loadReviewImage(ImageView view, String url){
+        Picasso.Builder builder = new Picasso.Builder(view.getContext());
+        builder.listener((picasso, uri, exception) -> exception.printStackTrace());
+        builder.build()
+                .load(url)
+                .transform(new CircleTransform())
+                .fit()
+                .into(view);
+    }
+
     @BindingAdapter({"bind:roundedCornersImageUrl"})
     public static void loadRoundedCorners(ImageView view,String url){
         Picasso.with(view.getContext())

@@ -19,7 +19,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:id="@+id/iv_user_image"
-            app:imageUrl="@{obj.user.imageUrl}"/>
+            app:userImageUrl="@{obj.user.imageUrl}"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
