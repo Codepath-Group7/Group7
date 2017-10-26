@@ -17,6 +17,7 @@
             android:layout_height="200dp"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="48dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="true">
             <ImageView
