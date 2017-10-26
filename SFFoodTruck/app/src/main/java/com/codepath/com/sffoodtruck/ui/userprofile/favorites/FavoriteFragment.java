@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentFavoriteBinding;
-import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
-import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileAdapter;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseAdapter;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseFragment;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBasePresenter;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseView;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +26,11 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class FavoriteFragment extends
-        AbstractMvpFragment<FavoriteContract.View,FavoriteContract.Presenter> implements
+        UserProfileBaseFragment implements
         FavoriteContract.View{
 
     private static final String TAG = FavoriteFragment.class.getSimpleName();
-    private FragmentFavoriteBinding mFavoriteBinding;
-    private UserProfileAdapter mAdapter;
+    private FavoritesAdapter mAdapter;
 
 
     public FavoriteFragment() {
@@ -36,33 +38,15 @@ public class FavoriteFragment extends
     }
 
     @Override
-    public FavoriteContract.Presenter createPresenter() {
+    public UserProfileBasePresenter createPresenter() {
         return new FavoritePresenter();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mAdapter = new UserProfileAdapter(new ArrayList<>());
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mFavoriteBinding = DataBindingUtil
-                .inflate(inflater,R.layout.fragment_favorite, container, false);
-
-        return mFavoriteBinding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(getPresenter() != null)
-            getPresenter().initialLoad();
-        else
-            Log.d(TAG,"presenter is null");
+    protected UserProfileBaseAdapter getUserProfileBaseAdapter() {
+        mAdapter = new FavoritesAdapter(new ArrayList<>());
+        return mAdapter;
     }
 
     @Override

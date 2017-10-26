@@ -96,7 +96,7 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
       /*  mBinding.recentVisits.btnShowMore
                 .setVisibility(businessList.size() <= 5 ? View.GONE: View.VISIBLE);
         mBinding.recentVisits.tvListTitle.setText(getString(R.string.recent_visits_title));
-        mBinding.recentVisits.rvUserProfile.setAdapter(new UserProfileAdapter(businessList));
+        mBinding.recentVisits.rvUserProfile.setAdapter(new UserProfileBaseAdapter(businessList));
         mBinding.recentVisits.rvUserProfile
                 .setLayoutManager(new LinearLayoutManager(getActivity()));*/
     }
@@ -106,7 +106,7 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
       /*  mBinding.favorite.btnShowMore
                 .setVisibility(businessList.size() <= 5 ? View.GONE: View.VISIBLE);
         mBinding.favorite.tvListTitle.setText(getString(R.string.favorites_title));
-        mBinding.favorite.rvUserProfile.setAdapter(new UserProfileAdapter(businessList));
+        mBinding.favorite.rvUserProfile.setAdapter(new UserProfileBaseAdapter(businessList));
         mBinding.favorite.rvUserProfile
                 .setLayoutManager(new LinearLayoutManager(getActivity()));*/
     }
@@ -116,7 +116,7 @@ public class UserProfileFragment extends AbstractMvpFragment<UserProfileContract
        /* mBinding.reviews.btnShowMore
                 .setVisibility(businessList.size() <= 5 ? View.GONE: View.VISIBLE);
         mBinding.reviews.tvListTitle.setText(getString(R.string.reviews_title));
-        mBinding.reviews.rvUserProfile.setAdapter(new UserProfileAdapter(businessList));
+        mBinding.reviews.rvUserProfile.setAdapter(new UserProfileBaseAdapter(businessList));
         mBinding.reviews.rvUserProfile
                 .setLayoutManager(new LinearLayoutManager(getActivity()));*/
 

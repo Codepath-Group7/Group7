@@ -2,7 +2,8 @@ package com.codepath.com.sffoodtruck.ui.userprofile.favorites;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBasePresenter;
-import com.codepath.com.sffoodtruck.ui.base.mvp.MvpBaseView;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBasePresenter;
+import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseView;
 
 import java.util.List;
 
@@ -12,13 +13,11 @@ import java.util.List;
 
 public class FavoriteContract {
 
-    interface View extends MvpBaseView{
-        void updateUI();
+    interface View extends UserProfileBaseView{
         void showFavoriteFoodTrucks(List<Business> businessList);
     }
 
-    interface Presenter extends MvpBasePresenter<View>{
-        void initialLoad();
+    interface Presenter extends UserProfileBasePresenter<View>{
         void loadFavoriteFoodTrucks();
     }
 
