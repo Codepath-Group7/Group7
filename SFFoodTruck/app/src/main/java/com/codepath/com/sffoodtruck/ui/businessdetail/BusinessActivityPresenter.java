@@ -9,11 +9,15 @@ import android.util.Log;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
+import com.codepath.com.sffoodtruck.data.model.UserPostedPhoto;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.codepath.com.sffoodtruck.ui.businessdetail.info.BusinessDetailPresenter;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -160,8 +164,18 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
             //Uri downloadUrl = taskSnapshot.getDownloadUrl();
             Log.d(TAG,"File upload successfully");
             DatabaseReference databaseReference = FirebaseUtils.getBusinessDatabasePhotoRef(sBusinessId);
-            if(taskSnapshot.getDownloadUrl()!= null)
-                databaseReference.push().setValue(taskSnapshot.getDownloadUrl().toString());
+            DatabaseReference userPhotoRef = FirebaseUtils.getCurrentUserPhotoDatabaseRef();
+            if(taskSnapshot.getDownloadUrl()!= null){
+                String key = databaseReference.push().getKey();
+                databaseReference.child(key).setValue(taskSnapshot.getDownloadUrl().toString());
+                if(userPhotoRef != null){
+                    UserPostedPhoto postedPhoto = new UserPostedPhoto();
+                    postedPhoto.setBusiness(sBusiness);
+                    postedPhoto.setImageUrl(taskSnapshot.getDownloadUrl().toString());
+                    userPhotoRef.child(key).setValue(postedPhoto);
+                }
+
+            }
             getView().hideProgressDialog();
         });
     }
@@ -172,8 +186,13 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
                 .getBusinessDatabaseReviewsRef(sBusinessId);
         DatabaseReference userReviewRef = FirebaseUtils
                 .getCurrentUserReviewDatabaseRef();
-        mDatabaseReference.push().setValue(review);
-        if(userReviewRef != null)
-            userReviewRef.child(sBusinessId).setValue(sBusiness);
+
+        String key = mDatabaseReference.push().getKey();
+        mDatabaseReference.child(key).setValue(review);
+
+        if(userReviewRef != null){
+            review.setBusiness(sBusiness);
+            userReviewRef.child(key).setValue(review);
+        }
     }
 }

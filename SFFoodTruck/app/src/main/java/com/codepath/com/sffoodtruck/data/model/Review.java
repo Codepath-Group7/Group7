@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -27,6 +28,18 @@ public class Review implements Parcelable {
     @SerializedName("time_created")
     @Expose
     private String timeCreated;
+
+    @Nullable
+    private Business mBusiness;
+
+    @Nullable
+    public Business getBusiness() {
+        return mBusiness;
+    }
+
+    public void setBusiness(@Nullable Business business) {
+        mBusiness = business;
+    }
 
     public String getUrl() {
         return url;
@@ -68,6 +81,10 @@ public class Review implements Parcelable {
         this.timeCreated = timeCreated;
     }
 
+    public Review() {
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -78,22 +95,21 @@ public class Review implements Parcelable {
         dest.writeString(this.url);
         dest.writeString(this.text);
         dest.writeValue(this.rating);
-        dest.writeSerializable(this.user);
+        dest.writeParcelable(this.user, flags);
         dest.writeString(this.timeCreated);
-    }
-
-    public Review() {
+        dest.writeParcelable(this.mBusiness, flags);
     }
 
     protected Review(Parcel in) {
         this.url = in.readString();
         this.text = in.readString();
         this.rating = (Float) in.readValue(Float.class.getClassLoader());
-        this.user = (User) in.readSerializable();
+        this.user = in.readParcelable(User.class.getClassLoader());
         this.timeCreated = in.readString();
+        this.mBusiness = in.readParcelable(Business.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>() {
+    public static final Creator<Review> CREATOR = new Creator<Review>() {
         @Override
         public Review createFromParcel(Parcel source) {
             return new Review(source);
