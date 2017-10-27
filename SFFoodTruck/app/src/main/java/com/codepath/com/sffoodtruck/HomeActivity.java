@@ -5,13 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
@@ -63,6 +69,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         changeFragment(R.id.navigation_home);
+        ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presentActivity(view);
+            }
+        });
     }
 
     private void changeFragment(int itemViewId) {
@@ -91,15 +104,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home_screen,menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        //MenuItem searchItem = menu.findItem(R.id.menu_search);
+        //SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        /*searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                startActivity(new Intent(HomeActivity.this, SearchActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                //startActivity(new Intent(HomeActivity.this, SearchActivity.class));
+                //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                presentActivity(searchView);
                 return true;
             }
-        });
+        });*/
         // Get the SearchView and set the searchable configuration
         /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
@@ -107,6 +122,20 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default*/
         return true;
+    }
+
+    private void presentActivity(View view) {
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, view, "transition");
+        int revealX = (int) (view.getX() + view.getWidth() / 2);
+        int revealY = (int) (view.getY() + view.getHeight() / 2);
+
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.EXTRA_CIRCULAR_REVEAL_X, revealX);
+        intent.putExtra(SearchActivity.EXTRA_CIRCULAR_REVEAL_Y, revealY);
+
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     @Override

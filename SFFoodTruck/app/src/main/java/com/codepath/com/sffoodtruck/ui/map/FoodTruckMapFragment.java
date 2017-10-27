@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.maps.android.ui.IconGenerator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +56,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     private MapView mapView;
     private GoogleMap map;
     private Bundle bundle;
+    private FoodTruckMapInfoWindowAdapter infoWindowAdapter;
 
     public static FoodTruckMapFragment newInstance() {
         FoodTruckMapFragment fragment = new FoodTruckMapFragment();
@@ -68,6 +67,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bundle = savedInstanceState;
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        infoWindowAdapter = new FoodTruckMapInfoWindowAdapter(inflater, viewModelMap);
     }
 
     @Override
@@ -162,6 +163,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         this.map = googleMap;
         this.map.setOnInfoWindowClickListener(this);
         this.map.setOnMyLocationButtonClickListener(this);
+        this.map.setInfoWindowAdapter(infoWindowAdapter);
         enableMapMyLocation(map);
         getPresenter().loadFoodTrucks();
     }
@@ -179,12 +181,18 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
     @Override
     public void renderFoodTrucks(List<FoodTruckMapViewModel> viewModels) {
         if (viewModels.isEmpty()) return;
+        getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewModelMap.clear();
+                clearOverlays();
 
-        viewModelMap.clear();
+                for (FoodTruckMapViewModel viewModel : viewModels) {
+                    addFoodTruckToMap(viewModel);
+                }
+            }
+        }, 1000);
 
-        for (FoodTruckMapViewModel viewModel : viewModels) {
-            addFoodTruckToMap(viewModel);
-        }
     }
 
     @Override
@@ -200,12 +208,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
     private void addFoodTruckToMap(FoodTruckMapViewModel viewModel) {
         String name = viewModel.getName();
-
-        IconGenerator iconGenerator = new IconGenerator(getContext());
-        iconGenerator.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        iconGenerator.setTextAppearance(getContext(), R.style.amu_Bubble_TextAppearance_Light);
-        Bitmap bitmap = iconGenerator.makeIcon(name);
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+        Bitmap bitmapIcon = MapUtils.getMarkerBitmapFromView(getContext(), R.drawable.ic_truck, name);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmapIcon);
 
         Coordinates coordinates = viewModel.getCoordinates();
         if (coordinates == null) return; // TODO: handle locations with no coordinates
@@ -216,6 +220,11 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         String id = viewModel.getId();
         marker.setTag(id);
         viewModelMap.put(id, viewModel);
+    }
+
+    private void clearOverlays(){
+        if (map == null) return;
+        map.clear();
     }
 
     @Override
@@ -229,6 +238,8 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         Intent intent = BusinessDetailActivity.newIntent(getContext()
                 , viewModel.getBusiness());
         startActivity(intent);
+        getActivity().overridePendingTransition(
+                R.anim.slide_up, R.anim.hold);
     }
 
     @Override

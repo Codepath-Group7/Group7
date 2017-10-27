@@ -1,9 +1,12 @@
 package com.codepath.com.sffoodtruck.ui.search;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.databinding.ActivitySearchBinding;
@@ -38,6 +45,10 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private final static String TAG = SearchActivity.class.getSimpleName();
     private ActivitySearchBinding mBinding;
     private String mQuery;
+    public static final String EXTRA_CIRCULAR_REVEAL_X = "EXTRA_CIRCULAR_REVEAL_X";
+    public static final String EXTRA_CIRCULAR_REVEAL_Y = "EXTRA_CIRCULAR_REVEAL_Y";
+    private int revealX;
+    private int revealY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +57,71 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_search);
         setSupportActionBar(mBinding.toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        handleIntent(getIntent());
+        Intent intent = getIntent();
+        handleIntent(intent);
+        if (savedInstanceState == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                intent.hasExtra(EXTRA_CIRCULAR_REVEAL_X) &&
+                intent.hasExtra(EXTRA_CIRCULAR_REVEAL_Y)) {
+            mBinding.getRoot().setVisibility(View.INVISIBLE);
+
+            revealX = intent.getIntExtra(EXTRA_CIRCULAR_REVEAL_X, 0);
+            revealY = intent.getIntExtra(EXTRA_CIRCULAR_REVEAL_Y, 0);
 
 
+            ViewTreeObserver viewTreeObserver = mBinding.getRoot().getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        revealActivity(revealX, revealY);
+                        mBinding.getRoot().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                });
+            }
+        } else {
+            mBinding.getRoot().setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    protected void revealActivity(int x, int y) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            float finalRadius = (float) (Math.max(mBinding.getRoot().getWidth(), mBinding.getRoot().getHeight()) * 1.1);
+
+            // create the animator for this view (the start radius is zero)
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(mBinding.getRoot(), x, y, 0, finalRadius);
+            circularReveal.setDuration(400);
+            circularReveal.setInterpolator(new AccelerateInterpolator());
+
+            // make the view visible and start the animation
+            mBinding.getRoot().setVisibility(View.VISIBLE);
+            circularReveal.start();
+        } else {
+            finish();
+        }
+    }
+
+    protected void unRevealActivity() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            finish();
+        } else {
+            float finalRadius = (float) (Math.max(mBinding.getRoot().getWidth(), mBinding.getRoot().getHeight()) * 1.1);
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(
+                    mBinding.getRoot(), revealX, revealY, finalRadius, 0);
+
+            circularReveal.setDuration(400);
+            circularReveal.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mBinding.getRoot().setVisibility(View.INVISIBLE);
+                    finish();
+                }
+            });
+
+
+            circularReveal.start();
+        }
     }
 
     private void initialize() {
@@ -118,7 +191,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Log.d(TAG,"Search view back pressed");
-                finish();
+                //finish();
+                unRevealActivity();
                 return true;
             }
         });
@@ -197,5 +271,10 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        unRevealActivity();
     }
 }

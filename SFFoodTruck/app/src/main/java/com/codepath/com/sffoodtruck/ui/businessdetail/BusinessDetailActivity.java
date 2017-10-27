@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
@@ -218,17 +219,27 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     }
 
     @Override
-    public void showProgressDialog(int stringResource) {
+    public void hideToolbarProgress(){
+        mBinding.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showProgressDialog() {
         mProgressDialog = new MaterialDialog.Builder(this)
-                .title(stringResource)
+                .title(R.string.label_uploading)
                 .content(R.string.please_wait)
-                .progress(true, 0).build();
+                .progress(false, 100,true).build();
         mProgressDialog.show();
     }
 
     @Override
+    public void updateProgress(int progress) {
+        mProgressDialog.setProgress(progress);
+    }
+
+    @Override
     public void hideProgressDialog() {
-        if(mProgressDialog.isShowing()) mProgressDialog.hide();
+        if(mProgressDialog.isShowing()) mProgressDialog.dismiss();
     }
 
     @Override

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -14,12 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessPhotosBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.photodetail.PhotoDetailActivity;
+import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +86,23 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
         mPhotosLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mBinding.rvPhotosList.setLayoutManager(mPhotosLayoutManager);
         mBinding.rvPhotosList.setAdapter(mPhotosAdapter);
+        ItemClickSupport.addTo(mBinding.rvPhotosList).setOnItemClickListener((recyclerView, position, v) -> {
+            Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
+            intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_URL,mPhotoList.get(position));
+
+            // Check if we're running on Android 5.0 or higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // Call some material design APIs here
+                ImageView ivPhoto = (ImageView) v.findViewById(R.id.iv_photo);
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), (View)ivPhoto, "detailphoto");
+
+                startActivity(intent,options.toBundle());
+            } else {
+                // Implement this feature without material design
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

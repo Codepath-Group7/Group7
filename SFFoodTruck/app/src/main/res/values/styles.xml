@@ -8,10 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
-    <style name="AppTheme.DetailView">
+    <style name="AppTheme.DetailView" parent="AppTheme">
         <item name="colorPrimaryDark">@color/colorPrimary_Alpha</item>
     </style>
-
+    <style name="AppTheme.WhiteAccent">
+        <item name="colorAccent">@color/white</item> <!-- Whatever color you want-->
+    </style>
     <style name="RatingBarStyle" parent="Widget.AppCompat.RatingBar.Small">
         <item name="android:minHeight">@dimen/ratingBarMinHeight</item>
         <item name="android:maxHeight">@dimen/ratingBarMaxHeight</item>

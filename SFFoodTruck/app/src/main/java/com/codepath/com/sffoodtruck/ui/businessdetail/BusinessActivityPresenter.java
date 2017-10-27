@@ -51,7 +51,6 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
     public void initialLoad(Business business) {
         sBusinessId = business.getId();
         sBusiness = business;
-        getView().showProgressDialog(R.string.label_loading);
         loadBusiness();
         checkIsFavorite();
         new Handler().postDelayed(() -> {
@@ -93,12 +92,13 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
                 }
 
                 getView().renderBusiness(businessDetails);
-                getView().hideProgressDialog();
+                getView().hideToolbarProgress();
             }
 
             @Override
             public void onFailure(@NonNull Call<Business> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed", t);
+                getView().hideToolbarProgress();
             }
         });
     }
@@ -145,19 +145,20 @@ public class BusinessActivityPresenter extends AbstractPresenter<BusinessActivit
 
     @Override
     public void uploadPhotoToStorage(Uri photoUri) {
-        getView().showProgressDialog(R.string.label_uploading);
+        getView().showProgressDialog();
         StorageReference photoRef = FirebaseUtils
                 .getBusinessPhotoReference(photoUri.getLastPathSegment());
         UploadTask mUploadTask = photoRef.putFile(photoUri);
         mUploadTask.addOnFailureListener(exception -> {
             // Handle unsuccessful uploads
             Log.e(TAG,"File upload failed");
+            getView().hideProgressDialog();
         }).addOnProgressListener(taskSnapshot -> {
             @SuppressWarnings("VisibleForTests")
             double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.
                     getTotalByteCount();
             Log.d(TAG,"Upload is " + progress + "% done");
-            //progressDialog.setProgress((int) progress);
+            getView().updateProgress((int)progress);
 
         }).addOnSuccessListener(taskSnapshot -> {
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.

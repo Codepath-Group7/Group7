@@ -7,9 +7,13 @@
              tools:context="com.codepath.com.sffoodtruck.ui.businessdetail.photos.BusinessPhotosFragment">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_photos_list"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin8">
+        android:layout_marginTop="@dimen/margin8"
+        android:layout_marginLeft="@dimen/margin4"
+        android:layout_marginStart="@dimen/margin4"
+        android:layout_marginEnd="@dimen/margin4"
+        android:layout_marginRight="@dimen/margin4">
     </android.support.v7.widget.RecyclerView>
 </android.support.design.widget.CoordinatorLayout>
 </layout>

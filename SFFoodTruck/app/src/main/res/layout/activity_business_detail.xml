@@ -17,6 +17,7 @@
             android:layout_height="200dp"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="48dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="true">
             <ImageView
@@ -42,6 +43,17 @@
                 android:layout_marginBottom="48dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:id="@+id/progressBar"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:theme="@style/AppTheme.WhiteAccent"/>
+                </RelativeLayout>
             </android.support.v7.widget.Toolbar>
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"

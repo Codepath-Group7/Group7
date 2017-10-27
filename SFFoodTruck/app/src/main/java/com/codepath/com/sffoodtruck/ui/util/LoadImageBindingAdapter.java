@@ -5,6 +5,8 @@ import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import android.util.DisplayMetrics;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -48,6 +50,7 @@ public class LoadImageBindingAdapter {
                 .transform(new RoundedCornersTransformation(12,12))
                 .into(view);
     }
+
 
     @BindingAdapter({"bind:roundedCornersImageUrl"})
     public static void loadRoundedCorners(ImageView view,String url){
