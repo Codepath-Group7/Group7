@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="obj" type="com.codepath.com.sffoodtruck.data.model.Review"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rlBusiness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivUserProfile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/margin16"
+            app:loadCircleImage="@{obj.user.imageUrl}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/tools_business_name"
+            android:text='@{String.valueOf("@" + obj.business.name)}'
+            android:textSize="@dimen/titleTextSize"
+            android:textStyle="bold|italic"
+            android:id="@+id/textView"
+            android:layout_alignTop="@+id/ivUserProfile"
+            android:layout_toRightOf="@+id/ivUserProfile"
+            android:layout_toEndOf="@+id/ivUserProfile"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.RatingBar.Small"
+            android:layout_below="@+id/textView"
+            android:layout_toRightOf="@+id/ivUserProfile"
+            android:layout_toEndOf="@+id/ivUserProfile"
+            android:layout_marginTop="@dimen/margin12"
+            tools:rating="5"
+            android:rating="@{obj.rating}"
+            android:isIndicator="true"
+            android:id="@+id/ratingBar"/>
+
+
+
+        <TextView
+            android:id="@+id/tvUserReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/tools_business_address"
+            android:layout_marginTop="@dimen/margin12"
+            android:layout_below="@+id/ratingBar"
+            android:layout_toRightOf="@+id/ivUserProfile"
+            android:layout_toEndOf="@+id/ivUserProfile"
+            android:text='@{String.valueOf( "Review: "  + obj.text)}'/>
+
+    </RelativeLayout>
+
+</layout>

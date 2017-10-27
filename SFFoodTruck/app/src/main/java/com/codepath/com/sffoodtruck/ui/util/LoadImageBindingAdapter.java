@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -47,19 +47,10 @@ public class LoadImageBindingAdapter {
                 .load(url)
                 .placeholder(R.drawable.placeholder160x160)
                 .resize(width/2,0)
+                .transform(new RoundedCornersTransformation(12,12))
                 .into(view);
     }
 
-    @BindingAdapter({"bind:userImageUrl"})
-    public static void loadReviewImage(ImageView view, String url){
-        Picasso.Builder builder = new Picasso.Builder(view.getContext());
-        builder.listener((picasso, uri, exception) -> exception.printStackTrace());
-        builder.build()
-                .load(url)
-                .transform(new CircleTransform())
-                .fit()
-                .into(view);
-    }
 
     @BindingAdapter({"bind:roundedCornersImageUrl"})
     public static void loadRoundedCorners(ImageView view,String url){
@@ -105,6 +96,14 @@ public class LoadImageBindingAdapter {
     public static void loadCircleImage(ImageView view, Uri uri){
         Picasso.with(view.getContext())
                 .load(uri)
+                .transform(new CircleTransform())
+                .into(view);
+    }
+
+    @BindingAdapter({"bind:loadCircleImage"})
+    public static void loadCircleImage(ImageView view, String url){
+        Picasso.with(view.getContext())
+                .load(url)
                 .transform(new CircleTransform())
                 .into(view);
     }

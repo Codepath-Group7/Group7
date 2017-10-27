@@ -99,6 +99,16 @@ public class FirebaseUtils {
         if(getCurrentUserDatabaseRef() == null) return null;
         return getCurrentUserDatabaseRef().child("previousTrips");
     }
+
+    public static DatabaseReference getCurrentUserPhotoDatabaseRef(){
+        if(getCurrentUserDatabaseRef() == null) return null;
+        return getCurrentUserDatabaseRef().child("photos");
+    }
+
+    public static DatabaseReference getPhotoDatabaseRef(String userId){
+        if(getUserDatabaseRef(userId) == null) return null;
+        return getUserDatabaseRef(userId).child("photos");
+    }
     /* End of Database References */
 
     public static FirebaseUser getCurrentUser(){

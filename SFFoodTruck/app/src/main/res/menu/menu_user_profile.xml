@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_logout"
+          android:title="@string/label_logout"
+          android:icon="@drawable/ic_exit_to_app_black_24dp"
+          app:showAsAction="always"
+          android:orderInCategory="@integer/logout_priority"
+        />
+
+    <item   android:id="@+id/action_settings"
+            android:title="@string/settings_menu"
+            android:icon="@drawable/ic_settings_black_24px"
+            app:showAsAction="ifRoom"
+            android:orderInCategory="@integer/settings_priority"
+        />
+
+</menu>
