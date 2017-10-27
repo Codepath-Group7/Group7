@@ -39,9 +39,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SearchActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class SearchActivity extends AppCompatActivity{
 
-    private GoogleApiClient mGoogleApiClient;
     private final static String TAG = SearchActivity.class.getSimpleName();
     private ActivitySearchBinding mBinding;
     private String mQuery;
@@ -203,14 +202,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_logout:
-                logout();
-                return true;
-            case R.id.action_settings:
-                Intent startSettingsActivity =
-                        new Intent(this, SettingsActivity.class);
-                startActivity(startSettingsActivity);
-                return true;
             case R.id.menu_search:
                 return true;
             case android.R.id.home:
@@ -221,57 +212,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         return super.onOptionsItemSelected(item);
     }
 
-    private void logout() {
-        LoginManager.getInstance().logOut();
-        FirebaseAuth.getInstance().signOut();
-        googleSignOut();
-        startLoginActivity();
-    }
-
-    private void googleSignOut() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-                if (mGoogleApiClient.isConnected()) {
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-                            if (status.isSuccess()) {
-                                Log.d(TAG, "User Logged out");
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onConnectionSuspended(int i) {
-
-            }
-        });
-    }
-
-    private void startLoginActivity(){
-        Intent intent = new Intent(this,LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                |Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     @Override
     public void onBackPressed() {
