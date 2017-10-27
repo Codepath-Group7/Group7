@@ -62,10 +62,10 @@
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".ui.userprofile.UserProfileActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity"/>
+                android:value=".ui.userprofile.UserProfileActivity"/>
         </activity>
         <activity android:name=".ui.map.FoodTruckMapActivity"/>
 
@@ -103,7 +103,11 @@
                        android:resource="@xml/searchable"/>
         </activity>
 
-        <activity android:name=".ui.userprofile.UserProfileActivity">
+        <activity android:name=".ui.userprofile.UserProfileActivity"
+            android:parentActivityName=".HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomeActivity"/>
         </activity>
 
         <service android:name=".infrastructure.service.FirebaseRegistrationIntentService" android:exported="false"/>
