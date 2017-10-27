@@ -1,6 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.nearby;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,19 +37,21 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NearByFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class NearByFragment extends Fragment {
 
 
     private FragmentNearByBinding mBinding;
-    private GoogleApiClient mGoogleApiClient;
     private static final String TAG = NearByFragment.class.getSimpleName();
 
-    private Message mActiveMessage;
-    private MessageListener mMessageListener;
     private NearByAdapter mAdapter;
     private List<MessagePayload> messagePayloads = new ArrayList<>();
     private FirebaseUser mFirebaseUser;
+
+    private onNearByFragmentListener mNearByFragmentListener;
+
+    public interface onNearByFragmentListener{
+        void onSendClick(MessagePayload messagePayload);
+    }
 
     public NearByFragment() {
         // Required empty public constructor
@@ -59,30 +62,17 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
         super.onCreate(savedInstanceState);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Log.d(TAG,"UserID is " + mFirebaseUser.getUid());
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(Nearby.MESSAGES_API)
-                .addConnectionCallbacks(this)
-                .enableAutoManage(getActivity(),this)
-                .build();
 
-        mMessageListener = new MessageListener(){
-            @Override
-            public void onFound(Message message) {
-                byte[] bytes = message.getContent();
-                MessagePayload payload = ParcelableUtil.unmarshall(bytes,MessagePayload.CREATOR);
-                messagePayloads.add(0, payload);
-                mAdapter.notifyDataSetChanged();
-                mBinding.rvGroupChat.scrollToPosition(0);
-                //String messageAsString = new String(message.getContent());
-                Log.d(TAG,"Found message: " + payload);
-            }
+    }
 
-            @Override
-            public void onLost(Message message) {
-                String messageAsString = new String(message.getContent());
-                Log.d(TAG, "Lost sight of message: " + messageAsString);
-            }
-        };
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            mNearByFragmentListener = (onNearByFragmentListener) context;
+        }catch (Exception e){
+            Log.e(TAG,"Must implement interface onNearbyFragmentListener",e);
+        }
     }
 
     @Override
@@ -108,90 +98,22 @@ public class NearByFragment extends Fragment implements GoogleApiClient.Connecti
         mBinding.rvGroupChat.setLayoutManager(linearLayoutManager);
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG,"It is connected");
-        subscribe();
-    }
 
-    @Override
-    public void onStop() {
-        unpublish();
-        unsubscribe();
-        super.onStop();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(TAG,"On Connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG,"On Connection failed");
-    }
 
     private void publish(String message){
-        if(mGoogleApiClient.isConnected()){
             MessagePayload payload = new MessagePayload();
-            Log.d(TAG,"Current session user id is : "
-                    + mFirebaseUser.getUid());
-
             if(mFirebaseUser == null) return;
             payload.setUserId(mFirebaseUser.getUid());
             payload.setMessage(message);
             payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
-
-            mActiveMessage = new Message(ParcelableUtil.marshall(payload));
-            //mActiveMessage = new Message(message.getBytes());
-            PublishOptions options = new PublishOptions.Builder().setCallback(new PublishCallback(){
-                @Override
-                public void onExpired() {
-                    Log.d(TAG,"Message has expired " + message);
-                }
-            }).build();
-            Nearby.Messages.publish(mGoogleApiClient,mActiveMessage,options)
-                    .setResultCallback(status ->{
-                        messagePayloads.add(0, payload);
-                        mAdapter.notifyDataSetChanged();
-                        mBinding.rvGroupChat.scrollToPosition(0);
-                        mBinding.etSendMessage.setText(null);
-
-                        Log.d(TAG,"Status of publishing message: "
-                                + message + ", status:  "
-                                + status.getStatusMessage() + " "
-                                + status.getStatus()  + " "
-                                + status.getStatusCode());
-                    });
-        }
+            Log.d(TAG,"Sending the payload to HomeActivity");
+            mNearByFragmentListener.onSendClick(payload);
     }
 
-    private void unpublish(){
-        Log.i(TAG,"Unpublishing");
-        if(mActiveMessage != null){
-            Nearby.Messages.unpublish(mGoogleApiClient,mActiveMessage);
-            mActiveMessage = null;
-        }
-    }
 
-    private void subscribe(){
-        Log.i(TAG,"Subscribing");
-        SubscribeOptions options = new SubscribeOptions.Builder()
-                .setCallback(new SubscribeCallback(){
-                    @Override
-                    public void onExpired() {
-                        Log.d(TAG,"subscription has expired");
-                    }
-                }).build();
-        Nearby.Messages.subscribe(mGoogleApiClient,mMessageListener,options)
-                .setResultCallback(status -> Log.d(TAG,"Status of subscription: "
-                        + status.getStatusMessage() + " "
-                        + status.getStatus()  + " "
-                        + status.getStatusCode() ));
-    }
 
-    private void unsubscribe(){
-        Log.i(TAG,"Unsubscribing");
-        Nearby.Messages.unsubscribe(mGoogleApiClient,mMessageListener);
-    }
+
+
+
+
 }

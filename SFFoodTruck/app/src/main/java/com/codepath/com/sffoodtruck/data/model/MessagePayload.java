@@ -3,6 +3,8 @@ package com.codepath.com.sffoodtruck.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.UUID;
+
 /**
  * Created by saip92 on 10/18/2017.
  */
@@ -12,6 +14,11 @@ public class MessagePayload implements Parcelable {
     private String userId;
     private String message;
     private String imageUrl;
+    private UUID mUUID;
+
+    public UUID getUUID() {
+        return mUUID;
+    }
 
     public String getUserId() {
         return userId;
@@ -46,6 +53,11 @@ public class MessagePayload implements Parcelable {
                 '}';
     }
 
+
+    public MessagePayload() {
+        mUUID = UUID.randomUUID();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -56,18 +68,17 @@ public class MessagePayload implements Parcelable {
         dest.writeString(this.userId);
         dest.writeString(this.message);
         dest.writeString(this.imageUrl);
-    }
-
-    public MessagePayload() {
+        dest.writeSerializable(this.mUUID);
     }
 
     protected MessagePayload(Parcel in) {
         this.userId = in.readString();
         this.message = in.readString();
         this.imageUrl = in.readString();
+        this.mUUID = (UUID) in.readSerializable();
     }
 
-    public static final Parcelable.Creator<MessagePayload> CREATOR = new Parcelable.Creator<MessagePayload>() {
+    public static final Creator<MessagePayload> CREATOR = new Creator<MessagePayload>() {
         @Override
         public MessagePayload createFromParcel(Parcel source) {
             return new MessagePayload(source);
