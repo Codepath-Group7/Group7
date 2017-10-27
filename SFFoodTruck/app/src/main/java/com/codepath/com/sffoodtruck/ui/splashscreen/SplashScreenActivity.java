@@ -16,14 +16,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.login.LoginUtils;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
@@ -104,7 +102,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     };
 
     private Transition.TransitionListener mEnterTransitionListener;
-    private View spashScreenIcon;
+    private View splashScreenIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,8 +112,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         mVisible = true;
         //mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-        spashScreenIcon = findViewById(R.id.splashScreenIcon);
-        spashScreenIcon.setVisibility(View.INVISIBLE);
+        splashScreenIcon = findViewById(R.id.splashScreenIcon);
+        splashScreenIcon.setVisibility(View.INVISIBLE);
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +131,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setupCircularAnimation();
         }else{
-
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startNextActivity();
+                }
+            },1000);
         }
     }
 
@@ -210,18 +214,18 @@ public class SplashScreenActivity extends AppCompatActivity {
         // previously invisible view
         Log.d(TAG,"Circular Transition called");
         // get the center for the clipping circle
-        int cx = spashScreenIcon.getMeasuredWidth() / 2;
-        int cy = spashScreenIcon.getMeasuredHeight() / 2;
+        int cx = splashScreenIcon.getMeasuredWidth() / 2;
+        int cy = splashScreenIcon.getMeasuredHeight() / 2;
 
         // get the final radius for the clipping circle
-        int finalRadius = Math.max(spashScreenIcon.getWidth(), spashScreenIcon.getHeight()) / 2;
+        int finalRadius = Math.max(splashScreenIcon.getWidth(), splashScreenIcon.getHeight()) / 2;
 
         // create the animator for this view (the start radius is zero)
         Animator anim =
-                ViewAnimationUtils.createCircularReveal(spashScreenIcon, cx, cy, 0, finalRadius);
+                ViewAnimationUtils.createCircularReveal(splashScreenIcon, cx, cy, 0, finalRadius);
         anim.setDuration(600);
         // make the view visible and start the animation
-        spashScreenIcon.setVisibility(View.VISIBLE);
+        splashScreenIcon.setVisibility(View.VISIBLE);
         anim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -263,7 +267,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Call some material design APIs here
             ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(this, (View)spashScreenIcon, "splashScreenIcon");
+                    makeSceneTransitionAnimation(this, (View) splashScreenIcon, "splashScreenIcon");
 
             startActivity(intent,options.toBundle());
             mShouldFinish = true;
