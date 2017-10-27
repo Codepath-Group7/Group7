@@ -61,7 +61,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         mUserProfileBinding = DataBindingUtil.setContentView(this,R.layout.activity_user_profile);
 
         setSupportActionBar(mUserProfileBinding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         renderUserProfile();
         renderTabs();
