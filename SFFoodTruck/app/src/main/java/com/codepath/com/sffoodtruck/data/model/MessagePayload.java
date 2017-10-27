@@ -50,9 +50,10 @@ public class MessagePayload implements Parcelable {
         return "MessagePayload{" +
                 "userId='" + userId + '\'' +
                 ", message='" + message + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", mUUID=" + mUUID +
                 '}';
     }
-
 
     public MessagePayload() {
         mUUID = UUID.randomUUID();

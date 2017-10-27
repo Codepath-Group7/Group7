@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.codepath.com.sffoodtruck.data.local.DBPayloads;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
@@ -60,9 +61,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private GoogleApiClient mGoogleApiClient;
     private Message mActiveMessage;
     private MessageListener mMessageListener;
-    final NearByFragment mNearByFragment = new NearByFragment();
-    final FoodTruckFeedFragment mFoodTruckFeedFragment = FoodTruckFeedFragment.newInstance(null);
-    final FoodTruckMapFragment mFoodTruckMapFragment = FoodTruckMapFragment.newInstance();
+    private final NearByFragment mNearByFragment = new NearByFragment();
+    private final FoodTruckFeedFragment mFoodTruckFeedFragment = FoodTruckFeedFragment.newInstance(null);
+    private final FoodTruckMapFragment mFoodTruckMapFragment = FoodTruckMapFragment.newInstance();
+    private boolean isNearByFragment = false;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -108,6 +110,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onFound(Message message) {
                 byte[] bytes = message.getContent();
                 MessagePayload payload = ParcelableUtil.unmarshall(bytes,MessagePayload.CREATOR);
+                DBPayloads.getInstance().storeMessagePayload(payload);
+
+                if(isNearByFragment){
+                    ((NearByFragment)getOnScreenFragment())
+                            .loadMessagesFromDB();
+                }
                 /*messagePayloads.add(0, payload);
                 mAdapter.notifyDataSetChanged();
                 mBinding.rvGroupChat.scrollToPosition(0);*/
@@ -126,6 +134,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private void changeFragment(int itemViewId) {
         Fragment newFragment = null;
 
+        isNearByFragment = false;
         switch (itemViewId) {
             case R.id.navigation_map:
                 newFragment = mFoodTruckMapFragment;
@@ -135,6 +144,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.navigation_group:
                 newFragment = mNearByFragment;
+                isNearByFragment = true;
                 break;
         }
 
@@ -248,6 +258,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         Nearby.Messages.publish(mGoogleApiClient,mActiveMessage,options)
                 .setResultCallback(status ->{
 
+                    boolean isPublishSuccess = false;
+                    if(status.getStatusCode() == 0 || status.getStatusCode() == -1){
+                       isPublishSuccess = true;
+                    }
+
+                    //Checking whether the onscreen fragment is NearByFragment or not
+                    if(isNearByFragment){
+                        ((NearByFragment)getOnScreenFragment())
+                                .publishSuccessful(isPublishSuccess,payload.getUUID());
+                    }
+
                     Log.d(TAG,"Status of publishing message: "
                             + payload.getMessage() + ", status:  "
                             + status.getStatusMessage() + " "
@@ -264,5 +285,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             Nearby.Messages.unpublish(mGoogleApiClient,mActiveMessage);
             mActiveMessage = null;
         }
+    }
+
+    private Fragment getOnScreenFragment(){
+        return getSupportFragmentManager().findFragmentById(R.id.content);
     }
 }
