@@ -97,6 +97,14 @@ public class LoadImageBindingAdapter {
                 .into(view);
     }
 
+    @BindingAdapter({"bind:loadCircleImage"})
+    public static void loadCircleImage(ImageView view, String url){
+        Picasso.with(view.getContext())
+                .load(url)
+                .transform(new CircleTransform())
+                .into(view);
+    }
+
 
 
 }

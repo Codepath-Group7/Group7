@@ -23,7 +23,7 @@ import retrofit2.Response;
  * Created by saip92 on 10/15/2017.
  */
 
-public class FoodTruckFeedPresenter extends AbstractPresenter<FoodTruckFeedContract.MvpView>
+class FoodTruckFeedPresenter extends AbstractPresenter<FoodTruckFeedContract.MvpView>
 implements FoodTruckFeedContract.Presenter{
 
 
@@ -36,7 +36,7 @@ implements FoodTruckFeedContract.Presenter{
     private static final String PARAM_OFFSET = "offset";
     private static boolean sInitialLoad = false;
 
-    public FoodTruckFeedPresenter(String authToken){
+    FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
         this.authToken = authToken;
     }
