@@ -7,16 +7,4 @@
         android:title="@string/label_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
-    <item
-        android:id="@+id/menu_logout"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"
-        android:title="@string/label_logout"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black_24px"
-        android:title="@string/action_settings"
-        app:showAsAction="never"
-        />
 </menu>

@@ -7,4 +7,5 @@ package com.codepath.com.sffoodtruck.ui.userprofile.base;
 
 public interface UserProfileBaseView extends com.hannesdorfmann.mosby3.mvp.MvpView {
     void updateUI();
+    void showProgressBar(boolean showProgress);
 }

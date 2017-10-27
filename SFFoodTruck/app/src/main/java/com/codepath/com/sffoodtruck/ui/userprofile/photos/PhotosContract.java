@@ -14,6 +14,7 @@ public class PhotosContract {
 
     interface View extends UserProfileBaseView{
         void showPhoto(UserPostedPhoto userPostedPhoto);
+        void showPhotos(List<UserPostedPhoto> photos);
     }
 
 

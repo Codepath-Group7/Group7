@@ -42,9 +42,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import io.fabric.sdk.android.Fabric;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class HomeActivity extends AppCompatActivity{
 
-    private GoogleApiClient mGoogleApiClient;
     private final static String TAG = HomeActivity.class.getSimpleName();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -70,12 +69,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         changeFragment(R.id.navigation_home);
         ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presentActivity(view);
-            }
-        });
+        imageButton.setOnClickListener(this::presentActivity);
     }
 
     private void changeFragment(int itemViewId) {
@@ -104,23 +98,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home_screen,menu);
-        //MenuItem searchItem = menu.findItem(R.id.menu_search);
-        //SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        /*searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                //startActivity(new Intent(HomeActivity.this, SearchActivity.class));
-                //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                presentActivity(searchView);
-                return true;
-            }
-        });*/
-        // Get the SearchView and set the searchable configuration
-        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default*/
         return true;
     }
 
@@ -141,14 +118,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_logout:
-                logout();
-                return true;
-            case R.id.action_settings:
-                Intent startSettingsActivity =
-                        new Intent(this, SettingsActivity.class);
-                startActivity(startSettingsActivity);
-                return true;
             case R.id.action_nearby:
                 startActivity(new Intent(this, NearByActivity.class));
                 return true;
@@ -160,56 +129,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void logout() {
-        LoginManager.getInstance().logOut();
-        FirebaseAuth.getInstance().signOut();
-        googleSignOut();
-        startLoginActivity();
-    }
 
-    private void googleSignOut() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-                if (mGoogleApiClient.isConnected()) {
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-                            if (status.isSuccess()) {
-                                Log.d(TAG, "User Logged out");
-                            }
-                        }
-                    });
-                }
-            }
 
-            @Override
-            public void onConnectionSuspended(int i) {
-
-            }
-        });
-    }
-
-    private void startLoginActivity(){
-        Intent intent = new Intent(this,LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                |Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
 }

@@ -24,6 +24,7 @@ import com.codepath.com.sffoodtruck.ui.userprofile.favorites.FavoriteFragment;
 import com.codepath.com.sffoodtruck.ui.userprofile.photos.PhotosFragment;
 import com.codepath.com.sffoodtruck.ui.userprofile.recentvisits.RecentVisitsFragment;
 import com.codepath.com.sffoodtruck.ui.userprofile.reviews.ReviewsFragment;
+import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -32,6 +33,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -57,6 +59,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_user_profile);
 
         mUserProfileBinding = DataBindingUtil.setContentView(this,R.layout.activity_user_profile);
+
         setSupportActionBar(mUserProfileBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -69,8 +72,6 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         mUserProfileBinding.executePendingBindings();
         mUserProfileBinding.collapsingToolbarLayout
                 .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.black));
-        startAlphaAnimation(mUserProfileBinding.ivToolbarProfile,0,View.INVISIBLE);
-
         mUserProfileBinding.appBarLayout
                 .addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
                     int maxScroll = appBarLayout.getTotalScrollRange();
@@ -98,6 +99,10 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if(!mIsTheTitleVisible) {
+                Picasso.with(this)
+                        .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                        .transform(new CircleTransform())
+                        .into(mUserProfileBinding.ivToolbarProfile);
                 startAlphaAnimation(mUserProfileBinding.ivToolbarProfile,
                         ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;

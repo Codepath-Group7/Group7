@@ -44,6 +44,7 @@ class ReviewsPresenter extends UserProfileAbstractPresenter<ReviewsContract.View
                                     reviews.addFirst(review);
                                 }
                             }
+                            getView().showProgressBar(false);
                             getView().showUserReviews(reviews);
                         }
 

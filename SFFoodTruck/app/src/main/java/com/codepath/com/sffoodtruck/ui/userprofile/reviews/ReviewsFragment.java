@@ -44,7 +44,6 @@ public class ReviewsFragment extends UserProfileBaseFragment implements ReviewsC
 
     @Override
     public void showUserReviews(List<Review> reviewList) {
-        showProgressBar(false);
         mReviewsAdapter.addAll(reviewList);
     }
 }

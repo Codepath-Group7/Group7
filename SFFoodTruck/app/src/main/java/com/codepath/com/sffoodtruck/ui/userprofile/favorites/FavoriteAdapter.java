@@ -11,11 +11,11 @@ import java.util.List;
  * Created by saip92 on 10/26/2017.
  */
 
-class FavoritesAdapter extends UserProfileBaseAdapter<Business> {
+class FavoriteAdapter extends UserProfileBaseAdapter<Business> {
 
     private List<Business> mBusinesses;
 
-    FavoritesAdapter(List<Business> businesses) {
+    FavoriteAdapter(List<Business> businesses) {
         super(businesses, R.layout.userprofile_business_item_layout);
         mBusinesses = businesses;
     }

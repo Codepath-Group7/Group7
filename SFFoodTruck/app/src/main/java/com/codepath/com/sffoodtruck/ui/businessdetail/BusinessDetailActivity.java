@@ -69,6 +69,11 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     private void setToolbar() {
         setSupportActionBar(mBinding.toolbar);
+        mBinding.toolbar.setTitle(mBusiness.getName());
+        mBinding.collapsingToolbarLayout
+                .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.white));
+        mBinding.collapsingToolbarLayout
+                .setCollapsedTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
         ActionBar  actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -220,7 +225,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     @Override
     public void hideToolbarProgress(){
-        mBinding.progressBar.setVisibility(View.GONE);
+       mBinding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
