@@ -21,7 +21,7 @@ public class FavoriteFragment extends
         FavoriteContract.View{
 
     private static final String TAG = FavoriteFragment.class.getSimpleName();
-    private FavoritesAdapter mAdapter;
+    private FavoriteAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
 
@@ -37,7 +37,7 @@ public class FavoriteFragment extends
 
     @Override
     protected UserProfileBaseAdapter getUserProfileBaseAdapter() {
-        mAdapter = new FavoritesAdapter(new ArrayList<>());
+        mAdapter = new FavoriteAdapter(new ArrayList<>());
         return mAdapter;
     }
 
@@ -49,7 +49,6 @@ public class FavoriteFragment extends
 
     @Override
     public void showFavoriteFoodTrucks(List<Business> businessList) {
-        showProgressBar(false);
         mAdapter.addAll(businessList);
     }
 }

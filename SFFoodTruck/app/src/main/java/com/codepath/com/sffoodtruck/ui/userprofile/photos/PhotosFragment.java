@@ -10,6 +10,7 @@ import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBasePresenter
 import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by saip92 on 10/26/2017.
@@ -42,7 +43,11 @@ public class PhotosFragment extends UserProfileBaseFragment implements
 
     @Override
     public void showPhoto(UserPostedPhoto userPostedPhoto) {
-        showProgressBar(false);
         mPhotosAdapter.addPhoto(userPostedPhoto);
+    }
+
+    @Override
+    public void showPhotos(List<UserPostedPhoto> photos) {
+        mPhotosAdapter.addAll(photos);
     }
 }

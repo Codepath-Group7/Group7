@@ -55,7 +55,6 @@ public class RecentVisitsFragment
 
     @Override
     public void showRecentVisits(List<Business> businessList) {
-        showProgressBar(false);
         mAdapter.addAll(businessList);
     }
 }

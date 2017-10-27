@@ -7,6 +7,10 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by saip92 on 10/26/2017.
@@ -26,29 +30,23 @@ public class PhotosPresenter extends UserProfileAbstractPresenter<PhotosContract
     @Override
     public void loadPhotos() {
         DatabaseReference photoRef = FirebaseUtils.getCurrentUserPhotoDatabaseRef();
-        if(photoRef != null)
-            photoRef.addChildEventListener(new ChildEventListener() {
+        if(photoRef != null){
+            photoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    UserPostedPhoto postedPhoto = dataSnapshot.getValue(UserPostedPhoto.class);
-                    if(postedPhoto != null){
-                        getView().showPhoto(postedPhoto);
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    getView().showProgressBar(false);
+                    if(dataSnapshot.getChildrenCount() > 0){
+                        List<UserPostedPhoto> photos = new LinkedList<>();
+                        for(DataSnapshot photoSnapshot : dataSnapshot.getChildren()){
+                            UserPostedPhoto postedPhoto = photoSnapshot
+                                    .getValue(UserPostedPhoto.class);
+                            if(postedPhoto != null){
+                                photos.add(postedPhoto);
+                            }
+                        }
+
+                        getView().showPhotos(photos);
                     }
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                 }
 
                 @Override
@@ -56,5 +54,7 @@ public class PhotosPresenter extends UserProfileAbstractPresenter<PhotosContract
 
                 }
             });
+        }
+
     }
 }

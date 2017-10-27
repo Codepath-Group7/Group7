@@ -52,7 +52,7 @@ implements RecentVisitsContract.Presenter{
                                     businesses.addFirst(business);
                                 }
                             }
-
+                            getView().showProgressBar(false);
                             getView().showRecentVisits(businesses);
                         }
 

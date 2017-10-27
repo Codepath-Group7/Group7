@@ -57,7 +57,8 @@ public abstract class UserProfileBaseFragment extends
         mFavoriteBinding.rvUserProfile.setLayoutManager(mLayoutManager);
     }
 
-    protected void showProgressBar(boolean showProgress){
+    @Override
+    public void showProgressBar(boolean showProgress){
         if(showProgress){
             mFavoriteBinding.rvUserProfile.setVisibility(View.INVISIBLE);
             mFavoriteBinding.progressBar.setVisibility(View.VISIBLE);

@@ -46,6 +46,7 @@ class FavoritePresenter extends UserProfileAbstractPresenter<FavoriteContract.Vi
                                     businesses.addLast(business);
                                 }
                             }
+                            getView().showProgressBar(false);
                             getView().showFavoriteFoodTrucks(businesses);
                         }
 
