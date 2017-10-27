@@ -214,8 +214,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(this,HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
                 |Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
         finish();
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
 
     @Override
@@ -240,5 +241,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
