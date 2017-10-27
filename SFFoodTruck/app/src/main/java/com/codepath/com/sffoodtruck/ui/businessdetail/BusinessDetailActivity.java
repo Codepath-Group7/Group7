@@ -228,7 +228,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     @Override
     public void hideProgressDialog() {
-        if(mProgressDialog.isShowing()) mProgressDialog.hide();
+        if(mProgressDialog.isShowing()) mProgressDialog.dismiss();
     }
 
     @Override

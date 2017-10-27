@@ -1,13 +1,17 @@
 package com.codepath.com.sffoodtruck.ui.util;
 
+import android.app.Activity;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import android.util.DisplayMetrics;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -34,12 +38,26 @@ public class LoadImageBindingAdapter {
     }
     @BindingAdapter({"bind:imageUrl"})
     public static void loadSmallImage(ImageView view, String url){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) view.getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
         Picasso.Builder builder = new Picasso.Builder(view.getContext());
         builder.listener((picasso, uri, exception) -> exception.printStackTrace());
         builder.build()
                 .load(url)
                 .placeholder(R.drawable.placeholder160x160)
-                .resize(344,0)
+                .resize(width/2,0)
+                .into(view);
+    }
+
+    @BindingAdapter({"bind:userImageUrl"})
+    public static void loadReviewImage(ImageView view, String url){
+        Picasso.Builder builder = new Picasso.Builder(view.getContext());
+        builder.listener((picasso, uri, exception) -> exception.printStackTrace());
+        builder.build()
+                .load(url)
+                .transform(new CircleTransform())
+                .fit()
                 .into(view);
     }
 
