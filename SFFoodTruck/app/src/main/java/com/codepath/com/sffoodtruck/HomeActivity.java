@@ -23,6 +23,7 @@ import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationI
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByActivity;
+import com.codepath.com.sffoodtruck.ui.nearby.NearByFragment;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
 import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
@@ -63,12 +64,15 @@ public class HomeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
+
         setSupportActionBar(toolbar);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         changeFragment(R.id.navigation_home);
-        ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
+
         imageButton.setOnClickListener(this::presentActivity);
     }
 
@@ -81,6 +85,9 @@ public class HomeActivity extends AppCompatActivity{
                 break;
             case R.id.navigation_home:
                 newFragment = FoodTruckFeedFragment.newInstance(null);
+                break;
+            case R.id.navigation_group:
+                newFragment = new NearByFragment();
                 break;
         }
 
@@ -118,9 +125,6 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_nearby:
-                startActivity(new Intent(this, NearByActivity.class));
-                return true;
             case R.id.action_account:
                 Intent accountIntent =
                         new Intent(this, UserProfileActivity.class);
