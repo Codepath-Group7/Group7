@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,7 +66,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_business_detail);
         mBusiness = getIntent().getParcelableExtra(EXTRA_BUSINESS);
         setToolbar();
-        getPresenter().initialLoad(mBusiness);
+        //getPresenter().initialLoad(mBusiness);
     }
 
     private void setToolbar() {
@@ -82,6 +84,37 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
         mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
                 BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition sharedElementEnterTransition = getWindow().getSharedElementEnterTransition();
+            sharedElementEnterTransition.addListener(new Transition.TransitionListener() {
+
+                @Override
+                public void onTransitionStart(Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    getPresenter().initialLoad(mBusiness);
+                }
+
+                @Override
+                public void onTransitionCancel(Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionPause(Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionResume(Transition transition) {
+
+                }
+            });
+        }
     }
 
     @Override

@@ -47,7 +47,6 @@ public class LoadImageBindingAdapter {
                 .load(url)
                 .placeholder(R.drawable.placeholder160x160)
                 .resize(width/2,0)
-                .transform(new RoundedCornersTransformation(12,12))
                 .into(view);
     }
 
