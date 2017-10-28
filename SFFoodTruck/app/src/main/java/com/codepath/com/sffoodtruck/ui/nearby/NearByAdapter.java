@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.List;
+import java.util.UUID;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
@@ -29,6 +30,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     private List<MessagePayload> mMessagePayloads;
     private Context mContext;
     private String userId;
+    private static boolean isSuccess = false;
 
     public NearByAdapter(Context context, List<MessagePayload> messagePayloads, String userId){
         mContext = context;
@@ -53,6 +55,31 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
         return mMessagePayloads.size();
     }
 
+    public void addMessagePayload(MessagePayload payload){
+        mMessagePayloads.add(0,payload);
+        notifyItemInserted(0);
+    }
+
+    public void addAllMessagePayloads(List<MessagePayload> payloads){
+        int oldSize = mMessagePayloads.size();
+        mMessagePayloads.addAll(payloads);
+        notifyItemRangeChanged(oldSize,mMessagePayloads.size());
+    }
+
+    public void clearAll(){
+        mMessagePayloads.clear();
+        notifyDataSetChanged();
+    }
+
+    public void postedMessageDisplay(boolean isSuccess, UUID messageId){
+        this.isSuccess = isSuccess;
+        for(int i = mMessagePayloads.size() - 1; i >= 0 ; i--){
+            if(mMessagePayloads.get(i).getUUID().equals(messageId)){
+                Log.d("Adapter","Found the item and making the required UI updates");
+                notifyItemChanged(i);
+            }
+        }
+    }
 
     class NearByViewHolder extends RecyclerView.ViewHolder{
 

@@ -7,94 +7,198 @@
         <variable name="obj" type="com.codepath.com.sffoodtruck.data.model.Business"/>
     </data>
 
-
-    <RelativeLayout
-        android:id="@+id/rlFoodTruckFeedItem"
-        android:orientation="vertical"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:layout_marginLeft="@dimen/margin8"
+        android:layout_marginRight="@dimen/margin8"
+        android:layout_marginTop="@dimen/margin16"
         android:background="?attr/selectableItemBackground"
-        android:layout_marginBottom="@dimen/margin16">
+        android:clickable="true"
+        app:cardElevation="@dimen/default_elevation"
+        app:cardCornerRadius="@dimen/cardview_corner_radius">
 
-        <FrameLayout
-            android:id="@+id/flBgImage"
+
+        <RelativeLayout
+            android:id="@+id/rlFoodTruckFeedItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivBanner"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin4"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/flBgImage"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/bannerImage"
-                android:src="@color/colorPrimary"
-                app:imageUrl="@{obj.imageUrl}"
-                app:error="@{@drawable/placeholder_1000x200}"
-                android:transitionName="businessImage"
-                />
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/bannerImage"
-                android:layout_gravity="end"
-                android:alpha="0.4"
-                android:background="@drawable/image_view_gradient"
-                />
-            <TextView
-                android:id="@+id/tvDistance"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/ivBanner"
+                    style="@style/AppTheme.DetailView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bannerImage"
+                    android:src="@color/colorPrimary"
+                    android:transitionName="businessImage"
+                    app:error="@{@drawable/placeholder_1000x200}"
+                    android:foreground="#5a212121"
+                    app:imageUrl="@{obj.imageUrl}"
+                    />
+
+                <TextView
+                    android:id="@+id/tvCuisineType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding8"
+                    android:text="@{obj.category ?? ` `}"
+                    tools:text="@string/cuisine_type"
+                    android:layout_gravity="top|end"
+                    android:textColor="@color/colorTextColor"
+                    />
+
+               <!-- <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_gravity="end">
+                    <TextView
+                        android:id="@+id/ImgBtnShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin8"
+                        android:background="@drawable/ic_share_white_24dp"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        />
+
+                    <TextView
+                        android:id="@+id/ImgBtnFav"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin8"
+                        android:background="@drawable/ic_favorite_border_white_24px"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+
+                        />
+                </LinearLayout>-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+
+
+
+                    <TextView
+                        android:id="@+id/tvBusinessTitle"
+                        style="@style/Base.TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|start"
+
+                        android:text="@{obj.name}"
+                        android:textColor="@color/colorTextColor"
+                        tools:text="@string/food_truck_title"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignLeft="@+id/rbFoodTruckRating"
+                        android:layout_alignStart="@+id/rbFoodTruckRating"/>
+
+                    <android.support.v7.widget.AppCompatRatingBar
+                        android:id="@+id/rbFoodTruckRating"
+                        style="?attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvBusinessTitle"
+                        android:layout_marginLeft="@dimen/margin8"
+                        android:layout_marginStart="@dimen/margin8"
+                        android:layout_marginTop="@dimen/margin8"
+                        android:isIndicator="true"
+                        android:rating="@{obj.rating}"
+                        tools:rating="5"/>
+
+                    <TextView
+                        android:id="@+id/tvRatings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@id/rbFoodTruckRating"
+                        android:padding="@dimen/padding8"
+                        android:layout_below="@id/tvBusinessTitle"
+                        android:layout_marginLeft="@dimen/margin8"
+                        android:layout_marginStart="@dimen/margin8"
+                        android:layout_toEndOf="@+id/rbFoodTruckRating"
+                        android:layout_toRightOf="@+id/rbFoodTruckRating"
+                        android:text="@{String.format(`%s reviews`,obj.reviewCount)}"
+                        android:textColor="@color/colorTextColor"
+                        tools:text="@string/number_of_reviews_text"/>
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:padding="@dimen/padding8"
+                        android:text="@{String.format(`%s ft`,obj.distance)}"
+                        android:textColor="@color/colorTextColor"
+                        tools:text="@string/distance"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignBaseline="@id/tvRatings"
+                        />
+                </RelativeLayout>
+
+
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llLikeAndShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="@string/distance"
-                android:text="@{String.format(`%s ft`,obj.distance)}"
-                android:textColor="@color/colorTextColor"
-                android:layout_gravity="bottom|end"
-                android:padding="@dimen/padding8"
-                />
-        </FrameLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/flBgImage">
+                <TextView
+                    android:id="@+id/ImgBtnShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin8"
+                    android:background="@drawable/ic_share_black_24dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    />
 
-        <TextView
-            android:layout_below="@id/flBgImage"
-            android:padding="@dimen/padding8"
-            android:id="@+id/tvFoodTruckTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{obj.name}"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            tools:text="@string/food_truck_title"/>
+                <TextView
+                    android:id="@+id/ImgBtnFav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin8"
+                    android:background="@drawable/ic_favorite_border_black_24dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
 
-        <android.support.v7.widget.AppCompatRatingBar
-            android:id="@+id/rbFoodTruckRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?attr/ratingBarStyleSmall"
-            android:isIndicator="true"
-            android:rating="@{obj.rating}"
-            tools:rating="5"
-            android:layout_marginLeft="@dimen/margin8"
-            android:layout_marginStart="@dimen/margin8"
-            android:layout_below="@id/tvFoodTruckTitle"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvRatings"
-            android:layout_marginStart="@dimen/margin8"
-            android:layout_marginLeft="@dimen/margin8"
-            tools:text="@string/number_of_reviews_text"
-            android:layout_below="@id/tvFoodTruckTitle"
-            android:text="@{String.format(`%s reviews`,obj.reviewCount)}"
-            android:layout_alignBaseline="@id/rbFoodTruckRating"
-            android:layout_toRightOf="@+id/rbFoodTruckRating"
-            android:layout_toEndOf="@+id/rbFoodTruckRating"/>
+                    />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvCuisineType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvFoodTruckTitle"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:padding="@dimen/padding8"
-            android:layout_alignBaseline="@id/tvRatings"
-            tools:text="@string/cuisine_type"
-            android:text="@{obj.category ?? ` `}"
-            />
+            <TextView
+                android:id="@+id/tvBusinessAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/flBgImage"
+                tools:text="@string/tools_business_address"
+                android:padding="@dimen/margin8"
+                android:layout_toStartOf="@id/llLikeAndShare"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/llLikeAndShare"
+                android:text="@{obj.location.completeAddress}"
+                android:layout_alignBaseline="@id/llLikeAndShare"/>
 
-    </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 </layout>
+
