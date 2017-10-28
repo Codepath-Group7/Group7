@@ -2,6 +2,8 @@ package com.codepath.com.sffoodtruck.data.local;
 
 
 
+import android.util.Log;
+
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,7 +16,7 @@ import java.util.UUID;
 
 public class DBPayloads {
 
-    private List<MessagePayload> mMessagePayloads = new LinkedList<>();
+    private LinkedList<MessagePayload> mMessagePayloads = new LinkedList<>();
     private HashSet<UUID> uniquePayloads = new HashSet<>();
 
     private static final DBPayloads ourInstance = new DBPayloads();
@@ -30,7 +32,7 @@ public class DBPayloads {
     public boolean storeMessagePayload(MessagePayload payload){
         if(!uniquePayloads.contains(payload.getUUID())){
             uniquePayloads.add(payload.getUUID());
-            mMessagePayloads.add(payload);
+            mMessagePayloads.addLast(payload);
             return false;
         }
         return true;
@@ -41,6 +43,7 @@ public class DBPayloads {
     }
 
     public boolean isDuplicate(MessagePayload payload){
+        Log.d("Actual Payload:",uniquePayloads + " " + payload);
         return uniquePayloads.contains(payload.getUUID());
     }
 

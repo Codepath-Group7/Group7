@@ -52,8 +52,6 @@ public class NearByFragment extends Fragment {
 
     private onNearByFragmentListener mNearByFragmentListener;
 
-
-
     public interface onNearByFragmentListener{
         void onSendClick(MessagePayload messagePayload);
     }
@@ -66,8 +64,8 @@ public class NearByFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d(TAG,"UserID is " + mFirebaseUser.getUid());
-        Log.d(TAG,"Got the payloads: " + DBPayloads.getInstance().getMessagePayloads());
+        mAdapter = new NearByAdapter(getActivity(), new ArrayList<>(),mFirebaseUser.getUid());
+        loadMessagesFromDB();
     }
 
     @Override
@@ -106,13 +104,15 @@ public class NearByFragment extends Fragment {
 
 
     private void publish(String message){
-            MessagePayload payload = new MessagePayload();
-            if(mFirebaseUser == null || TextUtils.isEmpty(message)) return;
-            payload.setUserId(mFirebaseUser.getUid());
-            payload.setMessage(message);
-            payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
-            Log.d(TAG,"Sending the payload to HomeActivity" + payload);
-            mNearByFragmentListener.onSendClick(payload);
+        MessagePayload payload = new MessagePayload();
+        if(mFirebaseUser == null || TextUtils.isEmpty(message)) return;
+        payload.setUserId(mFirebaseUser.getUid());
+        payload.setMessage(message);
+        payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
+        Log.d(TAG,"Sending the payload to HomeActivity" + payload);
+        mAdapter.addMessagePayload(payload);
+        mNearByFragmentListener.onSendClick(payload);
+        mBinding.etSendMessage.setText("");
     }
 
 
@@ -123,6 +123,13 @@ public class NearByFragment extends Fragment {
     public void loadMessagesFromDB(){
         Log.d(TAG,"loaded messages from database: "
                 + DBPayloads.getInstance().getMessagePayloads());
+        mAdapter.addAllMessagePayloads(DBPayloads.getInstance().getMessagePayloads());
+    }
+
+    public void addMessagePayload(MessagePayload payload){
+        Log.d(TAG,"Calling MessagePayload" + payload);
+        mAdapter.addMessagePayload(payload);
+        mBinding.rvGroupChat.scrollToPosition(0);
     }
 
 

@@ -3,6 +3,9 @@ package com.codepath.com.sffoodtruck.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -14,6 +17,8 @@ public class MessagePayload implements Parcelable {
     private String userId;
     private String message;
     private String imageUrl;
+    private long timestamp;
+    private String time;
     private UUID mUUID;
 
     public UUID getUUID() {
@@ -44,6 +49,13 @@ public class MessagePayload implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getTime() {
+        return time;
+    }
 
     @Override
     public String toString() {
@@ -51,12 +63,18 @@ public class MessagePayload implements Parcelable {
                 "userId='" + userId + '\'' +
                 ", message='" + message + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", timestamp=" + timestamp +
+                ", time='" + time + '\'' +
                 ", mUUID=" + mUUID +
                 '}';
     }
 
     public MessagePayload() {
         mUUID = UUID.randomUUID();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+        this.time = dateFormat.format(calendar.getTime());
+        timestamp = System.currentTimeMillis();
     }
 
     @Override
@@ -69,6 +87,8 @@ public class MessagePayload implements Parcelable {
         dest.writeString(this.userId);
         dest.writeString(this.message);
         dest.writeString(this.imageUrl);
+        dest.writeLong(this.timestamp);
+        dest.writeString(this.time);
         dest.writeSerializable(this.mUUID);
     }
 
@@ -76,6 +96,8 @@ public class MessagePayload implements Parcelable {
         this.userId = in.readString();
         this.message = in.readString();
         this.imageUrl = in.readString();
+        this.timestamp = in.readLong();
+        this.time = in.readString();
         this.mUUID = (UUID) in.readSerializable();
     }
 

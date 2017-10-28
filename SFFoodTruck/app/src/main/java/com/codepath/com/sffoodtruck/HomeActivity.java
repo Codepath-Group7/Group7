@@ -110,12 +110,16 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onFound(Message message) {
                 byte[] bytes = message.getContent();
                 MessagePayload payload = ParcelableUtil.unmarshall(bytes,MessagePayload.CREATOR);
-                DBPayloads.getInstance().storeMessagePayload(payload);
 
-                if(isNearByFragment){
+
+                Log.d(TAG,"Actual Payload: " + payload + ": from -> "
+                        + DBPayloads.getInstance().getMessagePayloads());
+                if(isNearByFragment && !DBPayloads.getInstance().isDuplicate(payload)){
                     ((NearByFragment)getOnScreenFragment())
-                            .loadMessagesFromDB();
+                            .addMessagePayload(payload);
                 }
+
+                DBPayloads.getInstance().storeMessagePayload(payload);
                 /*messagePayloads.add(0, payload);
                 mAdapter.notifyDataSetChanged();
                 mBinding.rvGroupChat.scrollToPosition(0);*/
