@@ -45,6 +45,8 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
     private static final String EXTRA_BUSINESS =
             "com.codepath.com.sffoodtruck.ui.businessdetail.EXTRA_BUSINESS";
+    public static final String EXTRA_ANIM =
+            "com.codepath.com.sffoodtruck.ui.businessdetail.EXTRA_ANIM";
     private static final String TAG = BusinessDetailActivity.class.getSimpleName();
     private ActivityBusinessDetailBinding mBinding;
     private Business mBusiness;
@@ -53,6 +55,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Uri mCurrentPhotoPath = null;
     private MaterialDialog mProgressDialog;
+    private boolean mShowAnimation = false;
 
     public static Intent newIntent(Context context, Business business){
         Intent intent = new Intent(context, BusinessDetailActivity.class);
@@ -65,28 +68,19 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_business_detail);
         mBusiness = getIntent().getParcelableExtra(EXTRA_BUSINESS);
+        mShowAnimation = getIntent().getBooleanExtra(EXTRA_ANIM,false);
         setToolbar();
-        //getPresenter().initialLoad(mBusiness);
+        if(mShowAnimation){
+            addShareElementTransitionListener();
+        }
+        else {
+            getPresenter().initialLoad(mBusiness);
+        }
     }
 
-    private void setToolbar() {
-        setSupportActionBar(mBinding.toolbar);
-        mBinding.toolbar.setTitle(mBusiness.getName());
-        mBinding.collapsingToolbarLayout
-                .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.white));
-        mBinding.collapsingToolbarLayout
-                .setCollapsedTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
-        ActionBar  actionBar = getSupportActionBar();
-        if(actionBar!=null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(mBusiness.getName());
-        }
-        Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
-        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
-                BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
-
+    private void addShareElementTransitionListener(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition sharedElementEnterTransition = getWindow().getSharedElementEnterTransition();
+            Transition sharedElementEnterTransition = getWindow().getEnterTransition();
             sharedElementEnterTransition.addListener(new Transition.TransitionListener() {
 
                 @Override
@@ -96,6 +90,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
 
                 @Override
                 public void onTransitionEnd(Transition transition) {
+                    Log.d(TAG,"Animation Ended");
                     getPresenter().initialLoad(mBusiness);
                 }
 
@@ -115,6 +110,23 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                 }
             });
         }
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(mBinding.toolbar);
+        mBinding.toolbar.setTitle(mBusiness.getName());
+        mBinding.collapsingToolbarLayout
+                .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.white));
+        mBinding.collapsingToolbarLayout
+                .setCollapsedTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
+        ActionBar  actionBar = getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(mBusiness.getName());
+        }
+        Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
+        mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
+                BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
     }
 
     @Override

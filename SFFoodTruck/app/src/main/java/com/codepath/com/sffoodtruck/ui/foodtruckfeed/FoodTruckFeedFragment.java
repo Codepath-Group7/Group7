@@ -103,7 +103,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
                         ImageView ivBanner = (ImageView) v.findViewById(R.id.ivBanner);
                         ActivityOptionsCompat options = ActivityOptionsCompat.
                                 makeSceneTransitionAnimation(getActivity(), (View)ivBanner, "businessImage");
-
+                        intent.putExtra(BusinessDetailActivity.EXTRA_ANIM,true);
                         startActivity(intent,options.toBundle());
                     } else {
                         // Implement this feature without material design
