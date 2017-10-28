@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
+import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.BaseLocationFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
@@ -63,7 +65,9 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
 
     @Override
     public FoodTruckFeedContract.Presenter createPresenter() {
-        return new FoodTruckFeedPresenter(QueryPreferences.getAccessToken(getActivity()));
+         SearchApi services = RetrofitClient
+                .createService(SearchApi.class,getActivity());
+        return new FoodTruckFeedPresenter(services);
     }
 
     @Override
@@ -156,14 +160,12 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
             //Handle sLocation updates accordingly
             Log.d(TAG,"Location: " + QueryPreferences.getCurrentLocation(getActivity()));
             sLocation = QueryPreferences.getCurrentLocation(getActivity());
-            Toast.makeText(getActivity(),"Current Location is: " +
-                    QueryPreferences.getCurrentLocation(getActivity()),Toast.LENGTH_SHORT).show();
             Snackbar snackbar = Snackbar.make(mBinding.getRoot(),
-                    getString(R.string.new_location),Snackbar.LENGTH_LONG);
+                    getString(R.string.new_location),Snackbar.LENGTH_INDEFINITE);
 
             snackbar.setAction(getString(R.string.load_new_results), view -> {
                 if(getPresenter() != null){
-                    getPresenter().updateLocation(sLocation,mQuery);
+                    getPresenter().updateLocation(QueryPreferences.getCurrentLocation(getActivity()),mQuery);
                 }
             }).show();
         }

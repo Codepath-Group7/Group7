@@ -111,13 +111,14 @@ public class NearByFragment extends Fragment {
         payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
         Log.d(TAG,"Sending the payload to HomeActivity" + payload);
         mAdapter.addMessagePayload(payload);
+        mBinding.rvGroupChat.smoothScrollToPosition(0);
         mNearByFragmentListener.onSendClick(payload);
         mBinding.etSendMessage.setText("");
     }
 
-
     public void publishSuccessful(boolean result, UUID messageId) {
         Log.d(TAG,"Publish was successful" + result + ", for messageId " + messageId);
+
     }
 
     public void loadMessagesFromDB(){
@@ -129,7 +130,7 @@ public class NearByFragment extends Fragment {
     public void addMessagePayload(MessagePayload payload){
         Log.d(TAG,"Calling MessagePayload" + payload);
         mAdapter.addMessagePayload(payload);
-        mBinding.rvGroupChat.scrollToPosition(0);
+        mBinding.rvGroupChat.smoothScrollToPosition(0);
     }
 
 

@@ -120,10 +120,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
 
                 DBPayloads.getInstance().storeMessagePayload(payload);
-                /*messagePayloads.add(0, payload);
-                mAdapter.notifyDataSetChanged();
-                mBinding.rvGroupChat.scrollToPosition(0);*/
-                //String messageAsString = new String(message.getContent());
                 Log.d(TAG,"Found message: " + payload);
             }
 
