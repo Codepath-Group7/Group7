@@ -43,6 +43,7 @@ implements FoodTruckFeedContract.Presenter{
     
     public void initialLoad(String query) { //add query string
         sInitialLoad = true;
+        getView().showProgress();
         loadFoodTruckFeed(null,query,0);
     }
 
@@ -69,9 +70,13 @@ implements FoodTruckFeedContract.Presenter{
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
                 SearchResults searchResults = response.body();
+                getView().hideProgress();
                 if (searchResults == null || searchResults.getBusinesses() == null
                         || searchResults.getBusinesses().isEmpty() || getView() == null) {
                     Log.e(TAG, "response has failed " + response.code());
+                    if(page==0){
+                        getView().showNoResultFound();
+                    }
                     return;
                 }
 
@@ -88,6 +93,7 @@ implements FoodTruckFeedContract.Presenter{
             @Override
             public void onFailure(Call<SearchResults> call, Throwable t) {
                 Log.e(TAG, "response has failed " ,t );
+                getView().hideProgress();
             }
         });
     }
