@@ -18,7 +18,7 @@ public class FavoriteContract {
     }
 
     interface Presenter extends UserProfileBasePresenter<View>{
-        void loadFavoriteFoodTrucks();
+        void loadFavoriteFoodTrucks(String userId);
     }
 
 }

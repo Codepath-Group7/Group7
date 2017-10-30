@@ -50,4 +50,9 @@ public class PhotosFragment extends UserProfileBaseFragment implements
     public void showPhotos(List<UserPostedPhoto> photos) {
         mPhotosAdapter.addAll(photos);
     }
+
+    @Override
+    public String getCurrentUserId() {
+        return null;
+    }
 }

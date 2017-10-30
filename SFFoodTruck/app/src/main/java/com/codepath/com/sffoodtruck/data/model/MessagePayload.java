@@ -21,6 +21,15 @@ public class MessagePayload implements Parcelable {
     private String time;
     private UUID mUUID;
     private String userName;
+    private String userEmail;
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
     public String getUserName() {
         return userName;

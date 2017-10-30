@@ -19,6 +19,7 @@ import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.databinding.ItemChatBinding;
 import com.codepath.com.sffoodtruck.databinding.ItemChatWithBgBinding;
+import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
 import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -88,17 +89,21 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
         }
     }
 
-    class NearByViewHolder extends RecyclerView.ViewHolder{
+    class NearByViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private static final String TAG = "NearByAdapter.class";
         private ItemChatWithBgBinding mBinding;
+        private MessagePayload mMessagePayload;
 
         public NearByViewHolder(ItemChatWithBgBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
+            mBinding.ivProfileMe.setOnClickListener(this);
+            mBinding.ivProfileOther.setOnClickListener(this);
         }
 
         void bindMessagePayload(MessagePayload payload){
+            mMessagePayload = payload;
             String messageUserId = payload.getUserId();
             final boolean isMe = messageUserId != null && messageUserId.equals(userId);
             Log.d(TAG,payload.getImageUrl() + " -> payload image url");
@@ -128,6 +133,16 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                 mBinding.tvProfileOther.setText(chatBody);
             }
         //    mBinding.tvBody.setText(payload.getMessage());
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch(view.getId()){
+                case R.id.ivProfileMe:
+                case R.id.ivProfileOther:
+                    mContext.startActivity(UserProfileActivity.newIntent(mContext,mMessagePayload));
+                    break;
+            }
         }
     }
 

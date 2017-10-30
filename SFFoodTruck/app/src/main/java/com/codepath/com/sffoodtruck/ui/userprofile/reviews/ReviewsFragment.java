@@ -46,4 +46,9 @@ public class ReviewsFragment extends UserProfileBaseFragment implements ReviewsC
     public void showUserReviews(List<Review> reviewList) {
         mReviewsAdapter.addAll(reviewList);
     }
+
+    @Override
+    public String getCurrentUserId() {
+        return null;
+    }
 }
