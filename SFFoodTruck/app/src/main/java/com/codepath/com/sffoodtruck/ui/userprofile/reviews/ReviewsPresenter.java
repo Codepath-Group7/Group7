@@ -23,14 +23,16 @@ class ReviewsPresenter extends UserProfileAbstractPresenter<ReviewsContract.View
 
     @Override
     public void initialLoad() {
-        loadUserReviews();
+        loadUserReviews(getView().getCurrentUserId());
         getView().updateUI();
     }
 
     @Override
-    public void loadUserReviews() {
+    public void loadUserReviews(String userId) {
 
-        DatabaseReference reviewsRef = FirebaseUtils.getCurrentUserReviewDatabaseRef();
+        DatabaseReference reviewsRef = userId == null ?
+                FirebaseUtils.getCurrentUserReviewDatabaseRef() :
+                FirebaseUtils.getReviewDatabaseRef(userId);
         if(reviewsRef != null){
 
             reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -53,6 +55,8 @@ class ReviewsPresenter extends UserProfileAbstractPresenter<ReviewsContract.View
 
                         }
                     });
+        }else{
+            getView().showProgressBar(false);
         }
 
 

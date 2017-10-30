@@ -19,6 +19,7 @@ import android.view.animation.AlphaAnimation;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.ActivityUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.common.CustomFragmentPagerAdapter;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
@@ -132,8 +133,8 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
         pagerAdapter.addFragment(FavoriteFragment.newInstance(mCurrentUserId),FAVORITES_TITLE);
         if(isCurrentUser) pagerAdapter.addFragment(new RecentVisitsFragment(),RECENT_VISITS_TITLE);
-        pagerAdapter.addFragment(new PhotosFragment(),PHOTOS_TITLE);
-        pagerAdapter.addFragment(new ReviewsFragment(),REVIEWS_TITLE);
+        pagerAdapter.addFragment(PhotosFragment.newInstance(mCurrentUserId),PHOTOS_TITLE);
+        pagerAdapter.addFragment(ReviewsFragment.newInstance(mCurrentUserId),REVIEWS_TITLE);
 
         mUserProfileBinding.viewpager.setAdapter(pagerAdapter);
         mUserProfileBinding.tabLayout.setupWithViewPager(mUserProfileBinding.viewpager);
@@ -241,6 +242,12 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isCurrentUser = false;
     }
 
     @Override

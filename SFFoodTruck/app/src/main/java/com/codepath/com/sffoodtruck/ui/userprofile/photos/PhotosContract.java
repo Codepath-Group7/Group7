@@ -19,6 +19,6 @@ public class PhotosContract {
 
 
     interface Presenter extends UserProfileBasePresenter<View>{
-        void loadPhotos();
+        void loadPhotos(String userId);
     }
 }

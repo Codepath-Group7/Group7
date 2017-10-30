@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.userprofile.reviews;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -20,9 +22,27 @@ public class ReviewsFragment extends UserProfileBaseFragment implements ReviewsC
 
 
     private static final String TAG = ReviewsFragment.class.getSimpleName();
+    private static final String EXTRA_USERID = "ReviewsFragment.EXTRA_USERID";
     private ReviewsAdapter mReviewsAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private String mUserId = null;
 
+
+    public static Fragment newInstance(String userId){
+        Bundle args = new Bundle();
+        args.putString(EXTRA_USERID,userId);
+        ReviewsFragment reviewsFragment = new ReviewsFragment();
+        reviewsFragment.setArguments(args);
+        return reviewsFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments()!= null){
+            mUserId = getArguments().getString(EXTRA_USERID);
+        }
+    }
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -49,6 +69,6 @@ public class ReviewsFragment extends UserProfileBaseFragment implements ReviewsC
 
     @Override
     public String getCurrentUserId() {
-        return null;
+        return mUserId;
     }
 }

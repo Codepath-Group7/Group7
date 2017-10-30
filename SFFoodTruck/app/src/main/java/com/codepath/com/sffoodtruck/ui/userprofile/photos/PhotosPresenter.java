@@ -23,13 +23,15 @@ public class PhotosPresenter extends UserProfileAbstractPresenter<PhotosContract
 
     @Override
     public void initialLoad() {
-        loadPhotos();
+        loadPhotos(getView().getCurrentUserId());
         getView().updateUI();
     }
 
     @Override
-    public void loadPhotos() {
-        DatabaseReference photoRef = FirebaseUtils.getCurrentUserPhotoDatabaseRef();
+    public void loadPhotos(String userId) {
+        DatabaseReference photoRef = userId != null ?
+                FirebaseUtils.getPhotoDatabaseRef(userId) :
+                FirebaseUtils.getCurrentUserPhotoDatabaseRef();
         if(photoRef != null){
             photoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
