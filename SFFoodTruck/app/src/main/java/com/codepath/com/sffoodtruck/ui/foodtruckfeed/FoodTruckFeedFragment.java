@@ -150,6 +150,23 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     }
 
     @Override
+    public void showProgress() {
+        Log.d(TAG,"Progress: Show");
+        mBinding.listProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        Log.d(TAG,"Progress: Hide");
+        mBinding.listProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoResultFound() {
+        mBinding.tvNoResults.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if(key.equals(QueryPreferences.PREF_CURRENT_LOCATION)){
