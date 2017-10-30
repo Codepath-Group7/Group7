@@ -23,6 +23,7 @@ import com.codepath.com.sffoodtruck.data.local.DBPayloads;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
+import com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByActivity;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByFragment;
@@ -142,7 +143,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 newFragment = mFoodTruckMapFragment;
                 break;
             case R.id.navigation_home:
-                newFragment = mFoodTruckFeedFragment;
+                newFragment = new HomeFeedFragment();
                 break;
             case R.id.navigation_group:
                 newFragment = mNearByFragment;

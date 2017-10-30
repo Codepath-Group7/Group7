@@ -14,17 +14,21 @@ import java.util.List;
 public class HomeFeedContract {
 
 
-    interface View extends MvpBaseView{
+    interface MvpView extends MvpBaseView{
+        void initializeUI();
         void appendFoodTruckList(List<Business> businessList);
-        void loadInitialFoodTruckList(List<Business> businessList);
+        void addInitialFoodTruckList(List<Business> businessList);
+        void addFavoritesFoodTruckList(List<Business> businessList);
         void getLastKnownLocation();
         void startLocationUpdates();
         void stopLocationUpdates();
     }
 
-    interface Presenter extends MvpBasePresenter<View> {
+    interface Presenter extends MvpBasePresenter<MvpView> {
         void initialLoad(String query);
         void loadFoodTruckFeed(String location);
+        void loadFavorites();
         void updateLocation(String location);
+
     }
 }

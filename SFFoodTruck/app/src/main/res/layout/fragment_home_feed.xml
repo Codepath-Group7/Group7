@@ -3,8 +3,9 @@
         tools:context="com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment">
 
     <FrameLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent">
+         android:id="@+id/flHomeFeedFragment"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -15,9 +16,11 @@
             />
 
         <ScrollView
+            android:id="@+id/svHomeFeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:id="@+id/llHomeFeed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -31,18 +34,15 @@
                     android:layout_margin="@dimen/margin16"
                     />
 
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin16"
-                    android:layout_marginRight="@dimen/margin16">
-
-                    <android.support.v7.widget.RecyclerView
+                    <com.codepath.com.sffoodtruck.ui.util.SnappyRecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin16"
+                        android:layout_marginRight="@dimen/margin16"
+                        android:layout_marginBottom="@dimen/margin16"
+                        android:padding="@dimen/padding4"
                         android:id="@+id/rvFavorites"/>
 
-                </android.support.v4.widget.NestedScrollView>
 
                 <TextView
                     android:id="@+id/tvTopPicks"
@@ -50,21 +50,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/top_picks_title"
                     style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_margin="@dimen/margin16"/>
-
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin16"
-                    android:layout_marginRight="@dimen/margin16">
+                    android:layout_marginStart="@dimen/margin16"
+                    android:layout_marginBottom="@dimen/margin16"
+                    android:layout_marginLeft="@dimen/margin16"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvHomeFeed"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </android.support.v4.widget.NestedScrollView>
-
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin16"
+                        android:layout_marginRight="@dimen/margin16"/>
 
             </LinearLayout>
 
