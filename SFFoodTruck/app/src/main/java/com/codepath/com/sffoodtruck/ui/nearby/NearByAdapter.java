@@ -2,7 +2,13 @@ package com.codepath.com.sffoodtruck.ui.nearby;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,7 +48,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     @Override
     public NearByViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemChatWithBgBinding binding = DataBindingUtil.inflate(inflater,R.layout.item_chat_with_bg,parent,false);
+        ItemChatWithBgBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_chat_with_bg,parent,false);
         return new NearByViewHolder(binding);
     }
 
@@ -96,6 +102,9 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
             String messageUserId = payload.getUserId();
             final boolean isMe = messageUserId != null && messageUserId.equals(userId);
             Log.d(TAG,payload.getImageUrl() + " -> payload image url");
+            String chatBody = String.format("%s %n %n %s %n %n %s",payload.getUserName()
+                    ,payload.getMessage(),payload.getTime());
+
             if(isMe){
                 mBinding.ivProfileMe.setVisibility(View.VISIBLE);
                 Picasso.with(mContext)
@@ -105,8 +114,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                 mBinding.ivProfileOther.setVisibility(View.INVISIBLE);
                 mBinding.tvProfileOther.setVisibility(View.INVISIBLE);
                 mBinding.tvProfileMe.setVisibility(View.VISIBLE);
-                mBinding.tvProfileMe.setText(String.format("%s %n %n %s",payload.getMessage()
-                        ,payload.getTime()));
+                mBinding.tvProfileMe.setText(chatBody);
                 //mBinding.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
             }else {
                 mBinding.ivProfileMe.setVisibility(View.INVISIBLE);
@@ -117,10 +125,11 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                         .transform(new CircleTransform())
                         .into(mBinding.ivProfileOther);
                 mBinding.tvProfileOther.setVisibility(View.VISIBLE);
-                mBinding.tvProfileOther.setText(String.format("%s %n %n %s",payload.getMessage()
-                        ,payload.getTime()));
+                mBinding.tvProfileOther.setText(chatBody);
             }
         //    mBinding.tvBody.setText(payload.getMessage());
         }
     }
+
+
 }

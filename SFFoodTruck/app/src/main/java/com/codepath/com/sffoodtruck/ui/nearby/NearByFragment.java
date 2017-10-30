@@ -109,6 +109,7 @@ public class NearByFragment extends Fragment {
         payload.setUserId(mFirebaseUser.getUid());
         payload.setMessage(message);
         payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
+        payload.setUserName(mFirebaseUser.getDisplayName());
         Log.d(TAG,"Sending the payload to HomeActivity" + payload);
         mAdapter.addMessagePayload(payload);
         mBinding.rvGroupChat.smoothScrollToPosition(0);

@@ -20,6 +20,15 @@ public class MessagePayload implements Parcelable {
     private long timestamp;
     private String time;
     private UUID mUUID;
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public UUID getUUID() {
         return mUUID;
@@ -69,6 +78,7 @@ public class MessagePayload implements Parcelable {
                 ", timestamp=" + timestamp +
                 ", time='" + time + '\'' +
                 ", mUUID=" + mUUID +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 
@@ -93,6 +103,7 @@ public class MessagePayload implements Parcelable {
         dest.writeLong(this.timestamp);
         dest.writeString(this.time);
         dest.writeSerializable(this.mUUID);
+        dest.writeString(this.userName);
     }
 
     protected MessagePayload(Parcel in) {
@@ -102,6 +113,7 @@ public class MessagePayload implements Parcelable {
         this.timestamp = in.readLong();
         this.time = in.readString();
         this.mUUID = (UUID) in.readSerializable();
+        this.userName = in.readString();
     }
 
     public static final Creator<MessagePayload> CREATOR = new Creator<MessagePayload>() {
