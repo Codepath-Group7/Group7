@@ -54,6 +54,9 @@ public class MessagePayload implements Parcelable {
     }
 
     public String getTime() {
+        if(time.charAt(0) == '0'){
+            return time.substring(1);
+        }
         return time;
     }
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.databinding.ItemChatBinding;
+import com.codepath.com.sffoodtruck.databinding.ItemChatWithBgBinding;
 import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -41,7 +42,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     @Override
     public NearByViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemChatBinding binding = DataBindingUtil.inflate(inflater,R.layout.item_chat,parent,false);
+        ItemChatWithBgBinding binding = DataBindingUtil.inflate(inflater,R.layout.item_chat_with_bg,parent,false);
         return new NearByViewHolder(binding);
     }
 
@@ -84,9 +85,9 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     class NearByViewHolder extends RecyclerView.ViewHolder{
 
         private static final String TAG = "NearByAdapter.class";
-        private ItemChatBinding mBinding;
+        private ItemChatWithBgBinding mBinding;
 
-        public NearByViewHolder(ItemChatBinding binding) {
+        public NearByViewHolder(ItemChatWithBgBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
@@ -101,18 +102,25 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                         .load(payload.getImageUrl())
                         .transform(new CircleTransform())
                         .into(mBinding.ivProfileMe);
-                mBinding.ivProfileOther.setVisibility(View.GONE);
-                mBinding.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+                mBinding.ivProfileOther.setVisibility(View.INVISIBLE);
+                mBinding.tvProfileOther.setVisibility(View.INVISIBLE);
+                mBinding.tvProfileMe.setVisibility(View.VISIBLE);
+                mBinding.tvProfileMe.setText(String.format("%s %n %n %s",payload.getMessage()
+                        ,payload.getTime()));
+                //mBinding.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
             }else {
-                mBinding.ivProfileMe.setVisibility(View.GONE);
+                mBinding.ivProfileMe.setVisibility(View.INVISIBLE);
+                mBinding.tvProfileMe.setVisibility(View.INVISIBLE);
                 mBinding.ivProfileOther.setVisibility(View.VISIBLE);
                 Picasso.with(mContext)
                         .load(payload.getImageUrl())
                         .transform(new CircleTransform())
                         .into(mBinding.ivProfileOther);
-                mBinding.tvBody.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+                mBinding.tvProfileOther.setVisibility(View.VISIBLE);
+                mBinding.tvProfileOther.setText(String.format("%s %n %n %s",payload.getMessage()
+                        ,payload.getTime()));
             }
-            mBinding.tvBody.setText(payload.getMessage());
+        //    mBinding.tvBody.setText(payload.getMessage());
         }
     }
 }

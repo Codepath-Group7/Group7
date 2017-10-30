@@ -90,6 +90,12 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getPresenter().initialLoad(mQuery);
+    }
+
     private void setupRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mBinding.rvFoodTruckFeed.setLayoutManager(layoutManager);
@@ -129,11 +135,11 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        if(getPresenter() != null && isAdded()){
+        /*if(getPresenter() != null && isAdded()){
             getPresenter().initialLoad(mQuery); //add query String
         }else{
             Log.d("PRESENTER","it is null");
-        }
+        }*/
     }
 
     @Override

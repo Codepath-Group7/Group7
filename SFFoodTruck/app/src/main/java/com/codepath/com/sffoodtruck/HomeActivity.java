@@ -42,6 +42,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -101,6 +102,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private void setUpNearBy(){
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
+                .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .enableAutoManage(this,this)
                 .build();
@@ -213,9 +215,16 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
     public void onStop() {
         unpublish();
         unsubscribe();
+        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
