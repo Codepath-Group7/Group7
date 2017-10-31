@@ -98,22 +98,25 @@ public class HomeFeedFragment extends
     private LinearLayoutManager mFavoriteManager;
     private LinearLayoutManager mTopPicksManager;
 
-    private onGroupShareListener mOnGroupShareListener;
+    private onHomeFeedFragmentListener mOnHomeFeedFragmentListener;
 
     public HomeFeedFragment() {
     }
 
-    public interface onGroupShareListener{
+    public interface onHomeFeedFragmentListener {
         void onGroupShare(Business business);
+        void onSeeAllBtnClick();
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try{
-            mOnGroupShareListener = (onGroupShareListener) activity;
+            mOnHomeFeedFragmentListener = (onHomeFeedFragmentListener) activity;
         }catch (ClassCastException e){
-            Log.e(TAG," Activity must Implement onGroupShareListener");
+            Log.e(TAG," Activity must Implement onHomeFeedFragmentListener");
         }
 
     }
@@ -136,6 +139,10 @@ public class HomeFeedFragment extends
         //initializing top stories recycler view
         mHomeFeedBinding.rvHomeFeed.setAdapter(mTopStoriesAdapter);
         mHomeFeedBinding.rvHomeFeed.setLayoutManager(mTopPicksManager);
+
+        mHomeFeedBinding.btnSeeAll.setOnClickListener(v ->{
+            mOnHomeFeedFragmentListener.onSeeAllBtnClick();
+        });
 
     }
 
@@ -190,7 +197,7 @@ public class HomeFeedFragment extends
                     +lastLoc.getLongitude());
             float distanceBetween = lastLoc.distanceTo(currentLocation);
             Log.d(TAG,"Distance between: " + distanceBetween);
-            //Toast.makeText(getCAc)
+
             if(distanceBetween >= 100){
                 QueryPreferences.storeCurrentLocation(getActivity(),
                         JsonUtils.toJson(currentLocation));
@@ -278,7 +285,7 @@ public class HomeFeedFragment extends
 
         if(requestCode == RC_SHARE_DATA && data != null){
             Business business = data.getParcelableExtra(ShareBottomSheet.EXTRA_BUSINESS);
-            mOnGroupShareListener.onGroupShare(business);
+            mOnHomeFeedFragmentListener.onGroupShare(business);
         }
 
     }
@@ -309,7 +316,7 @@ public class HomeFeedFragment extends
         topPicksListState = mTopPicksManager.onSaveInstanceState();
         outState.putParcelable(FAVORITES_LIST_STATE_KEY,favoritesListState);
         outState.putParcelable(TOP_PICKS_LIST_STATE_KEY,topPicksListState);
-     /*   outState.putParcelableArrayList(FAVORITES_BUSINESSES_KEY,mFavoritesList);
+     /* outState.putParcelableArrayList(FAVORITES_BUSINESSES_KEY,mFavoritesList);
         outState.putParcelableArrayList(TOP_PICKS_BUSINESSES_KEY,mTopPicksList);*/
 
     }

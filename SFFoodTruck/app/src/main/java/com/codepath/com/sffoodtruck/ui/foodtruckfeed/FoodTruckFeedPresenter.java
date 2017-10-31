@@ -47,9 +47,9 @@ implements FoodTruckFeedContract.Presenter{
         mSearchApi = authToken;
     }
     
-    public void initialLoad(String query) { //add query string
+    public void initialLoad(String query, String location) { //add query string
         sInitialLoad = true;
-        loadFoodTruckFeed(null,query,0);
+        loadFoodTruckFeed(location,query,0);
     }
 
 

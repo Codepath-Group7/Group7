@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,9 @@ import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.databinding.FragmentFoodTruckFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.BaseLocationFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
+import com.codepath.com.sffoodtruck.ui.homefeed.FeedAdapter;
+import com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment;
+import com.codepath.com.sffoodtruck.ui.homefeed.ShareBottomSheet;
 import com.codepath.com.sffoodtruck.ui.util.EndlessRecyclerViewScrollListener;
 import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 
@@ -40,12 +44,43 @@ import java.util.List;
 public class FoodTruckFeedFragment extends BaseLocationFragment implements
         FoodTruckFeedContract.MvpView, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String ARG_LOCATION = "ARG_LOCATION";
     private FragmentFoodTruckFeedBinding mBinding;
-    private FoodTruckFeedAdapter mAdapter;
+    private FeedAdapter mAdapter;
     private static final String TAG = FoodTruckFeedFragment.class.getSimpleName();
     private static final String ARG_QUERY = "query";
     private String mQuery = null;
     private static String sLocation = null;
+    private static final int RC_SHARE_DATA = 124;
+    private static final String OPEN_BOTTOM_SHEET = "FoodTruckFeedFragment.REQUEST_TO_OPEN_BOTTOM_SHEET";
+
+    private FeedAdapter.onBusinessItemClickListener mOnBusinessItemClickListener
+            = new FeedAdapter.onBusinessItemClickListener() {
+        @Override
+        public void onClickBusinessItem(Business business, View view) {
+            Intent intent = BusinessDetailActivity
+                    .newIntent(getActivity(),business);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ImageView ivBanner = (ImageView) view.findViewById(R.id.ivBanner);
+                // Call some material design APIs here
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), ivBanner, "businessImage");
+
+                startActivity(intent,options.toBundle());
+            } else {
+                // Implement this feature without material design
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        public void onClickFab(Business business) {
+            BottomSheetDialogFragment shareBottomSheet =
+                    ShareBottomSheet.newInstance(business);
+            shareBottomSheet.setTargetFragment(FoodTruckFeedFragment.this,RC_SHARE_DATA);
+            shareBottomSheet.show(getChildFragmentManager(),OPEN_BOTTOM_SHEET);
+        }
+    };
 
     private SharedPreferences mSharedPreferences;
   
@@ -54,13 +89,15 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     }
 
 
-    public static FoodTruckFeedFragment newInstance(String queryString){
+    public static FoodTruckFeedFragment newInstance(String queryString, String location){
         FoodTruckFeedFragment foodTruckFeedFragment = new FoodTruckFeedFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_QUERY,queryString);
+        bundle.putString(ARG_LOCATION,location);
         foodTruckFeedFragment.setArguments(bundle);
         return foodTruckFeedFragment;
     }
+
 
 
     @Override
@@ -75,8 +112,9 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
         super.onCreate(savedInstanceState);
         if(getArguments()!=null){
             mQuery = getArguments().getString(ARG_QUERY);
+            sLocation = getArguments().getString(ARG_LOCATION);
         }
-        mAdapter = new FoodTruckFeedAdapter(new ArrayList<>());
+        mAdapter = new FeedAdapter(new ArrayList<>(),mOnBusinessItemClickListener);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
@@ -93,14 +131,14 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPresenter().initialLoad(mQuery);
+        getPresenter().initialLoad(mQuery,sLocation);
     }
 
     private void setupRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mBinding.rvFoodTruckFeed.setLayoutManager(layoutManager);
         mBinding.rvFoodTruckFeed.setAdapter(mAdapter);
-        ItemClickSupport.addTo(mBinding.rvFoodTruckFeed)
+        /*ItemClickSupport.addTo(mBinding.rvFoodTruckFeed)
                 .setOnItemClickListener((recyclerView, position, v) ->
                 {
                     Log.d(TAG,"Opening detail view for "
@@ -120,7 +158,7 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
                         startActivity(intent);
                     }
 
-                });
+                });*/
         mBinding.rvFoodTruckFeed.addOnScrollListener
                 (new EndlessRecyclerViewScrollListener(layoutManager){
                     @Override

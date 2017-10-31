@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.homefeed;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = FeedAdapter.class.getSimpleName();
     private List<Business> mBusinesses;
     private onBusinessItemClickListener mListener;
 
@@ -26,7 +28,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onClickFab(Business business);
     }
 
-    FeedAdapter(List<Business> businesses, onBusinessItemClickListener listener){
+    public FeedAdapter(List<Business> businesses, onBusinessItemClickListener listener){
         mBusinesses = businesses;
         mListener = listener;
     }
@@ -56,6 +58,30 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addAll(List<Business> businessList) {
         mBusinesses.addAll(businessList);
         notifyDataSetChanged();
+    }
+
+    public void addData(List<Business> businesses){
+        if(mBusinesses.size() == 0){
+            Log.d(TAG,"Adding data for the first time to the adapter");
+            mBusinesses.addAll(businesses);
+            notifyDataSetChanged();
+            return;
+        }
+        Log.d(TAG,"Appending data to existing list of businesses in the adapter");
+        int oldSize = mBusinesses.size();
+        mBusinesses.addAll(businesses);
+        notifyItemRangeInserted(oldSize, mBusinesses.size());
+    }
+
+    public void clearData(){
+        mBusinesses.clear();
+    }
+
+    public Business getBusinessForPos(int pos){
+        if(pos >= 0 && pos < mBusinesses.size())
+            return mBusinesses.get(pos);
+        else
+            return null;
     }
 
     private class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

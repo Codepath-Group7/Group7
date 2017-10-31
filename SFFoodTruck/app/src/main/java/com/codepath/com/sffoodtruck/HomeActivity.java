@@ -18,9 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import com.codepath.com.sffoodtruck.data.local.DBPayloads;
+import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
+import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByFragment;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
@@ -47,7 +49,7 @@ import io.fabric.sdk.android.Fabric;
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         NearByFragment.onNearByFragmentListener,
-        HomeFeedFragment.onGroupShareListener{
+        HomeFeedFragment.onHomeFeedFragmentListener {
 
     private final static String TAG = HomeActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
@@ -192,8 +194,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnected(@Nullable Bundle bundle) {
         if(isHomeFeedFragment){
             Log.d(TAG,"Calling HomeScreenFragment's setgoogleApi");
-            ((HomeFeedFragment)getOnScreenFragment())
-                    .setGoogleApiClient(mGoogleApiClient);
+            if(getOnScreenFragment() instanceof  HomeFeedFragment){
+                ((HomeFeedFragment)getOnScreenFragment())
+                        .setGoogleApiClient(mGoogleApiClient);
+            }
+
         }else{
             Log.d(TAG,"isHomeFragment is false");
         }
@@ -315,5 +320,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             publish(payload);
         },1000);
 
+    }
+
+    @Override
+    public void onSeeAllBtnClick() {
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                FoodTruckFeedFragment
+                        .newInstance(null, QueryPreferences.getCurrentLocation(this)),R.id.content);
     }
 }
