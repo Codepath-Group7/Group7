@@ -114,6 +114,7 @@
     <string name="share_via_social_media">Share via Social Media</string>
     <string name="share_food_truck">Share via</string>
     <string name="share_food_truck_content">Checkout this amazing food truck \n %1$s</string>
+    <string name="back_to_home">Back To home</string>
 
 
 </resources>

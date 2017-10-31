@@ -49,7 +49,8 @@ import io.fabric.sdk.android.Fabric;
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         NearByFragment.onNearByFragmentListener,
-        HomeFeedFragment.onHomeFeedFragmentListener {
+        HomeFeedFragment.onHomeFeedFragmentListener,
+        FoodTruckFeedFragment.onFoodTruckFeedListener{
 
     private final static String TAG = HomeActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
@@ -61,6 +62,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private final FoodTruckMapFragment mFoodTruckMapFragment = FoodTruckMapFragment.newInstance();
     private boolean isNearByFragment = false;
     private boolean isHomeFeedFragment = false;
+    private BottomNavigationView mBottomNavigationView;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -80,14 +82,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
 
         setSupportActionBar(toolbar);
 
         setUpNearBy();
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         changeFragment(R.id.navigation_home);
 
@@ -314,6 +316,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         MessagePayload payload = mNearByFragment
                                     .getMessagePayload(businessData);
         changeFragment(R.id.navigation_group);
+        mBottomNavigationView.setSelectedItemId(R.id.navigation_group);
         //crashing when called directly
         new Handler().postDelayed(() -> {
             ((NearByFragment)getOnScreenFragment()).addMessagePayload(payload);
@@ -327,5 +330,25 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                 FoodTruckFeedFragment
                         .newInstance(null, QueryPreferences.getCurrentLocation(this)),R.id.content);
+    }
+
+    @Override
+    public void onHomeButtonClick() {
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle(getString(R.string.app_name));
+        }
+        changeFragment(R.id.navigation_home);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getOnScreenFragment() instanceof HomeFeedFragment){
+            super.onBackPressed();
+        }else{
+            changeFragment(R.id.navigation_home);
+            mBottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        }
+
     }
 }
