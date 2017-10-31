@@ -4,23 +4,16 @@ package com.codepath.com.sffoodtruck.ui.homefeed;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,12 +28,8 @@ import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.databinding.FragmentHomeFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
-import com.codepath.com.sffoodtruck.ui.util.BackgroundLocationService;
-import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.codepath.com.sffoodtruck.ui.util.LinePagerIndicatorDecoration;
-import com.codepath.com.sffoodtruck.ui.util.MapUtils;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -62,6 +51,10 @@ public class HomeFeedFragment extends
     private static final int RC_LOCATION = 57;
     private static final int RC_SHARE_DATA = 123;
     private static final String OPEN_BOTTOM_SHEET = "REQUEST_TO_OPEN_BOTTOM_SHEET";
+    private static final String FAVORITES_LIST_STATE_KEY = "HomeFeedFragment.FAVORITES_LIST_STATE_KEY";
+    private static final String TOP_PICKS_LIST_STATE_KEY = "HomeFeedFragment.TOP_PICKS_LIST_STATE_KEY";
+    private static final String FAVORITES_BUSINESSES_KEY = "HomeFeedFragment.FAVORITES_BUSINESS_KEY";
+    private static final String TOP_PICKS_BUSINESSES_KEY = "HomeFeedFragment.TOP_PICKS_BUSINESSES_KEY";
     private FragmentHomeFeedBinding mHomeFeedBinding;
     private FeedAdapter mFavoriteAdapter;
     private FeedAdapter mTopStoriesAdapter;
@@ -96,6 +89,15 @@ public class HomeFeedFragment extends
         }
     };
 
+    private ArrayList<Business> mFavoritesList = new ArrayList<>();
+    private ArrayList<Business> mTopPicksList = new ArrayList<>();
+
+    private Parcelable favoritesListState;
+    private Parcelable topPicksListState;
+
+    private LinearLayoutManager mFavoriteManager;
+    private LinearLayoutManager mTopPicksManager;
+
     private onGroupShareListener mOnGroupShareListener;
 
     public HomeFeedFragment() {
@@ -118,30 +120,34 @@ public class HomeFeedFragment extends
 
     @Override
     public void initializeUI() {
-        mFavoriteAdapter = new FeedAdapter(new ArrayList<>(), mOnBusinessItemClickListener );
-        mTopStoriesAdapter = new FeedAdapter(new ArrayList<>(), mOnBusinessItemClickListener);
+        mFavoriteAdapter = new FeedAdapter(mFavoritesList, mOnBusinessItemClickListener );
+        mTopStoriesAdapter = new FeedAdapter(mTopPicksList, mOnBusinessItemClickListener);
+
+        mFavoriteManager = new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.HORIZONTAL, false);
+
+        mTopPicksManager = new LinearLayoutManager(getActivity());
 
         //initializing favorites recycler view
         mHomeFeedBinding.rvFavorites.setAdapter(mFavoriteAdapter);
-        mHomeFeedBinding.rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.HORIZONTAL, false));
+        mHomeFeedBinding.rvFavorites.setLayoutManager(mFavoriteManager);
         mHomeFeedBinding.rvFavorites.addItemDecoration(new LinePagerIndicatorDecoration());
 
         //initializing top stories recycler view
         mHomeFeedBinding.rvHomeFeed.setAdapter(mTopStoriesAdapter);
-        mHomeFeedBinding.rvHomeFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mHomeFeedBinding.rvHomeFeed.setLayoutManager(mTopPicksManager);
 
     }
 
-
-
     @Override
     public void addFoodTruckList(List<Business> businessList) {
+      //  mTopPicksList.addAll(businessList);
         mTopStoriesAdapter.addAll(businessList);
     }
 
     @Override
     public void addFavoritesFoodTruckList(List<Business> businessList) {
+       // mFavoritesList.addAll(businessList);
         mFavoriteAdapter.addAll(businessList);
     }
 
@@ -239,6 +245,7 @@ public class HomeFeedFragment extends
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mHomeFeedBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_home_feed,container,false);
+
         return mHomeFeedBinding.getRoot();
     }
 
@@ -253,6 +260,15 @@ public class HomeFeedFragment extends
     public void onResume() {
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected()) getPresenter().setUpLocation();
         super.onResume();
+
+        if(favoritesListState != null){
+            mFavoriteManager.onRestoreInstanceState(favoritesListState);
+        }
+
+        if(topPicksListState != null){
+            mTopPicksManager.onRestoreInstanceState(topPicksListState);
+        }
+
     }
 
 
@@ -283,6 +299,22 @@ public class HomeFeedFragment extends
         }
         super.onStop();
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        favoritesListState = mFavoriteManager.onSaveInstanceState();
+        topPicksListState = mTopPicksManager.onSaveInstanceState();
+        outState.putParcelable(FAVORITES_LIST_STATE_KEY,favoritesListState);
+        outState.putParcelable(TOP_PICKS_LIST_STATE_KEY,topPicksListState);
+     /*   outState.putParcelableArrayList(FAVORITES_BUSINESSES_KEY,mFavoritesList);
+        outState.putParcelableArrayList(TOP_PICKS_BUSINESSES_KEY,mTopPicksList);*/
+
+    }
+
+
 
     @Override
     public void onLocationChanged(Location location) {

@@ -81,7 +81,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mBusiness.getName());
         }
-        Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
+        if(!TextUtils.isEmpty(mBusiness.getImageUrl())) Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
         mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
                 BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
 

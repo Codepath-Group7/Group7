@@ -135,11 +135,6 @@ public class FoodTruckFeedFragment extends BaseLocationFragment implements
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        /*if(getPresenter() != null && isAdded()){
-            getPresenter().initialLoad(mQuery); //add query String
-        }else{
-            Log.d("PRESENTER","it is null");
-        }*/
     }
 
     @Override

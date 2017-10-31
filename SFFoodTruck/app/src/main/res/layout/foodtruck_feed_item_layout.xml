@@ -27,8 +27,8 @@
             android:layout_margin="@dimen/margin16"
             app:elevation="@dimen/default_elevation"
             app:pressedTranslationZ="4dp"
-            app:srcCompat="@drawable/ic_share_black_24dp"
-            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_share_black_18px"
+            app:fabSize="mini"
             app:backgroundTint="@color/white"
             android:clickable="true"
             />
