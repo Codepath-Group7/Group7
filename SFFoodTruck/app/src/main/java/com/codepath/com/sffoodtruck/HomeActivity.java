@@ -8,9 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,31 +16,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-
 import com.codepath.com.sffoodtruck.data.local.DBPayloads;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
-import com.codepath.com.sffoodtruck.ui.foodtruckfeed.FoodTruckFeedFragment;
 import com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment;
-import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
-import com.codepath.com.sffoodtruck.ui.nearby.NearByActivity;
 import com.codepath.com.sffoodtruck.ui.nearby.NearByFragment;
 import com.codepath.com.sffoodtruck.ui.search.SearchActivity;
-import com.codepath.com.sffoodtruck.ui.settings.SettingsActivity;
 import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
 import com.codepath.com.sffoodtruck.ui.map.FoodTruckMapFragment;
 import com.codepath.com.sffoodtruck.ui.util.ParcelableUtil;
 import com.codepath.com.sffoodtruck.ui.util.PlayServicesUtil;
 import com.crashlytics.android.Crashlytics;
-
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -51,7 +38,7 @@ import com.google.android.gms.nearby.messages.PublishCallback;
 import com.google.android.gms.nearby.messages.PublishOptions;
 import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 import io.fabric.sdk.android.Fabric;
 
@@ -64,9 +51,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private Message mActiveMessage;
     private MessageListener mMessageListener;
     private final NearByFragment mNearByFragment = new NearByFragment();
-    private final FoodTruckFeedFragment mFoodTruckFeedFragment = FoodTruckFeedFragment.newInstance(null);
+  //  private final FoodTruckFeedFragment mFoodTruckFeedFragment = FoodTruckFeedFragment.newInstance(null);
+    private final HomeFeedFragment mHomeFeedFragment = new HomeFeedFragment();
     private final FoodTruckMapFragment mFoodTruckMapFragment = FoodTruckMapFragment.newInstance();
     private boolean isNearByFragment = false;
+    private boolean isHomeFeedFragment = false;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -138,12 +127,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         Fragment newFragment = null;
 
         isNearByFragment = false;
+        isHomeFeedFragment = false;
         switch (itemViewId) {
             case R.id.navigation_map:
                 newFragment = mFoodTruckMapFragment;
                 break;
             case R.id.navigation_home:
-                newFragment = new HomeFeedFragment();
+                newFragment = mHomeFeedFragment;
+                isHomeFeedFragment = true;
                 break;
             case R.id.navigation_group:
                 newFragment = mNearByFragment;
@@ -196,6 +187,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        if(isHomeFeedFragment){
+            Log.d(TAG,"Calling HomeScreenFragment's setgoogleApi");
+            ((HomeFeedFragment)getOnScreenFragment())
+                    .setGoogleApiClient(mGoogleApiClient);
+        }else{
+            Log.d(TAG,"isHomeFragment is false");
+        }
         subscribe();
     }
 
@@ -225,7 +223,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onStop() {
         unpublish();
         unsubscribe();
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient.isConnected()) mGoogleApiClient.disconnect();
         super.onStop();
     }
 

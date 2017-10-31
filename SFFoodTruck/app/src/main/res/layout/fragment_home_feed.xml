@@ -31,7 +31,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/favorites_title"
                     style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_margin="@dimen/margin16"
+                    android:layout_marginStart="@dimen/margin16"
+                    android:layout_marginLeft="@dimen/margin16"
+                    android:layout_marginTop="@dimen/margin16"
                     />
 
                     <com.codepath.com.sffoodtruck.ui.util.SnappyRecyclerView
