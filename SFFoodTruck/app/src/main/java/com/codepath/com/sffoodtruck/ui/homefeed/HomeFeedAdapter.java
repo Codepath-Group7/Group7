@@ -30,4 +30,11 @@ public class HomeFeedAdapter extends UserProfileBaseAdapter<Business> {
     public int getItemCount() {
         return mBusinesses.size();
     }
+
+    public Business getBusinessForPos(int pos){
+        if(pos >= 0 && pos < mBusinesses.size())
+            return mBusinesses.get(pos);
+        else
+            return null;
+    }
 }

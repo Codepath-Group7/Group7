@@ -17,8 +17,7 @@ public class HomeFeedContract {
 
     interface MvpView extends MvpBaseView{
         void initializeUI();
-        void appendFoodTruckList(List<Business> businessList);
-        void addInitialFoodTruckList(List<Business> businessList);
+        void addFoodTruckList(List<Business> businessList);
         void addFavoritesFoodTruckList(List<Business> businessList);
         void getLastKnownLocation();
         void startLocationUpdates(LocationRequest locationRequest);
@@ -32,6 +31,5 @@ public class HomeFeedContract {
         void loadFoodTruckFeed(String location);
         void loadFavorites();
         void updateLocation(String location);
-
     }
 }

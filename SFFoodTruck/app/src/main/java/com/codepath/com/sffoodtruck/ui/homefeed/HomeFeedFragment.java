@@ -2,27 +2,36 @@ package com.codepath.com.sffoodtruck.ui.homefeed;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
+import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.databinding.FragmentHomeFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
+import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.codepath.com.sffoodtruck.ui.util.LinePagerIndicatorDecoration;
 import com.codepath.com.sffoodtruck.ui.util.MapUtils;
@@ -48,6 +57,7 @@ public class HomeFeedFragment extends
     private static final int RC_LOCATION = 57;
     private FragmentHomeFeedBinding mHomeFeedBinding;
     private HomeFeedAdapter mFavoriteAdapter;
+    private HomeFeedAdapter mTopStoriesAdapter;
     private static final String TAG = HomeFeedFragment.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation = null;
@@ -58,20 +68,48 @@ public class HomeFeedFragment extends
 
     @Override
     public void initializeUI() {
+        mFavoriteAdapter = new HomeFeedAdapter(new ArrayList<>());
+        mTopStoriesAdapter = new HomeFeedAdapter(new ArrayList<>());
+
+        //initializing favorites recycler view
         mHomeFeedBinding.rvFavorites.setAdapter(mFavoriteAdapter);
         mHomeFeedBinding.rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.HORIZONTAL, false));
         mHomeFeedBinding.rvFavorites.addItemDecoration(new LinePagerIndicatorDecoration());
+        ItemClickSupport.addTo(mHomeFeedBinding.rvFavorites)
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    openBusinessDetail(mFavoriteAdapter,position,v);
+                });
+
+        //initializing top stories recycler view
+        mHomeFeedBinding.rvHomeFeed.setAdapter(mTopStoriesAdapter);
+        mHomeFeedBinding.rvHomeFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ItemClickSupport.addTo(mHomeFeedBinding.rvHomeFeed)
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    openBusinessDetail(mTopStoriesAdapter,position,v);
+                });
+    }
+
+    private void openBusinessDetail(HomeFeedAdapter homeFeedAdapter, int position, View v){
+        Intent intent = BusinessDetailActivity
+                .newIntent(getActivity(),homeFeedAdapter.getBusinessForPos(position));
+        // Check if we're running on Android 5.0 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Call some material design APIs here
+            ImageView ivBanner = (ImageView) v.findViewById(R.id.ivBanner);
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(getActivity(), ivBanner, "businessImage");
+
+            startActivity(intent,options.toBundle());
+        } else {
+            // Implement this feature without material design
+            startActivity(intent);
+        }
     }
 
     @Override
-    public void appendFoodTruckList(List<Business> businessList) {
-
-    }
-
-    @Override
-    public void addInitialFoodTruckList(List<Business> businessList) {
-
+    public void addFoodTruckList(List<Business> businessList) {
+        mTopStoriesAdapter.addAll(businessList);
     }
 
     @Override
@@ -94,7 +132,9 @@ public class HomeFeedFragment extends
                 storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");
+                if(mTopStoriesAdapter.getItemCount() == 0)  getPresenter().loadFoodTruckFeed(null);
             }
+
         }else{
             Log.d(TAG,"Requesting for permissions: ");
             EasyPermissions.requestPermissions(getActivity(),
@@ -102,7 +142,6 @@ public class HomeFeedFragment extends
         }
 
     }
-
 
     private void storeCurrentLocation(Location currentLocation){
         String storedLastLocation = QueryPreferences.getCurrentLocation(getActivity());
@@ -119,9 +158,13 @@ public class HomeFeedFragment extends
             if(distanceBetween >= 100){
                 QueryPreferences.storeCurrentLocation(getActivity(),
                         JsonUtils.toJson(currentLocation));
+                getPresenter().loadFoodTruckFeed(JsonUtils.toJson(currentLocation));
                 Log.d(TAG,"Updating the stored location with: "
                         + JsonUtils.toJson(currentLocation));
             }else{
+                if(mTopStoriesAdapter.getItemCount() <= 0){
+                    getPresenter().loadFoodTruckFeed(JsonUtils.toJson(currentLocation));
+                }
                 Log.d(TAG,"current location and stored location are less than 150 meters apart");
             }
         }
@@ -155,14 +198,11 @@ public class HomeFeedFragment extends
 
     @Override
     public HomeFeedContract.Presenter createPresenter() {
-        return new HomeFeedPresenter();
+        SearchApi services = RetrofitClient
+                .createService(SearchApi.class,getActivity());
+        return new HomeFeedPresenter(services);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mFavoriteAdapter = new HomeFeedAdapter(new ArrayList<>());
-    }
 
     @Nullable
     @Override
