@@ -18,6 +18,9 @@ public interface FoodTruckFeedContract {
     interface MvpView extends MvpBaseView{
         void appendFoodTruckList(List<Business> businessList);
         void loadInitialFoodTruckList(List<Business> businessList);
+        void showProgress();
+        void hideProgress();
+        void showNoResultFound();
     }
 
 

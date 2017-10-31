@@ -237,6 +237,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
 
         Intent intent = BusinessDetailActivity.newIntent(getContext()
                 , viewModel.getBusiness());
+        intent.putExtra(BusinessDetailActivity.EXTRA_ANIM,false);
         startActivity(intent);
         getActivity().overridePendingTransition(
                 R.anim.slide_up, R.anim.hold);
