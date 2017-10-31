@@ -136,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|end"
                         android:padding="@dimen/padding8"
-                        android:text="@{String.format(`%s ft`,obj.distance)}"
+                        android:text="@{obj.distanceInString}"
                         android:textColor="@color/colorTextColor"
                         tools:text="@string/distance"
                         android:layout_alignParentEnd="true"
@@ -144,7 +144,6 @@
                         android:layout_alignBaseline="@id/tvRatings"
                         />
                 </RelativeLayout>
-
 
 
             </FrameLayout>
