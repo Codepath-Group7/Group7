@@ -123,6 +123,7 @@ public class HomeFeedFragment extends
 
     @Override
     public void initializeUI() {
+
         mFavoriteAdapter = new FeedAdapter(mFavoritesList, mOnBusinessItemClickListener );
         mTopStoriesAdapter = new FeedAdapter(mTopPicksList, mOnBusinessItemClickListener);
 
@@ -143,6 +144,10 @@ public class HomeFeedFragment extends
         mHomeFeedBinding.btnSeeAll.setOnClickListener(v ->{
             mOnHomeFeedFragmentListener.onSeeAllBtnClick();
         });
+
+        if(mFavoriteAdapter.getItemCount() == 0 || mTopStoriesAdapter.getItemCount() == 0){
+            showProgressBar();
+        }
 
     }
 

@@ -54,7 +54,6 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
     @Override
     public void initialLoad(String query) {
         getView().initializeUI();
-        getView().showProgressBar();
     }
 
     @Override

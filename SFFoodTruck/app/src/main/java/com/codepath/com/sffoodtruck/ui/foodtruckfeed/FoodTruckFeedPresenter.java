@@ -49,7 +49,7 @@ implements FoodTruckFeedContract.Presenter{
     
     public void initialLoad(String query, String location) { //add query string
         sInitialLoad = true;
-        loadFoodTruckFeed(location,query,0
+        loadFoodTruckFeed(location,query,0);
         getView().showProgress();
 
     }
