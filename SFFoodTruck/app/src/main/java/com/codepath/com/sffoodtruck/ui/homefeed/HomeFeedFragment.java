@@ -292,7 +292,7 @@ public class HomeFeedFragment extends
             storeCurrentLocation(mLastLocation);
             Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                     +mLastLocation.getLongitude());
-            mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+           // mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
         }else{
             Log.d(TAG,"On Location received got null");
         }
