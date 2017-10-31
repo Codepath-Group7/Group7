@@ -31,6 +31,7 @@ import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.databinding.FragmentHomeFeedBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.BusinessDetailActivity;
+import com.codepath.com.sffoodtruck.ui.util.BackgroundLocationService;
 import com.codepath.com.sffoodtruck.ui.util.ItemClickSupport;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.codepath.com.sffoodtruck.ui.util.LinePagerIndicatorDecoration;
@@ -132,7 +133,9 @@ public class HomeFeedFragment extends
                 storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");
-                if(mTopStoriesAdapter.getItemCount() == 0)  getPresenter().loadFoodTruckFeed(null);
+                if(mTopStoriesAdapter.getItemCount() == 0){
+                   getPresenter().updateLocation(QueryPreferences.getLocationPref(getActivity()));
+                }
             }
 
         }else{
@@ -158,12 +161,12 @@ public class HomeFeedFragment extends
             if(distanceBetween >= 100){
                 QueryPreferences.storeCurrentLocation(getActivity(),
                         JsonUtils.toJson(currentLocation));
-                getPresenter().loadFoodTruckFeed(JsonUtils.toJson(currentLocation));
+                getPresenter().updateLocation(JsonUtils.toJson(currentLocation));
                 Log.d(TAG,"Updating the stored location with: "
                         + JsonUtils.toJson(currentLocation));
             }else{
                 if(mTopStoriesAdapter.getItemCount() <= 0){
-                    getPresenter().loadFoodTruckFeed(JsonUtils.toJson(currentLocation));
+                    getPresenter().updateLocation(JsonUtils.toJson(currentLocation));
                 }
                 Log.d(TAG,"current location and stored location are less than 150 meters apart");
             }
@@ -182,6 +185,7 @@ public class HomeFeedFragment extends
                     .requestLocationUpdates(mGoogleApiClient, locationRequest, this)
                     .setResultCallback(status -> Log.d(TAG,"Status of requesting location update is: "
                             + status.getStatusMessage()));
+           // getActivity().startService(new Intent(getActivity(), BackgroundLocationService.class));
         }else{
             Log.d(TAG,"Requesting for permissions: ");
             EasyPermissions.requestPermissions(getActivity(),

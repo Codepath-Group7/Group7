@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,11 +31,12 @@ public class LoadImageBindingAdapter {
     @BindingAdapter({"bind:imageUrl","bind:error"})
     public static void loadImageUrl(ImageView view, String url, Drawable error){
         Log.d("Adapter","This method is being called with : " + url);
-        Picasso.with(view.getContext())
-                .load(url)
-                .fit()
-                .error(error)
-                .into(view);
+        if(!TextUtils.isEmpty(url))
+            Picasso.with(view.getContext())
+                    .load(url)
+                    .fit()
+                    .error(error)
+                    .into(view);
     }
     @BindingAdapter({"bind:imageUrl"})
     public static void loadSmallImage(ImageView view, String url){

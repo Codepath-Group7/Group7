@@ -69,6 +69,15 @@
                             android:nestedScrollingEnabled="false"/>
                     </android.support.v4.widget.NestedScrollView>
 
+                <Button
+                    android:id="@+id/btnSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin16"
+                    android:layout_gravity="center"
+                    android:text="@string/see_all_text"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+
             </LinearLayout>
 
         </ScrollView>

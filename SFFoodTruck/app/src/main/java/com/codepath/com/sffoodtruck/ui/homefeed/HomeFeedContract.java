@@ -29,7 +29,7 @@ public class HomeFeedContract {
         void setUpLocation();
         void stopLocationUpdates();
         void loadFoodTruckFeed(String location);
-        void loadFavorites();
+        void loadFavorites(String location);
         void updateLocation(String location);
     }
 }
