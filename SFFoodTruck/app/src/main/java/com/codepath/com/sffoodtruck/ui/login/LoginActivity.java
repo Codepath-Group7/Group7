@@ -3,6 +3,7 @@ package com.codepath.com.sffoodtruck.ui.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanJungleDEMO.otf");
+        mBinding.tvAppName.setTypeface(font);
 
         /*
         Start of Facebook Login

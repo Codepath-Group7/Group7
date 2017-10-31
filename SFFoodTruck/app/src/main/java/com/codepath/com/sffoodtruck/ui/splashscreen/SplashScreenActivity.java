@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
@@ -115,6 +117,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         splashScreenIcon = findViewById(R.id.splashScreenIcon);
         splashScreenIcon.setVisibility(View.INVISIBLE);
 
+        TextView textView = (TextView) findViewById(R.id.splashScreenText);
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanJungleDEMO.otf");
+        textView.setTypeface(font);
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
