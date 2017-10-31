@@ -40,6 +40,8 @@
                 android:background="@drawable/ic_chat_bubble_outline_black_48dp"
                 android:layout_gravity="start"
                 android:gravity="start"
+                android:autoLink="all"
+                android:linksClickable="true"
                 android:textColor="@color/colorTextColor"
                 tools:text="Hello hello"
                 />
@@ -51,6 +53,8 @@
                 android:background="@drawable/ic_chat_bubble_outline_black_48dp_right"
                 android:layout_gravity="end"
                 android:gravity="end"
+                android:autoLink="all"
+                android:linksClickable="true"
                 tools:text="Hello"
                 android:textColor="@color/colorTextColor"
                 />

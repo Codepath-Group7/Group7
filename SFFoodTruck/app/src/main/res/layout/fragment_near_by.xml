@@ -12,7 +12,9 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_marginStart="@dimen/margin8"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/margin8">
 
             <EditText
                 android:id="@+id/etSendMessage"

@@ -104,18 +104,24 @@ public class NearByFragment extends Fragment {
 
 
     private void publish(String message){
-        MessagePayload payload = new MessagePayload();
         if(mFirebaseUser == null || TextUtils.isEmpty(message)) return;
-        payload.setUserId(mFirebaseUser.getUid());
-        payload.setMessage(message);
-        payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
-        payload.setUserName(mFirebaseUser.getDisplayName());
-        payload.setUserEmail(mFirebaseUser.getEmail());
+        MessagePayload payload = getMessagePayload(message);
         Log.d(TAG,"Sending the payload to HomeActivity" + payload);
         mAdapter.addMessagePayload(payload);
         mBinding.rvGroupChat.smoothScrollToPosition(0);
         mNearByFragmentListener.onSendClick(payload);
         mBinding.etSendMessage.setText("");
+    }
+
+    public MessagePayload getMessagePayload(String message){
+        MessagePayload payload = new MessagePayload();
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        payload.setUserId(mFirebaseUser.getUid());
+        payload.setMessage(message);
+        payload.setImageUrl(mFirebaseUser.getPhotoUrl() + "");
+        payload.setUserName(mFirebaseUser.getDisplayName());
+        payload.setUserEmail(mFirebaseUser.getEmail());
+        return payload;
     }
 
     public void publishSuccessful(boolean result, UUID messageId) {

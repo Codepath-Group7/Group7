@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import com.codepath.com.sffoodtruck.data.local.DBPayloads;
+import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.infrastructure.service.FirebaseRegistrationIntentService;
 import com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment;
@@ -44,7 +46,8 @@ import io.fabric.sdk.android.Fabric;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        NearByFragment.onNearByFragmentListener {
+        NearByFragment.onNearByFragmentListener,
+        HomeFeedFragment.onGroupShareListener{
 
     private final static String TAG = HomeActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
@@ -273,6 +276,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                     //Checking whether the onscreen fragment is NearByFragment or not
                     if(isNearByFragment){
+                       /* DBPayloads.getInstance().storeMessagePayload(payload);*/
                         ((NearByFragment)getOnScreenFragment())
                                 .publishSuccessful(isPublishSuccess,payload.getUUID());
                     }
@@ -297,5 +301,19 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private Fragment getOnScreenFragment(){
         return getSupportFragmentManager().findFragmentById(R.id.content);
+    }
+
+    @Override
+    public void onGroupShare(Business business) {
+        String businessData = getString(R.string.share_food_truck_content,business.getUrl());
+        MessagePayload payload = mNearByFragment
+                                    .getMessagePayload(businessData);
+        changeFragment(R.id.navigation_group);
+        //crashing when called directly
+        new Handler().postDelayed(() -> {
+            ((NearByFragment)getOnScreenFragment()).addMessagePayload(payload);
+            publish(payload);
+        },1000);
+
     }
 }

@@ -2,6 +2,7 @@ package com.codepath.com.sffoodtruck.ui.homefeed;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -10,9 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
@@ -56,6 +60,8 @@ public class HomeFeedFragment extends
         implements HomeFeedContract.MvpView,LocationListener {
 
     private static final int RC_LOCATION = 57;
+    private static final int RC_SHARE_DATA = 123;
+    private static final String OPEN_BOTTOM_SHEET = "REQUEST_TO_OPEN_BOTTOM_SHEET";
     private FragmentHomeFeedBinding mHomeFeedBinding;
     private HomeFeedAdapter mFavoriteAdapter;
     private HomeFeedAdapter mTopStoriesAdapter;
@@ -64,7 +70,24 @@ public class HomeFeedFragment extends
     private Location mLastLocation = null;
     private String mLocationAddress;
 
+    private onGroupShareListener mOnGroupShareListener;
+
     public HomeFeedFragment() {
+    }
+
+    public interface onGroupShareListener{
+        void onGroupShare(Business business);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try{
+            mOnGroupShareListener = (onGroupShareListener) activity;
+        }catch (ClassCastException e){
+            Log.e(TAG," Activity must Implement onGroupShareListener");
+        }
+
     }
 
     @Override
@@ -94,6 +117,15 @@ public class HomeFeedFragment extends
     private void openBusinessDetail(HomeFeedAdapter homeFeedAdapter, int position, View v){
         Intent intent = BusinessDetailActivity
                 .newIntent(getActivity(),homeFeedAdapter.getBusinessForPos(position));
+
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            BottomSheetDialogFragment shareBottomSheet =
+                    ShareBottomSheet.newInstance(homeFeedAdapter.getBusinessForPos(position));
+            shareBottomSheet.setTargetFragment(HomeFeedFragment.this,RC_SHARE_DATA);
+            shareBottomSheet.show(getChildFragmentManager(),OPEN_BOTTOM_SHEET);
+        });
+
         // Check if we're running on Android 5.0 or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Call some material design APIs here
@@ -226,6 +258,18 @@ public class HomeFeedFragment extends
     public void onResume() {
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected()) getPresenter().setUpLocation();
         super.onResume();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) return;
+
+        if(requestCode == RC_SHARE_DATA && data != null){
+            Business business = data.getParcelableExtra(ShareBottomSheet.EXTRA_BUSINESS);
+            mOnGroupShareListener.onGroupShare(business);
+        }
+
     }
 
     public void setGoogleApiClient(GoogleApiClient googleApiClient){
