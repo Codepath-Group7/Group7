@@ -135,6 +135,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         isNearByFragment = false;
         isHomeFeedFragment = false;
+        setToolbarTitle();
         switch (itemViewId) {
             case R.id.navigation_map:
                 newFragment = mFoodTruckMapFragment;
@@ -334,10 +335,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onHomeButtonClick() {
-        if(getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setTitle(getString(R.string.app_name));
-        }
         changeFragment(R.id.navigation_home);
     }
 
@@ -350,5 +347,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             mBottomNavigationView.setSelectedItemId(R.id.navigation_home);
         }
 
+    }
+
+    private void setToolbarTitle(){
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle(getString(R.string.app_name));
+        }
     }
 }

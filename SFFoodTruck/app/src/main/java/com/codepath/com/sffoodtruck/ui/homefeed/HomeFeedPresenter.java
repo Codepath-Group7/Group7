@@ -1,9 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.homefeed;
 
 import android.location.Location;
-import android.text.TextUtils;
 import android.util.Log;
-
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
@@ -11,14 +9,11 @@ import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
-import com.codepath.com.sffoodtruck.ui.util.MapUtils;
 import com.google.android.gms.location.LocationRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +54,7 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
     @Override
     public void initialLoad(String query) {
         getView().initializeUI();
+        getView().showProgressBar();
     }
 
     @Override
@@ -108,12 +104,14 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                 List<Business> businesses = searchResults.getBusinesses();
 
                 getView().addFoodTruckList(businesses);
+                getView().hideProgressBar();
 
             }
 
             @Override
             public void onFailure(Call<SearchResults> call, Throwable t) {
                 Log.e(TAG, "response has failed " ,t );
+                getView().hideProgressBar();
             }
         });
     }
@@ -126,6 +124,10 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getChildrenCount() == 0) {
+                                getView().hideFavorites();
+                                return;
+                            }
                             LinkedList<Business> businesses = new LinkedList<>();
 
                             Location loc = JsonUtils.fromJson(location,Location.class);
@@ -171,6 +173,8 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
 
                         }
                     });
+        }else{
+            getView().hideFavorites();
         }
     }
 

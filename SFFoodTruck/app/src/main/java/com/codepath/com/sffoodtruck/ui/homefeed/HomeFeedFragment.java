@@ -146,15 +146,17 @@ public class HomeFeedFragment extends
 
     }
 
+
+
     @Override
     public void addFoodTruckList(List<Business> businessList) {
-      //  mTopPicksList.addAll(businessList);
+        if(mTopStoriesAdapter.getItemCount() > 0) return;
         mTopStoriesAdapter.addAll(businessList);
     }
 
     @Override
     public void addFavoritesFoodTruckList(List<Business> businessList) {
-       // mFavoritesList.addAll(businessList);
+        if(mFavoriteAdapter.getItemCount() > 0) return;
         mFavoriteAdapter.addAll(businessList);
     }
 
@@ -238,6 +240,25 @@ public class HomeFeedFragment extends
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+    }
+
+    @Override
+    public void showProgressBar() {
+        mHomeFeedBinding.svHomeFeed.setVisibility(View.GONE);
+        mHomeFeedBinding.progressBar.setVisibility(View.VISIBLE);
+        mHomeFeedBinding.btnSeeAll.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mHomeFeedBinding.svHomeFeed.setVisibility(View.VISIBLE);
+        mHomeFeedBinding.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideFavorites() {
+        mHomeFeedBinding.tvFavorites.setVisibility(View.GONE);
+        mHomeFeedBinding.rvFavorites.setVisibility(View.GONE);
     }
 
     @Override

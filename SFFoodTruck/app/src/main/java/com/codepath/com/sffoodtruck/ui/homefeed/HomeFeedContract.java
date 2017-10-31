@@ -22,6 +22,11 @@ public class HomeFeedContract {
         void getLastKnownLocation();
         void startLocationUpdates(LocationRequest locationRequest);
         void stopLocationUpdates();
+
+        void showProgressBar();
+        void hideProgressBar();
+
+        void hideFavorites();
     }
 
     interface Presenter extends MvpBasePresenter<MvpView> {
