@@ -144,8 +144,6 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                                 return 0;
                             });
 
-
-
                             for(DataSnapshot businessSnapshot : dataSnapshot.getChildren()){
                                 Business business = businessSnapshot.getValue(Business.class);
                                 if(business != null){
@@ -157,12 +155,13 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                                     }
 
                                     businessQueue.add(business);
-                                    //businesses.addLast(business);
                                 }
                             }
-                            for(int i = 5 ; i >=0; i--){
-                                businesses.add(businessQueue.poll());
+
+                            while(businesses.size() <= 5 && businessQueue.size() > 0 ){
+                                businesses.addFirst(businessQueue.poll());
                             }
+
                             getView().addFavoritesFoodTruckList(businesses);
 
                         }

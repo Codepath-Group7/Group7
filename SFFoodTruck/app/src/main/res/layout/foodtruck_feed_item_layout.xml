@@ -18,6 +18,23 @@
         app:cardElevation="@dimen/default_elevation"
         app:cardCornerRadius="@dimen/cardview_corner_radius">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding8"
+            android:textColor="@color/colorTextColor"
+            tools:text="@string/distance"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/margin16"
+            app:elevation="@dimen/default_elevation"
+            app:pressedTranslationZ="4dp"
+            app:srcCompat="@drawable/ic_share_black_24dp"
+            app:fabSize="normal"
+            app:backgroundTint="@color/white"
+            android:clickable="true"
+            />
+
 
         <RelativeLayout
             android:id="@+id/rlFoodTruckFeedItem"
@@ -37,25 +54,36 @@
                     style="@style/AppTheme.DetailView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bannerImage"
+                    android:foreground="#5a212121"
                     android:src="@color/colorPrimary"
                     android:transitionName="businessImage"
                     app:error="@{@drawable/placeholder_1000x200}"
-                    android:foreground="#5a212121"
                     app:imageUrl="@{obj.imageUrl}"
                     />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/tvCuisineType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
                     android:padding="@dimen/padding8"
                     android:text="@{obj.category ?? ` `}"
-                    tools:text="@string/cuisine_type"
-                    android:layout_gravity="top|end"
                     android:textColor="@color/colorTextColor"
+                    tools:text="@string/cuisine_type"
+                    />-->
+
+                <TextView
+                    android:id="@+id/tvDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:padding="@dimen/padding8"
+                    android:text="@{obj.distanceInString}"
+                    android:textColor="@color/colorTextColor"
+                    tools:text="@string/distance"
                     />
 
-               <!-- <LinearLayout
+                <!-- <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -87,20 +115,19 @@
                     android:layout_gravity="bottom">
 
 
-
                     <TextView
                         android:id="@+id/tvBusinessTitle"
                         style="@style/Base.TextAppearance.AppCompat.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|start"
+                        android:layout_alignLeft="@+id/rbFoodTruckRating"
 
+                        android:layout_alignParentTop="true"
+                        android:layout_alignStart="@+id/rbFoodTruckRating"
+                        android:layout_gravity="bottom|start"
                         android:text="@{obj.name}"
                         android:textColor="@color/colorTextColor"
-                        tools:text="@string/food_truck_title"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignLeft="@+id/rbFoodTruckRating"
-                        android:layout_alignStart="@+id/rbFoodTruckRating"/>
+                        tools:text="@string/food_truck_title"/>
 
                     <android.support.v7.widget.AppCompatRatingBar
                         android:id="@+id/rbFoodTruckRating"
@@ -120,36 +147,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/rbFoodTruckRating"
-                        android:padding="@dimen/padding8"
                         android:layout_below="@id/tvBusinessTitle"
                         android:layout_marginLeft="@dimen/margin8"
                         android:layout_marginStart="@dimen/margin8"
                         android:layout_toEndOf="@+id/rbFoodTruckRating"
                         android:layout_toRightOf="@+id/rbFoodTruckRating"
+                        android:padding="@dimen/padding8"
                         android:text="@{String.format(`%s reviews`,obj.reviewCount)}"
                         android:textColor="@color/colorTextColor"
                         tools:text="@string/number_of_reviews_text"/>
 
-                    <TextView
-                        android:id="@+id/tvDistance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end"
-                        android:padding="@dimen/padding8"
-                        android:text="@{obj.distanceInString}"
-                        android:textColor="@color/colorTextColor"
-                        tools:text="@string/distance"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignBaseline="@id/tvRatings"
-                        />
                 </RelativeLayout>
 
 
             </FrameLayout>
 
 
-            <LinearLayout
+            <!-- <LinearLayout
                 android:id="@+id/llLikeAndShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -176,24 +190,21 @@
                     android:foreground="?attr/selectableItemBackground"
 
                     />
-            </LinearLayout>
+            </LinearLayout>-->
+
 
             <TextView
-                android:id="@+id/tvBusinessAddress"
+                android:id="@+id/tvCuisineType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/flBgImage"
-                tools:text="@string/tools_business_address"
-                android:padding="@dimen/margin8"
-                android:layout_toStartOf="@id/llLikeAndShare"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/llLikeAndShare"
-                android:text="@{obj.location.completeAddress}"
-                android:layout_alignBaseline="@id/llLikeAndShare"/>
-
-
-
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/flBgImage"
+                android:minLines="1"
+                android:ellipsize="end"
+                android:padding="@dimen/margin8"
+                android:text="@{obj.category ?? `Food Truck`}"
+                tools:text="@string/cuisine_type"/>
 
 
         </RelativeLayout>
