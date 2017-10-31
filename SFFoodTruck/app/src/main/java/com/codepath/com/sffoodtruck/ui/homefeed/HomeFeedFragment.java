@@ -63,12 +63,38 @@ public class HomeFeedFragment extends
     private static final int RC_SHARE_DATA = 123;
     private static final String OPEN_BOTTOM_SHEET = "REQUEST_TO_OPEN_BOTTOM_SHEET";
     private FragmentHomeFeedBinding mHomeFeedBinding;
-    private HomeFeedAdapter mFavoriteAdapter;
-    private HomeFeedAdapter mTopStoriesAdapter;
+    private FeedAdapter mFavoriteAdapter;
+    private FeedAdapter mTopStoriesAdapter;
     private static final String TAG = HomeFeedFragment.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation = null;
-    private String mLocationAddress;
+    private FeedAdapter.onBusinessItemClickListener mOnBusinessItemClickListener
+            = new FeedAdapter.onBusinessItemClickListener() {
+        @Override
+        public void onClickBusinessItem(Business business, View view) {
+            Intent intent = BusinessDetailActivity
+                    .newIntent(getActivity(),business);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ImageView ivBanner = (ImageView) view.findViewById(R.id.ivBanner);
+                // Call some material design APIs here
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), ivBanner, "businessImage");
+
+                startActivity(intent,options.toBundle());
+            } else {
+                // Implement this feature without material design
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        public void onClickFab(Business business) {
+            BottomSheetDialogFragment shareBottomSheet =
+                    ShareBottomSheet.newInstance(business);
+            shareBottomSheet.setTargetFragment(HomeFeedFragment.this,RC_SHARE_DATA);
+            shareBottomSheet.show(getChildFragmentManager(),OPEN_BOTTOM_SHEET);
+        }
+    };
 
     private onGroupShareListener mOnGroupShareListener;
 
@@ -92,53 +118,22 @@ public class HomeFeedFragment extends
 
     @Override
     public void initializeUI() {
-        mFavoriteAdapter = new HomeFeedAdapter(new ArrayList<>());
-        mTopStoriesAdapter = new HomeFeedAdapter(new ArrayList<>());
+        mFavoriteAdapter = new FeedAdapter(new ArrayList<>(), mOnBusinessItemClickListener );
+        mTopStoriesAdapter = new FeedAdapter(new ArrayList<>(), mOnBusinessItemClickListener);
 
         //initializing favorites recycler view
         mHomeFeedBinding.rvFavorites.setAdapter(mFavoriteAdapter);
         mHomeFeedBinding.rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.HORIZONTAL, false));
         mHomeFeedBinding.rvFavorites.addItemDecoration(new LinePagerIndicatorDecoration());
-        ItemClickSupport.addTo(mHomeFeedBinding.rvFavorites)
-                .setOnItemClickListener((recyclerView, position, v) -> {
-                    openBusinessDetail(mFavoriteAdapter,position,v);
-                });
 
         //initializing top stories recycler view
         mHomeFeedBinding.rvHomeFeed.setAdapter(mTopStoriesAdapter);
         mHomeFeedBinding.rvHomeFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
-        ItemClickSupport.addTo(mHomeFeedBinding.rvHomeFeed)
-                .setOnItemClickListener((recyclerView, position, v) -> {
-                    openBusinessDetail(mTopStoriesAdapter,position,v);
-                });
+
     }
 
-    private void openBusinessDetail(HomeFeedAdapter homeFeedAdapter, int position, View v){
-        Intent intent = BusinessDetailActivity
-                .newIntent(getActivity(),homeFeedAdapter.getBusinessForPos(position));
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            BottomSheetDialogFragment shareBottomSheet =
-                    ShareBottomSheet.newInstance(homeFeedAdapter.getBusinessForPos(position));
-            shareBottomSheet.setTargetFragment(HomeFeedFragment.this,RC_SHARE_DATA);
-            shareBottomSheet.show(getChildFragmentManager(),OPEN_BOTTOM_SHEET);
-        });
-
-        // Check if we're running on Android 5.0 or higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Call some material design APIs here
-            ImageView ivBanner = (ImageView) v.findViewById(R.id.ivBanner);
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(getActivity(), ivBanner, "businessImage");
-
-            startActivity(intent,options.toBundle());
-        } else {
-            // Implement this feature without material design
-            startActivity(intent);
-        }
-    }
 
     @Override
     public void addFoodTruckList(List<Business> businessList) {
@@ -161,7 +156,7 @@ public class HomeFeedFragment extends
             if(mLastLocation != null){
                 Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                         +mLastLocation.getLongitude());
-                mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
+               // mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
                 storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");

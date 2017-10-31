@@ -13,8 +13,6 @@
         android:layout_marginLeft="@dimen/margin16"
         android:layout_marginTop="@dimen/margin16"
         android:layout_marginBottom="@dimen/margin8"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
         app:cardElevation="@dimen/default_elevation"
         app:cardCornerRadius="@dimen/cardview_corner_radius">
 
@@ -40,6 +38,8 @@
             android:id="@+id/rlFoodTruckFeedItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
             android:layout_marginBottom="@dimen/margin4"
             android:orientation="vertical">
 

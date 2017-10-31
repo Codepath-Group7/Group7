@@ -53,13 +53,17 @@ public class ShareBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding.btnGroup.setOnClickListener(v-> sendResults(mBusiness));
+        mBinding.btnGroup.setOnClickListener(v-> {
+            sendResults(mBusiness);
+            dismiss();
+        });
         mBinding.btnSocialMedia.setOnClickListener(v -> {
             ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(getActivity());
             intentBuilder.setType("text/plain");
             intentBuilder.setChooserTitle(getString(R.string.share_food_truck));
             intentBuilder.setText(getString(R.string.share_food_truck_content,mBusiness.getUrl()));
             startActivity(intentBuilder.createChooserIntent());
+            dismiss();
         });
     }
 
