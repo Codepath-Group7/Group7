@@ -6,6 +6,14 @@
         <variable
             name="user"
             type="com.google.firebase.auth.FirebaseUser"/>
+
+        <variable
+            name="isCurrentUser"
+            type="Boolean"/>
+
+        <variable
+            name="payload"
+            type="com.codepath.com.sffoodtruck.data.model.MessagePayload"/>
     </data>
 
         <android.support.design.widget.CoordinatorLayout
@@ -26,7 +34,7 @@
                     android:layout_width="match_parent"
                     app:contentScrim="?attr/colorPrimary"
                     android:layout_height="match_parent"
-                    app:title="@{user.displayName}"
+                    app:title="@{isCurrentUser ? user.displayName: payload.userName}"
                     app:expandedTitleMarginTop="@dimen/margin32"
                     app:expandedTitleGravity="bottom|center_horizontal"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -58,7 +66,7 @@
                                 android:layout_marginBottom="@dimen/margin8"
                                 android:layout_marginTop="-40dp"
                                 android:layout_below="@id/ivBanner"
-                                app:loadCircleImage="@{String.valueOf(user.photoUrl)}"
+                                app:loadCircleImage="@{isCurrentUser ? String.valueOf(user.photoUrl): String.valueOf(payload.imageUrl)}"
                                 android:padding="4dp"
                                 android:layout_centerInParent="true"
                                 tools:src="@mipmap/ic_camera_launcher"/>
@@ -72,7 +80,7 @@
                                 tools:text="@string/user_email_address"
                                 android:textColor="@android:color/black"
                                 android:textSize="@dimen/emailTextSize"
-                                android:text="@{user.email}"
+                                android:text="@{isCurrentUser ? user.email : payload.userEmail}"
                                 />
 
                         </RelativeLayout>

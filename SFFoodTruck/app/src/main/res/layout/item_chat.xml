@@ -20,20 +20,23 @@
         <TextView
             style="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/tvBody"
-            android:lines="1"
-            android:ellipsize="end"
-            android:padding="@dimen/padding8"
+            android:gravity="top"
+            android:background="@drawable/ic_chat_bubble_outline_black_48dp"
+            android:paddingLeft="@dimen/padding32"
+            android:paddingRight="@dimen/padding32"
             android:layout_width="0dp"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="16dp"
-            app:layout_constraintLeft_toRightOf="@+id/ivProfileOther"
-            android:layout_marginLeft="8dp"
             app:layout_constraintRight_toLeftOf="@+id/ivProfileMe"
             android:layout_marginRight="8dp"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:textColor="@color/colorTextColor"
+            tools:text="Hello hello"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/ivProfileOther"
+            android:layout_marginLeft="8dp"/>
 
         <ImageView
             android:id="@+id/ivProfileMe"

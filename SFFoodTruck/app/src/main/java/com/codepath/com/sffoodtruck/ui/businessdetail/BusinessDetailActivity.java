@@ -78,6 +78,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         }
     }
 
+
     private void addShareElementTransitionListener(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Transition sharedElementEnterTransition = getWindow().getEnterTransition();

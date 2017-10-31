@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/llShareBottomSheet"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/share_with_group"
+            android:gravity="start|center"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/btnSocialMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/share_via_social_media"
+            android:gravity="start|center"
+            android:textAllCaps="false"
+            />
+
+    </LinearLayout>
+</layout>

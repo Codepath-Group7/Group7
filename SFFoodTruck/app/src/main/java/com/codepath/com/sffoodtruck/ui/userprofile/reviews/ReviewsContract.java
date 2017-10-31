@@ -17,6 +17,6 @@ public class ReviewsContract {
     }
 
     interface Presenter extends UserProfileBasePresenter<View>{
-        void loadUserReviews();
+        void loadUserReviews(String userId);
     }
 }

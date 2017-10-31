@@ -59,7 +59,7 @@ public class QueryPreferences {
 
     public static String getLocationPref(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(context.getString(R.string.pref_location_picker_key),"");
+                .getString(context.getString(R.string.pref_location_picker_key),null);
     }
 
     public static void storeCurrentLocation(Context context, String location){

@@ -25,13 +25,18 @@ class FavoritePresenter extends UserProfileAbstractPresenter<FavoriteContract.Vi
 
     @Override
     public void initialLoad() {
-        loadFavoriteFoodTrucks();
+        loadFavoriteFoodTrucks(getView().getCurrentUserId());
         getView().updateUI();
     }
 
+
+
     @Override
-    public void loadFavoriteFoodTrucks() {
-        DatabaseReference databaseReference = FirebaseUtils.getCurrentUserFavoriteDatabaseRef();
+    public void loadFavoriteFoodTrucks(String userId) {
+        Log.d(TAG,"calling loadFavoriteFoodTrucks with: " + userId);
+        DatabaseReference databaseReference = userId != null ?
+                FirebaseUtils.getFavoriteDatabaseRef(userId)
+                : FirebaseUtils.getCurrentUserFavoriteDatabaseRef();
         if(databaseReference != null){
             databaseReference
                     .orderByChild("timestamp")
@@ -55,6 +60,8 @@ class FavoritePresenter extends UserProfileAbstractPresenter<FavoriteContract.Vi
 
                         }
                     });
+        }else{
+            getView().showProgressBar(false);
         }
     }
 }

@@ -1,0 +1,86 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.codepath.com.sffoodtruck.ui.homefeed.HomeFeedFragment">
+
+    <FrameLayout
+         android:id="@+id/flHomeFeedFragment"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            />
+
+        <ScrollView
+            android:id="@+id/svHomeFeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/llHomeFeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvFavorites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorites_title"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_marginStart="@dimen/margin16"
+                    android:layout_marginLeft="@dimen/margin16"
+                    android:layout_marginTop="@dimen/margin16"
+                    />
+
+                    <com.codepath.com.sffoodtruck.ui.util.SnappyRecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin16"
+                        android:layout_marginRight="@dimen/margin16"
+                        android:layout_marginBottom="@dimen/margin16"
+                        android:padding="@dimen/padding4"
+                        android:id="@+id/rvFavorites"/>
+
+
+                <TextView
+                    android:id="@+id/tvTopPicks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/top_picks_title"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_marginStart="@dimen/margin16"
+                    android:layout_marginBottom="@dimen/margin16"
+                    android:layout_marginLeft="@dimen/margin16"/>
+
+                    <android.support.v4.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rvHomeFeed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin16"
+                            android:layout_marginRight="@dimen/margin16"
+                            android:nestedScrollingEnabled="false"/>
+                    </android.support.v4.widget.NestedScrollView>
+
+                <Button
+                    android:id="@+id/btnSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin16"
+                    android:layout_gravity="center"
+                    android:text="@string/see_all_text"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+</layout>

@@ -216,6 +216,14 @@ public class Business implements Parcelable {
         return distance;
     }
 
+    public String getDistanceInString(){
+        double miles = Math.round(distance * 0.00018939 * 100.0)/100.0;
+        if(miles < 0.1){
+            return String.valueOf(Math.round(distance * 100.0)/100.0 + " ft");
+        }
+        return String.valueOf(String.valueOf(miles +" mi"));
+    }
+
     public void setDistance(Float distance) {
         this.distance = distance;
     }

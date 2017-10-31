@@ -57,4 +57,9 @@ public class RecentVisitsFragment
     public void showRecentVisits(List<Business> businessList) {
         mAdapter.addAll(businessList);
     }
+
+    @Override
+    public String getCurrentUserId() {
+        return null;
+    }
 }

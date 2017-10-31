@@ -128,12 +128,12 @@ public class SearchActivity extends AppCompatActivity{
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fl_food_truck_feed);
         if (fragment!=null) {
-            fragment = FoodTruckFeedFragment.newInstance(mQuery);
+            fragment = FoodTruckFeedFragment.newInstance(mQuery,null);
             fm.beginTransaction()
                     .replace(R.id.fl_food_truck_feed, fragment)
                     .commit();
         } else {
-            fragment = FoodTruckFeedFragment.newInstance(mQuery);
+            fragment = FoodTruckFeedFragment.newInstance(mQuery,null);
             fm.beginTransaction()
                     .add(R.id.fl_food_truck_feed, fragment)
                     .commit();

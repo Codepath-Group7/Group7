@@ -29,29 +29,36 @@ implements FoodTruckFeedContract.Presenter{
 
     private static final String TAG = FoodTruckFeedPresenter.class.getSimpleName();
     private static final String FOODTRUCK = "foodtrucks";
-    private final String authToken;
+    private final String authToken = "";
     private static final String PARAM_LOCATION = "location";
     private static final String PARAM_CATEGORIES = "categories";
     private static final String PARAM_TERM = "term";
     private static final String PARAM_OFFSET = "offset";
     private static boolean sInitialLoad = false;
+    private SearchApi mSearchApi;
 
     FoodTruckFeedPresenter(String authToken){
         Log.d(TAG,"This is the generated token"  + authToken);
-        this.authToken = authToken;
+     //   this.authToken = authToken;
+    }
+
+    FoodTruckFeedPresenter(SearchApi authToken){
+        Log.d(TAG,"This is the generated token"  + authToken);
+        mSearchApi = authToken;
     }
     
-    public void initialLoad(String query) { //add query string
+    public void initialLoad(String query, String location) { //add query string
         sInitialLoad = true;
+        loadFoodTruckFeed(location,query,0);
         getView().showProgress();
-        loadFoodTruckFeed(null,query,0);
+
     }
 
 
     @Override
     public void loadFoodTruckFeed(String location, String query, int page) {
-        final SearchApi services = RetrofitClient
-                .createService(SearchApi.class, authToken);
+       /* final SearchApi services = RetrofitClient
+                .createService(SearchApi.class, authToken);*/
         Map<String,String> queryParams = new HashMap<>();
         if(location != null){
             Location loc = JsonUtils.fromJson(location,Location.class);
@@ -65,7 +72,7 @@ implements FoodTruckFeedContract.Presenter{
         //put page number
         queryParams.put(PARAM_OFFSET,String.valueOf(page*20));
         if(query!=null && !TextUtils.isEmpty(query)) queryParams.put(PARAM_TERM,query);
-        Call<SearchResults> callResults = services.getSearchResults(queryParams);
+        Call<SearchResults> callResults = mSearchApi.getSearchResults(queryParams);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
             public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {

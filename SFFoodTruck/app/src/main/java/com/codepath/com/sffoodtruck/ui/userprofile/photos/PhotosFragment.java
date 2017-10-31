@@ -1,5 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.userprofile.photos;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
@@ -20,9 +22,28 @@ public class PhotosFragment extends UserProfileBaseFragment implements
     PhotosContract.View{
 
     private static final String TAG = PhotosFragment.class.getSimpleName();
+    private static final String EXTRA_USERID = "PhotosFragment.EXTRA_USERID";
 
     private StaggeredGridLayoutManager mLayoutManager;
     private PhotosAdapter mPhotosAdapter;
+    private String mUserId = null;
+
+
+    public static Fragment newInstance(String userId){
+        Bundle args = new Bundle();
+        args.putString(EXTRA_USERID,userId);
+        PhotosFragment photosFragment = new PhotosFragment();
+        photosFragment.setArguments(args);
+        return photosFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            mUserId = getArguments().getString(EXTRA_USERID);
+        }
+    }
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -49,5 +70,10 @@ public class PhotosFragment extends UserProfileBaseFragment implements
     @Override
     public void showPhotos(List<UserPostedPhoto> photos) {
         mPhotosAdapter.addAll(photos);
+    }
+
+    @Override
+    public String getCurrentUserId() {
+        return mUserId;
     }
 }

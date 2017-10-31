@@ -7,23 +7,14 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent">
 
-
-        <android.support.v7.widget.Toolbar
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@color/colorTextColor"
-            app:title="@string/group_chat"
-            android:id="@+id/toolbar"
-            />
-
         <LinearLayout
             android:id="@+id/llGroupChat"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_marginStart="@dimen/margin8"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/margin8">
 
             <EditText
                 android:id="@+id/etSendMessage"

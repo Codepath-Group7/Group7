@@ -1,7 +1,9 @@
 package com.codepath.com.sffoodtruck.ui.userprofile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -16,6 +18,8 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.model.MessagePayload;
+import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.ActivityUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.common.CustomFragmentPagerAdapter;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
@@ -30,8 +34,6 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private static final String EXTRA_USER = "UserProfileActivity.EXTRA_USER";
     private boolean mIsTheTitleVisible = false;
 
 
@@ -52,6 +55,18 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
     private GoogleApiClient mGoogleApiClient;
 
+    private static boolean isCurrentUser = false;
+
+    private static String mCurrentUserId;
+
+    private static MessagePayload sMessagePayload;
+
+
+    public static Intent newIntent(Context context, MessagePayload payload){
+        Intent intent = new Intent(context,UserProfileActivity.class);
+        intent.putExtra(EXTRA_USER,payload);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +78,42 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         setSupportActionBar(mUserProfileBinding.toolbar);
         if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        checkForCurrentUser();
         renderUserProfile();
         renderTabs();
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        checkForCurrentUser();
+    }
+
+    private void checkForCurrentUser() {
+        if(getIntent() != null){
+            sMessagePayload = getIntent().getParcelableExtra(EXTRA_USER);
+            if(sMessagePayload == null || sMessagePayload.getUserId()
+                    .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                isCurrentUser = true;
+            }
+        }
+
+        if(isCurrentUser){
+            mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }else{
+            mCurrentUserId = sMessagePayload.getUserId();
+        }
+    }
+
     private void renderUserProfile() {
-        mUserProfileBinding.setUser(FirebaseAuth.getInstance().getCurrentUser());
+        mUserProfileBinding.setIsCurrentUser(isCurrentUser);
+        if(isCurrentUser){
+            Log.d(TAG,"Loading current user profile");
+            mUserProfileBinding.setUser(FirebaseAuth.getInstance().getCurrentUser());
+        }else{
+            Log.d(TAG,"Loading secondary person user profile: " + sMessagePayload.getUserEmail());
+            mUserProfileBinding.setPayload(sMessagePayload);
+        }
         mUserProfileBinding.executePendingBindings();
         mUserProfileBinding.collapsingToolbarLayout
                 .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.black));
@@ -86,10 +131,10 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         CustomFragmentPagerAdapter pagerAdapter = new
                 CustomFragmentPagerAdapter(getSupportFragmentManager(),true);
 
-        pagerAdapter.addFragment(new FavoriteFragment(),FAVORITES_TITLE);
-        pagerAdapter.addFragment(new RecentVisitsFragment(),RECENT_VISITS_TITLE);
-        pagerAdapter.addFragment(new PhotosFragment(),PHOTOS_TITLE);
-        pagerAdapter.addFragment(new ReviewsFragment(),REVIEWS_TITLE);
+        pagerAdapter.addFragment(FavoriteFragment.newInstance(mCurrentUserId),FAVORITES_TITLE);
+        if(isCurrentUser) pagerAdapter.addFragment(new RecentVisitsFragment(),RECENT_VISITS_TITLE);
+        pagerAdapter.addFragment(PhotosFragment.newInstance(mCurrentUserId),PHOTOS_TITLE);
+        pagerAdapter.addFragment(ReviewsFragment.newInstance(mCurrentUserId),REVIEWS_TITLE);
 
         mUserProfileBinding.viewpager.setAdapter(pagerAdapter);
         mUserProfileBinding.tabLayout.setupWithViewPager(mUserProfileBinding.viewpager);
@@ -100,7 +145,9 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
             if(!mIsTheTitleVisible) {
                 Picasso.with(this)
-                        .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                        .load(isCurrentUser ?
+                                FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl():
+                                Uri.parse(sMessagePayload.getImageUrl()))
                         .transform(new CircleTransform())
                         .into(mUserProfileBinding.ivToolbarProfile);
                 startAlphaAnimation(mUserProfileBinding.ivToolbarProfile,
@@ -195,6 +242,12 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
 
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isCurrentUser = false;
     }
 
     @Override

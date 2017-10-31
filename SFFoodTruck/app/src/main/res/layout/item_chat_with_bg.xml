@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivProfileOther"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="@dimen/margin16"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:id="@+id/ivProfileMe"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="@dimen/margin16"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+        <FrameLayout
+            android:id="@+id/flChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivProfileOther"
+            android:layout_toLeftOf="@id/ivProfileMe"
+            android:layout_marginTop="@dimen/margin16"
+            android:layout_marginBottom="@dimen/margin16">
+
+            <TextView
+                android:id="@+id/tvProfileOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_chat_bubble_outline_black_48dp"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:textColor="@color/colorTextColor"
+                tools:text="Hello hello"
+                />
+
+            <TextView
+                android:id="@+id/tvProfileMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_chat_bubble_outline_black_48dp_right"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:autoLink="all"
+                android:linksClickable="true"
+                tools:text="Hello"
+                android:textColor="@color/colorTextColor"
+                />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</layout>
