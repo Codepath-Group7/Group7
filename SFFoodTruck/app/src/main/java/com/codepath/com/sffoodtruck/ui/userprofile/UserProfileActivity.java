@@ -174,7 +174,6 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
             }
 
         } else {
-
             if (mIsTheTitleVisible) {
                 startAlphaAnimation(mUserProfileBinding.ivToolbarProfile,
                         ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
