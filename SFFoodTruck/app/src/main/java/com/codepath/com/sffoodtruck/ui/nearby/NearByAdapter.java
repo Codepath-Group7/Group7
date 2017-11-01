@@ -24,6 +24,7 @@ import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,12 +36,12 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByViewHolder> {
 
-    private List<MessagePayload> mMessagePayloads;
+    private LinkedList<MessagePayload> mMessagePayloads;
     private Context mContext;
     private String userId;
     private static boolean isSuccess = false;
 
-    public NearByAdapter(Context context, List<MessagePayload> messagePayloads, String userId){
+    public NearByAdapter(Context context, LinkedList<MessagePayload> messagePayloads, String userId){
         mContext = context;
         mMessagePayloads = messagePayloads;
         this.userId = userId;
@@ -69,9 +70,14 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     }
 
     public void addAllMessagePayloads(List<MessagePayload> payloads){
-        int oldSize = mMessagePayloads.size();
+        /*int oldSize = mMessagePayloads.size();
         mMessagePayloads.addAll(payloads);
-        notifyItemRangeInserted(oldSize,mMessagePayloads.size());
+        notifyItemRangeInserted(oldSize,mMessagePayloads.size());*/
+        for(int i = 0 ; i < payloads.size(); i++){
+            mMessagePayloads.addFirst(payloads.get(i));
+            notifyItemInserted(0);
+        }
+
     }
 
     public void clearAll(){

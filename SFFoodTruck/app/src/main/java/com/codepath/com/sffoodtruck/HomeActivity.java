@@ -300,6 +300,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                        /* DBPayloads.getInstance().storeMessagePayload(payload);*/
                         ((NearByFragment)getOnScreenFragment())
                                 .publishSuccessful(isPublishSuccess,payload.getUUID());
+                        DBPayloads.getInstance().storeMessagePayload(payload);
                     }
 
                     Log.d(TAG,"Status of publishing message: "
