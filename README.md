@@ -28,6 +28,12 @@ The following **optional** functionality is completed:
 
 Here's a walkthrough of implemented user stories:
 
+[Video Walkthrough](https://www.dropbox.com/s/6ldkpxywgowqdz4/projectDemo.mp4?dl=0)
+
+### After UI Polish
+<img src='https://i.imgur.com/z0xL27i.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />      <img src='https://i.imgur.com/crzqR0v.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' /><img src='https://i.imgur.com/vkZxpl5.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Before UI Polish
 <img src='http://i.imgur.com/EOxiwhw.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />      <img src='http://i.imgur.com/6cckdg6.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' /><img src='https://i.imgur.com/ZkGRjyJ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' /><img src='https://i.imgur.com/pyR7QgS.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' /><img src='https://i.imgur.com/7Aya7pK.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
