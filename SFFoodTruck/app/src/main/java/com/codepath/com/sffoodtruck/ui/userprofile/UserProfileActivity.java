@@ -1,5 +1,6 @@
 package com.codepath.com.sffoodtruck.ui.userprofile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -15,11 +16,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
-import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.ActivityUserProfileBinding;
 import com.codepath.com.sffoodtruck.ui.common.CustomFragmentPagerAdapter;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
@@ -48,6 +49,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
     private static final String EXTRA_USER = "UserProfileActivity.EXTRA_USER";
+    private static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
     private boolean mIsTheTitleVisible = false;
 
 
@@ -62,6 +64,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     private static MessagePayload sMessagePayload;
 
 
+
     public static Intent newIntent(Context context, MessagePayload payload){
         Intent intent = new Intent(context,UserProfileActivity.class);
         intent.putExtra(EXTRA_USER,payload);
@@ -71,17 +74,23 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
 
-        mUserProfileBinding = DataBindingUtil.setContentView(this,R.layout.activity_user_profile);
+        mUserProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
 
         setSupportActionBar(mUserProfileBinding.toolbar);
-        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         checkForCurrentUser();
         renderUserProfile();
         renderTabs();
+
+    }
+
+    public static void startUserProfileFromLocation(int[] startingLocation, Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, UserProfileActivity.class);
+        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
+        startingActivity.startActivity(intent);
     }
 
 
@@ -195,7 +204,8 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
+                overridePendingTransition(0,R.anim.slide_down);
                 return true;
             case R.id.action_logout:
                 logout();
@@ -207,6 +217,12 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(0,R.anim.slide_down);
     }
 
     private void logout() {
@@ -263,4 +279,8 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
+
+
 }

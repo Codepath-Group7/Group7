@@ -64,6 +64,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private boolean isNearByFragment = false;
     private boolean isHomeFeedFragment = false;
     private BottomNavigationView mBottomNavigationView;
+    private ImageButton  imageButton;
+    private Toolbar toolbar;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -82,9 +84,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        ImageButton  imageButton = (ImageButton) findViewById(R.id.imagebtn);
+        imageButton = (ImageButton) findViewById(R.id.imagebtn);
 
         setSupportActionBar(toolbar);
 
@@ -198,9 +201,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_account:
-                Intent accountIntent =
-                        new Intent(this, UserProfileActivity.class);
-                startActivity(accountIntent);
+                int[] startingLocation = new int[2];
+                toolbar.getLocationOnScreen(startingLocation);
+                startingLocation[0] += toolbar.getWidth() / 2;
+                UserProfileActivity.startUserProfileFromLocation(startingLocation, this);
+                overridePendingTransition(R.anim.slide_up, R.anim.hold);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
