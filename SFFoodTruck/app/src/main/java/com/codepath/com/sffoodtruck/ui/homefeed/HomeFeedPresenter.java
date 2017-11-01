@@ -4,12 +4,15 @@ import android.location.Location;
 import android.util.Log;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
+import com.codepath.com.sffoodtruck.data.model.CustomPlace;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractPresenter;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.places.Place;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,15 +83,27 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
     public void loadFoodTruckFeed(String location) {
         Map<String,String> queryParams = new HashMap<>();
         if(location != null){
+
             Location loc = JsonUtils.fromJson(location,Location.class);
-            queryParams.put("latitude",String.valueOf(loc.getLatitude()));
-            queryParams.put("longitude",String.valueOf(loc.getLongitude()));
+            CustomPlace place = JsonUtils.fromJson(location,CustomPlace.class);
+            if(loc != null && (loc.getLongitude() != 0.0 || loc.getLatitude() != 0.0)){
+                queryParams.put("latitude",String.valueOf(loc.getLatitude()));
+                queryParams.put("longitude",String.valueOf(loc.getLongitude()));
+            }else if(place != null && (place.getLatitude() != 0.0 || place.getLongitude() != 0.0)){
+                queryParams.put("latitude",String.valueOf(place.getLatitude()));
+                queryParams.put("longitude",String.valueOf(place.getLongitude()));
+            }else{
+                queryParams.put(PARAM_LOCATION,"Menlo Park, California");
+            }
+
+
         }else{
             queryParams.put(PARAM_LOCATION,"Menlo Park, California");
         }
         queryParams.put("limit","10");
         queryParams.put(PARAM_CATEGORIES,FOODTRUCK);
         //put page number
+        Log.d(TAG,"Requesting server with: " + queryParams);
         Call<SearchResults> callResults = mSearchApi.getSearchResults(queryParams);
         callResults.enqueue(new Callback<SearchResults>() {
             @Override
@@ -119,6 +134,8 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
     public void loadFavorites(String location) {
         DatabaseReference databaseReference =  FirebaseUtils.getCurrentUserFavoriteDatabaseRef();
         if(databaseReference != null){
+
+
             databaseReference
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -130,15 +147,22 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                             LinkedList<Business> businesses = new LinkedList<>();
 
                             Location loc = JsonUtils.fromJson(location,Location.class);
+                            CustomPlace customPlace = JsonUtils.fromJson(location,CustomPlace.class);
                             Integer integer = Integer.valueOf(String.valueOf(dataSnapshot.getChildrenCount()));
                             Queue<Business> businessQueue = new PriorityQueue<>(integer, (one, two) -> {
 
-                                if(loc != null){
-                                    Log.d(TAG,"loc is not null" + loc.getLatitude() + " , "
-                                            +loc.getLongitude());
+                                if(loc != null ){
 
-                                    boolean result = getDistance(loc,one.getCoordinates()) >
-                                            getDistance(loc,two.getCoordinates());
+                                    boolean result = false;
+                                   if(loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0){
+                                        result = getDistance(loc,one.getCoordinates()) >
+                                               getDistance(loc,two.getCoordinates());
+                                   }else if(customPlace != null && (customPlace.getLatitude() != 0.0 && customPlace.getLongitude() != 0.0)){
+                                       result = getDistance(customPlace,one.getCoordinates()) >
+                                               getDistance(customPlace,two.getCoordinates());
+                                   }else{
+                                       return 0;
+                                   }
 
                                     return result? 1 : -1;
                                 }
@@ -151,8 +175,15 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                                     Log.d(TAG,"Favorite's list :" + business.getName());
                                     if(loc != null){
                                         Log.d(TAG,"Updating distance");
-                                        business.setDistance(getDistance(loc,
-                                                business.getCoordinates()));
+                                        if(loc.getLatitude() != 0.0 ){
+                                            business.setDistance(getDistance(loc,
+                                                    business.getCoordinates()));
+                                        }else if(customPlace.getLatitude() != 0.0){
+                                            business.setDistance(getDistance(customPlace,
+                                                    business.getCoordinates()));
+                                        }
+
+
                                     }
 
                                     businessQueue.add(business);
@@ -164,7 +195,7 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
                             }
 
                             getView().addFavoritesFoodTruckList(businesses);
-
+                            getView().hideProgressBar();
                         }
 
                         @Override
@@ -178,6 +209,19 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
     }
 
     private float getDistance(Location location, Coordinates coordinates){
+        float[] results = new float[3];
+
+
+        Location.distanceBetween(location.getLatitude(),
+                location.getLongitude(),
+                Double.valueOf(coordinates.getLatitude()),
+                Double.valueOf(coordinates.getLongitude()),
+                results);
+
+        return results[0];
+    }
+
+    private float getDistance(CustomPlace location, Coordinates coordinates){
         float[] results = new float[3];
 
 

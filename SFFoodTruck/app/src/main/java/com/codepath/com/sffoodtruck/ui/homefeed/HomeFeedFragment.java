@@ -125,6 +125,8 @@ public class HomeFeedFragment extends
     @Override
     public void initializeUI() {
 
+        Log.d(TAG,"Initialize UI is being called" + QueryPreferences.getCustomPlacePref(getActivity()));
+
         mFavoriteAdapter = new FeedAdapter(mFavoritesList, mOnBusinessItemClickListener );
         mTopStoriesAdapter = new FeedAdapter(mTopPicksList, mOnBusinessItemClickListener);
 
@@ -181,9 +183,7 @@ public class HomeFeedFragment extends
                 storeCurrentLocation(mLastLocation);
             }else{
                 Log.d(TAG,"Last known location is null");
-                if(mTopStoriesAdapter.getItemCount() == 0){
-                   getPresenter().updateLocation(null);
-                }
+                getPresenter().updateLocation(JsonUtils.toJson(QueryPreferences.getCustomPlacePref(getActivity())));
             }
 
         }else{
@@ -199,6 +199,7 @@ public class HomeFeedFragment extends
         Log.d(TAG,"Stored last Location: " + storedLastLocation);
         if(storedLastLocation == null){
             QueryPreferences.storeCurrentLocation(getActivity(), JsonUtils.toJson(currentLocation));
+            getPresenter().updateLocation(JsonUtils.toJson(currentLocation));
         }else{
             Location lastLoc = JsonUtils.fromJson(storedLastLocation,Location.class);
             Log.d(TAG,"Stored location: lat: " + lastLoc.getLatitude() + " , long: "
@@ -213,9 +214,7 @@ public class HomeFeedFragment extends
                 Log.d(TAG,"Updating the stored location with: "
                         + JsonUtils.toJson(currentLocation));
             }else{
-                if(mTopStoriesAdapter.getItemCount() <= 0){
-                    getPresenter().updateLocation(JsonUtils.toJson(currentLocation));
-                }
+                getPresenter().updateLocation(JsonUtils.toJson(currentLocation));
                 Log.d(TAG,"current location and stored location are less than 150 meters apart");
             }
         }
@@ -230,9 +229,7 @@ public class HomeFeedFragment extends
         if(EasyPermissions.hasPermissions(getActivity(),perms)) {
             Log.d(TAG,"Requesting location updates");
             LocationServices.FusedLocationApi
-                    .requestLocationUpdates(mGoogleApiClient, locationRequest, this)
-                    .setResultCallback(status -> Log.d(TAG,"Status of requesting location update is: "
-                            + status.getStatusMessage()));
+                    .requestLocationUpdates(mGoogleApiClient, locationRequest, this);
            // getActivity().startService(new Intent(getActivity(), BackgroundLocationService.class));
         }else{
             Log.d(TAG,"Requesting for permissions: ");
@@ -344,11 +341,8 @@ public class HomeFeedFragment extends
         topPicksListState = mTopPicksManager.onSaveInstanceState();
         outState.putParcelable(FAVORITES_LIST_STATE_KEY,favoritesListState);
         outState.putParcelable(TOP_PICKS_LIST_STATE_KEY,topPicksListState);
-     /* outState.putParcelableArrayList(FAVORITES_BUSINESSES_KEY,mFavoritesList);
-        outState.putParcelableArrayList(TOP_PICKS_BUSINESSES_KEY,mTopPicksList);*/
 
     }
-
 
 
     @Override
@@ -359,12 +353,12 @@ public class HomeFeedFragment extends
             storeCurrentLocation(mLastLocation);
             Log.d(TAG,"latitude: " + mLastLocation.getLatitude() + ", Longitude: "
                     +mLastLocation.getLongitude());
-           // mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
         }else{
             Log.d(TAG,"On Location received got null");
-            if(mTopStoriesAdapter ==null || mTopStoriesAdapter.getItemCount() <= 0){
+            getPresenter().updateLocation(JsonUtils.toJson(QueryPreferences.getCustomPlacePref(getActivity())));
+            /*if(mTopStoriesAdapter ==null || mTopStoriesAdapter.getItemCount() <= 0){
                 getPresenter().updateLocation(null);
-            }
+            }*/
         }
     }
 }
