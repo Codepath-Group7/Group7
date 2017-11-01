@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +48,7 @@ public class NearByFragment extends Fragment {
     private static final String TAG = NearByFragment.class.getSimpleName();
 
     private NearByAdapter mAdapter;
-    private List<MessagePayload> messagePayloads = new ArrayList<>();
+    private LinkedList<MessagePayload> messagePayloads = new LinkedList<>();
     private FirebaseUser mFirebaseUser;
 
     private onNearByFragmentListener mNearByFragmentListener;
@@ -64,7 +65,7 @@ public class NearByFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        mAdapter = new NearByAdapter(getActivity(), new ArrayList<>(),mFirebaseUser.getUid());
+        mAdapter = new NearByAdapter(getActivity(),messagePayloads ,mFirebaseUser.getUid());
         loadMessagesFromDB();
     }
 
@@ -132,6 +133,7 @@ public class NearByFragment extends Fragment {
     public void loadMessagesFromDB(){
         Log.d(TAG,"loaded messages from database: "
                 + DBPayloads.getInstance().getMessagePayloads());
+        mAdapter.clearAll();
         mAdapter.addAllMessagePayloads(DBPayloads.getInstance().getMessagePayloads());
     }
 

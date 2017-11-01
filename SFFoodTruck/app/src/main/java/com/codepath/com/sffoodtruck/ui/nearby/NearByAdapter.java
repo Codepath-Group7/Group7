@@ -24,6 +24,7 @@ import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,12 +36,12 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByViewHolder> {
 
-    private List<MessagePayload> mMessagePayloads;
+    private LinkedList<MessagePayload> mMessagePayloads;
     private Context mContext;
     private String userId;
     private static boolean isSuccess = false;
 
-    public NearByAdapter(Context context, List<MessagePayload> messagePayloads, String userId){
+    public NearByAdapter(Context context, LinkedList<MessagePayload> messagePayloads, String userId){
         mContext = context;
         mMessagePayloads = messagePayloads;
         this.userId = userId;
@@ -69,9 +70,14 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     }
 
     public void addAllMessagePayloads(List<MessagePayload> payloads){
-        int oldSize = mMessagePayloads.size();
+        /*int oldSize = mMessagePayloads.size();
         mMessagePayloads.addAll(payloads);
-        notifyItemRangeChanged(oldSize,mMessagePayloads.size());
+        notifyItemRangeInserted(oldSize,mMessagePayloads.size());*/
+        for(int i = 0 ; i < payloads.size(); i++){
+            mMessagePayloads.addFirst(payloads.get(i));
+            notifyItemInserted(0);
+        }
+
     }
 
     public void clearAll(){
@@ -107,8 +113,12 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
             String messageUserId = payload.getUserId();
             final boolean isMe = messageUserId != null && messageUserId.equals(userId);
             Log.d(TAG,payload.getImageUrl() + " -> payload image url");
-            String chatBody = String.format("%s %n %n %s %n %n %s",payload.getUserName()
-                    ,payload.getMessage(),payload.getTime());
+           /* String chatBody = String.format("%s %n %n %s %n %n %s",payload.getUserName()
+                    ,payload.getMessage(),payload.getTime());*/
+
+           Spanned chatBody = fromHtml( "<b><i>" + payload.getUserName()
+                   + "</i></b>  <br/> <br/>" +
+                        payload.getMessage() +"  <br/> <br/> <b><i>"+ payload.getTime() +"</i></b>") ;
 
             if(isMe){
                 mBinding.ivProfileMe.setVisibility(View.VISIBLE);
@@ -144,6 +154,17 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                     break;
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
+        }
+        return result;
     }
 
 
