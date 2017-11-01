@@ -374,4 +374,12 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                     }
                 });
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (!mShowAnimation) { //Not launched with shared element transition
+            overridePendingTransition(R.anim.hold, R.anim.slide_down);
+        }
+    }
 }
