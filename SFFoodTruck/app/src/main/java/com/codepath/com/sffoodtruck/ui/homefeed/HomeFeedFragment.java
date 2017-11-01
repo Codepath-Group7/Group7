@@ -69,6 +69,7 @@ public class HomeFeedFragment extends
                     .newIntent(getActivity(),business);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ImageView ivBanner = (ImageView) view.findViewById(R.id.ivBanner);
+                intent.putExtra(BusinessDetailActivity.EXTRA_ANIM,true);
                 // Call some material design APIs here
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(getActivity(), ivBanner, "businessImage");

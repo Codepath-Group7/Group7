@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
@@ -32,6 +33,7 @@ import com.codepath.com.sffoodtruck.databinding.ActivityBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpActivity;
 import com.codepath.com.sffoodtruck.ui.businessdetail.photos.TakePhotoDialogFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.SubmitReviewDialogFragment;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -71,6 +73,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         mShowAnimation = getIntent().getBooleanExtra(EXTRA_ANIM,false);
         setToolbar();
         if(mShowAnimation){
+            supportPostponeEnterTransition();
             addShareElementTransitionListener();
         }
         else {
@@ -125,7 +128,17 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mBusiness.getName());
         }
-        Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage);
+        Picasso.with(this).load(mBusiness.getImageUrl()).fit().into(mBinding.headerImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                scheduleStartPostponedTransition((View) mBinding.headerImage);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         mBinding.fab.setImageDrawable(ContextCompat.getDrawable(
                 BusinessDetailActivity.this,R.drawable.ic_favorite_white_24px));
     }
@@ -348,5 +361,17 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             Log.d(TAG, "From Camera " + mCurrentPhotoPath);
             openTakePhotoDialog();
         }
+    }
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        supportStartPostponedEnterTransition();
+                        return true;
+                    }
+                });
     }
 }

@@ -135,7 +135,7 @@
                 android:minLines="1"
                 android:ellipsize="end"
                 android:padding="@dimen/margin8"
-                android:text="@{obj.category ?? `Food Truck`}"
+                android:text="@{obj.allCategories ?? `Food Truck`}"
                 tools:text="@string/cuisine_type"/>
 
 
