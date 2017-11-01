@@ -144,7 +144,7 @@ public class Business implements Parcelable {
      */
     public String getAllCategories(){
         if(categories == null || categories.size() == 0){
-            return "";
+            return null;
         }else{
             StringBuilder categoryStringBuilder = new StringBuilder();
             for(Category category : categories){
@@ -155,7 +155,7 @@ public class Business implements Parcelable {
             }
             String categoryString = categoryStringBuilder.toString();
             if(categoryString.length()>0) return categoryString.substring(0,categoryString.length()-2);
-            else return "";
+            else return null;
         }
     }
     /* End of changes*/
@@ -216,7 +216,11 @@ public class Business implements Parcelable {
         return distance;
     }
 
+    /**
+     * converts feet into miles and rounds it up to 2 decimal places
+     * */
     public String getDistanceInString(){
+        if(distance == null) return "na";
         double miles = Math.round(distance * 0.00018939 * 100.0)/100.0;
         if(miles < 0.1){
             return String.valueOf(Math.round(distance * 100.0)/100.0 + " ft");

@@ -39,51 +39,51 @@
                     app:expandedTitleGravity="bottom|center_horizontal"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-                        <RelativeLayout
-                            android:fitsSystemWindows="true"
+                    <RelativeLayout
+                        android:fitsSystemWindows="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="272dp"
+                        app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                        app:layout_collapseMode="parallax">
+
+                        <ImageView
+                            android:id="@+id/ivBanner"
                             android:layout_width="match_parent"
-                            android:layout_height="272dp"
-                            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-                            app:layout_collapseMode="parallax">
+                            android:layout_height="150dp"
+                            android:background="@color/colorPrimary"
+                            android:fitsSystemWindows="true"
+                            android:scaleType="centerCrop"
+                            />
 
-                            <ImageView
-                                android:id="@+id/ivBanner"
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:background="@color/colorPrimary"
-                                android:fitsSystemWindows="true"
-                                android:scaleType="centerCrop"
-                                />
+                        <ImageView
+                            android:id="@+id/ivProfile"
+                            android:layout_width="@dimen/image_width"
+                            android:layout_height="@dimen/image_width"
+                            android:layout_marginStart="@dimen/margin24"
+                            android:layout_marginLeft="@dimen/margin24"
+                            android:layout_marginRight="@dimen/margin12"
+                            android:layout_marginEnd="@dimen/margin12"
+                            android:layout_marginBottom="@dimen/margin8"
+                            android:layout_marginTop="-40dp"
+                            android:layout_below="@id/ivBanner"
+                            app:loadCircleImage="@{isCurrentUser ? String.valueOf(user.photoUrl): String.valueOf(payload.imageUrl)}"
+                            android:padding="4dp"
+                            android:layout_centerInParent="true"
+                            tools:src="@mipmap/ic_camera_launcher"/>
 
-                            <ImageView
-                                android:id="@+id/ivProfile"
-                                android:layout_width="@dimen/image_width"
-                                android:layout_height="@dimen/image_width"
-                                android:layout_marginStart="@dimen/margin24"
-                                android:layout_marginLeft="@dimen/margin24"
-                                android:layout_marginRight="@dimen/margin12"
-                                android:layout_marginEnd="@dimen/margin12"
-                                android:layout_marginBottom="@dimen/margin8"
-                                android:layout_marginTop="-40dp"
-                                android:layout_below="@id/ivBanner"
-                                app:loadCircleImage="@{isCurrentUser ? String.valueOf(user.photoUrl): String.valueOf(payload.imageUrl)}"
-                                android:padding="4dp"
-                                android:layout_centerInParent="true"
-                                tools:src="@mipmap/ic_camera_launcher"/>
+                        <TextView
+                            android:id="@+id/tvEmailAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerInParent="true"
+                            tools:text="@string/user_email_address"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/emailTextSize"
+                            android:text="@{isCurrentUser ? user.email : payload.userEmail}"
+                            />
 
-                            <TextView
-                                android:id="@+id/tvEmailAddress"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_centerInParent="true"
-                                tools:text="@string/user_email_address"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/emailTextSize"
-                                android:text="@{isCurrentUser ? user.email : payload.userEmail}"
-                                />
-
-                        </RelativeLayout>
+                    </RelativeLayout>
 
                     <android.support.v7.widget.Toolbar
                         android:id="@+id/toolbar"
@@ -125,6 +125,5 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         </android.support.design.widget.CoordinatorLayout>
-
 
 </layout>
