@@ -71,7 +71,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
     public void addAllMessagePayloads(List<MessagePayload> payloads){
         int oldSize = mMessagePayloads.size();
         mMessagePayloads.addAll(payloads);
-        notifyItemRangeChanged(oldSize,mMessagePayloads.size());
+        notifyItemRangeInserted(oldSize,mMessagePayloads.size());
     }
 
     public void clearAll(){

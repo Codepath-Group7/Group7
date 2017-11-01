@@ -156,8 +156,20 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 .findFragmentById(R.id.content);
         if (newFragment.getClass().isInstance(currentFragment)) return;
 
+        if(itemViewId == R.id.navigation_home){
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    newFragment,R.id.content,R.anim.slide_in_left,R.anim.slide_out_right);
+            return;
+        }
+
+        if(itemViewId == R.id.navigation_map){
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    newFragment,R.id.content);
+            return;
+        }
+
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                newFragment,R.id.content);
+                newFragment,R.id.content,R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override
@@ -330,7 +342,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onSeeAllBtnClick() {
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                 FoodTruckFeedFragment
-                        .newInstance(null, QueryPreferences.getCurrentLocation(this)),R.id.content);
+                        .newInstance(null, QueryPreferences.getCurrentLocation(this))
+                ,R.id.content,R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override

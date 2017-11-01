@@ -156,13 +156,13 @@ public class HomeFeedFragment extends
 
     @Override
     public void addFoodTruckList(List<Business> businessList) {
-        if(mTopStoriesAdapter.getItemCount() > 0) return;
+        mTopStoriesAdapter.clearData();
         mTopStoriesAdapter.addAll(businessList);
     }
 
     @Override
     public void addFavoritesFoodTruckList(List<Business> businessList) {
-        if(mFavoriteAdapter.getItemCount() > 0) return;
+        mFavoriteAdapter.clearData();
         mFavoriteAdapter.addAll(businessList);
     }
 
