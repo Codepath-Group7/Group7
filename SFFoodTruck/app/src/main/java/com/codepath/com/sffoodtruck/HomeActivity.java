@@ -10,6 +10,7 @@ import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;

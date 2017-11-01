@@ -4,13 +4,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin8">
 
         <ImageView
             android:id="@+id/ivProfileOther"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_margin="@dimen/margin16"
+            android:layout_margin="@dimen/margin8"
+            android:layout_centerInParent="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             />
@@ -19,47 +21,44 @@
             android:id="@+id/ivProfileMe"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_margin="@dimen/margin16"
+            android:layout_margin="@dimen/margin8"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             />
 
-        <FrameLayout
-            android:id="@+id/flChat"
+        <TextView
+            android:id="@+id/tvProfileOther"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:layout_toRightOf="@id/ivProfileOther"
-            android:layout_toLeftOf="@id/ivProfileMe"
-            android:layout_marginTop="@dimen/margin16"
-            android:layout_marginBottom="@dimen/margin16">
+            android:layout_toEndOf="@+id/ivProfileOther"
+            android:autoLink="all"
+            android:background="@drawable/ic_chat_bubble_green"
+            android:gravity="start"
+            android:linksClickable="true"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorTextColor"
+            android:layout_marginEnd="@dimen/margin32"
+            tools:text="Hello hello"
+            android:layout_marginRight="@dimen/margin32"/>
 
-            <TextView
-                android:id="@+id/tvProfileOther"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_chat_bubble_outline_black_48dp"
-                android:layout_gravity="start"
-                android:gravity="start"
-                android:autoLink="all"
-                android:linksClickable="true"
-                android:textColor="@color/colorTextColor"
-                tools:text="Hello hello"
-                />
-
-            <TextView
-                android:id="@+id/tvProfileMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_chat_bubble_outline_black_48dp_right"
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:autoLink="all"
-                android:linksClickable="true"
-                tools:text="Hello"
-                android:textColor="@color/colorTextColor"
-                />
-
-        </FrameLayout>
+        <TextView
+            android:id="@+id/tvProfileMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_toLeftOf="@+id/ivProfileMe"
+            android:layout_toStartOf="@+id/ivProfileMe"
+            android:layout_centerInParent="true"
+            android:autoLink="all"
+            android:background="@drawable/ic_chat_bubble_green_right"
+            android:gravity="end"
+            android:linksClickable="true"
+            android:textColor="@color/colorTextColor"
+            tools:text="Hello Hello"
+            android:layout_marginStart="@dimen/margin32"
+            android:layout_marginLeft="@dimen/margin32"/>
 
     </RelativeLayout>
 

@@ -216,7 +216,11 @@ public class Business implements Parcelable {
         return distance;
     }
 
+    /**
+     * converts feet into miles and rounds it up to 2 decimal places
+     * */
     public String getDistanceInString(){
+        if(distance == null) return "na";
         double miles = Math.round(distance * 0.00018939 * 100.0)/100.0;
         if(miles < 0.1){
             return String.valueOf(Math.round(distance * 100.0)/100.0 + " ft");

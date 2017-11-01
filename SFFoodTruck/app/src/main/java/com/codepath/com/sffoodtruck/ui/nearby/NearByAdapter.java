@@ -107,8 +107,12 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
             String messageUserId = payload.getUserId();
             final boolean isMe = messageUserId != null && messageUserId.equals(userId);
             Log.d(TAG,payload.getImageUrl() + " -> payload image url");
-            String chatBody = String.format("%s %n %n %s %n %n %s",payload.getUserName()
-                    ,payload.getMessage(),payload.getTime());
+           /* String chatBody = String.format("%s %n %n %s %n %n %s",payload.getUserName()
+                    ,payload.getMessage(),payload.getTime());*/
+
+           Spanned chatBody = fromHtml( "<b><i>" + payload.getUserName()
+                   + "</i></b>  <br/> <br/>" +
+                        payload.getMessage() +"  <br/> <br/> <b><i>"+ payload.getTime() +"</i></b>") ;
 
             if(isMe){
                 mBinding.ivProfileMe.setVisibility(View.VISIBLE);
@@ -144,6 +148,17 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.NearByView
                     break;
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
+        }
+        return result;
     }
 
 
