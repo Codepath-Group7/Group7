@@ -84,7 +84,7 @@ class HomeFeedPresenter extends AbstractPresenter<HomeFeedContract.MvpView> impl
             queryParams.put("latitude",String.valueOf(loc.getLatitude()));
             queryParams.put("longitude",String.valueOf(loc.getLongitude()));
         }else{
-            queryParams.put(PARAM_LOCATION,"San Jose, California");
+            queryParams.put(PARAM_LOCATION,"Menlo Park, California");
         }
         queryParams.put("limit","10");
         queryParams.put(PARAM_CATEGORIES,FOODTRUCK);

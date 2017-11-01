@@ -182,7 +182,7 @@ public class HomeFeedFragment extends
             }else{
                 Log.d(TAG,"Last known location is null");
                 if(mTopStoriesAdapter.getItemCount() == 0){
-                   getPresenter().updateLocation(QueryPreferences.getLocationPref(getActivity()));
+                   getPresenter().updateLocation(null);
                 }
             }
 
@@ -362,6 +362,9 @@ public class HomeFeedFragment extends
            // mLocationAddress = MapUtils.findLocation(getActivity(),mLastLocation);
         }else{
             Log.d(TAG,"On Location received got null");
+            if(mTopStoriesAdapter ==null || mTopStoriesAdapter.getItemCount() <= 0){
+                getPresenter().updateLocation(null);
+            }
         }
     }
 }
