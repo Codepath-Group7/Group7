@@ -258,6 +258,7 @@ public class HomeFeedFragment extends
     public void hideProgressBar() {
         mHomeFeedBinding.svHomeFeed.setVisibility(View.VISIBLE);
         mHomeFeedBinding.progressBar.setVisibility(View.GONE);
+        mHomeFeedBinding.btnSeeAll.setVisibility(View.VISIBLE);
     }
 
     @Override

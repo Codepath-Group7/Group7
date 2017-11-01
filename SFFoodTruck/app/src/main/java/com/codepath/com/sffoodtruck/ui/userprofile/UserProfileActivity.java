@@ -78,10 +78,12 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         setSupportActionBar(mUserProfileBinding.toolbar);
         if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         checkForCurrentUser();
         renderUserProfile();
         renderTabs();
     }
+
 
 
     @Override
@@ -105,8 +107,15 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCurrentUser();
+    }
+
     private void renderUserProfile() {
         mUserProfileBinding.setIsCurrentUser(isCurrentUser);
+
         if(isCurrentUser){
             Log.d(TAG,"Loading current user profile");
             mUserProfileBinding.setUser(FirebaseAuth.getInstance().getCurrentUser());
