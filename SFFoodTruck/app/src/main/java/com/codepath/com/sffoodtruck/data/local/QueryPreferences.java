@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
+import com.codepath.com.sffoodtruck.data.model.CustomPlace;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.internal.PlaceEntity;
@@ -76,6 +77,17 @@ public class QueryPreferences {
 
     public static void storePlacePref(Context context , Place place){
         String jsonStr = JsonUtils.toJson(place);
+        Log.d(TAG,"place string: " + jsonStr);
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREF_PLACE, jsonStr)
+                .apply();
+    }
+
+
+    public static void storeCustomPlacePref(Context context , CustomPlace place){
+        String jsonStr = JsonUtils.toJson(place);
+        Log.d(TAG,"place string: " + jsonStr);
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREF_PLACE, jsonStr)
@@ -88,12 +100,25 @@ public class QueryPreferences {
                 .getString(PREF_PLACE, "");
         if (TextUtils.isEmpty(jsonStr)) return null;
 
-        Place place = null;
         try {
-            place = JsonUtils.fromJson(jsonStr, PlaceEntity.class);
+            return JsonUtils.fromJson(jsonStr, PlaceEntity.class);
         } catch (Exception ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
         }
-        return place;
+        return null;
+    }
+
+    @Nullable
+    public static CustomPlace getCustomPlacePref(Context context){
+        String jsonStr = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_PLACE, "");
+        if (TextUtils.isEmpty(jsonStr)) return null;
+
+        try {
+            return JsonUtils.fromJson(jsonStr, CustomPlace.class);
+        } catch (Exception ex) {
+            Log.e(TAG, Log.getStackTraceString(ex));
+        }
+        return null;
     }
 }

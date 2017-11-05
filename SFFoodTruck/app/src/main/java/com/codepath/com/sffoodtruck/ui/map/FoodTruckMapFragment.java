@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Coordinates;
+import com.codepath.com.sffoodtruck.data.model.CustomPlace;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
@@ -78,7 +79,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         final FusedLocationProviderClient client =
                 LocationServices.getFusedLocationProviderClient(getContext());
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        Place placePref = QueryPreferences.getPlacePref(getContext());
+        CustomPlace placePref = QueryPreferences.getCustomPlacePref(getContext());
         return new FoodTruckMapPresenter(searchApi, client, geocoder, placePref);
     }
 

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.CustomPlace;
 import com.codepath.com.sffoodtruck.data.model.SearchResults;
 import com.codepath.com.sffoodtruck.data.remote.ResponseHandler;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
@@ -41,10 +42,10 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
     private FusedLocationProviderClient client;
     private Geocoder geocoder;
     private SearchApi searchApi;
-    private Place placePreference;
+    private CustomPlace placePreference;
 
     public FoodTruckMapPresenter(SearchApi searchApi
-            , FusedLocationProviderClient client, Geocoder geocoder, Place placePreference) {
+            , FusedLocationProviderClient client, Geocoder geocoder, CustomPlace placePreference) {
         this.searchApi = searchApi;
         this.client = client;
         this.geocoder = geocoder;
@@ -58,11 +59,11 @@ public class FoodTruckMapPresenter extends AbstractPresenter<FoodTruckMapContrac
 
     @Override
     public void loadFoodTrucks(boolean useCurrentLocation) {
-        if (!useCurrentLocation && placePreference != null && placePreference.getLatLng() != null) {
-            LatLng latLng = placePreference.getLatLng();
+        if (!useCurrentLocation && placePreference != null && placePreference.getLatitude() != 0.0) {
+          /*  LatLng latLng = placePreference.getLatLng();*/
             Location location = new Location("Place");
-            location.setLatitude(latLng.latitude);
-            location.setLongitude(latLng.longitude);
+            location.setLatitude(placePreference.getLatitude());
+            location.setLongitude(placePreference.getLongitude());
             getView().renderZoomToLocation(location);
 
             String locationString = findLocation(location);
