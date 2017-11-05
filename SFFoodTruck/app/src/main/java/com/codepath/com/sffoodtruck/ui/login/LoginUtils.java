@@ -1,6 +1,7 @@
 package com.codepath.com.sffoodtruck.ui.login;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
@@ -19,10 +20,16 @@ import retrofit2.Response;
  * Created by akshaymathur on 10/13/17.
  */
 
+
 public class LoginUtils {
     private final static String TAG = LoginUtils.class.getSimpleName();
 
-    public static void getYelpAccessToken(final Context context){
+    public interface YelpAccessTokenListener{
+        void onSaveAccessToken();
+        void onFailure();
+    }
+
+    public static void getYelpAccessToken(final Context context, YelpAccessTokenListener listener){
         LoginService service = RetrofitClient
                 .getInstance()
                 .getRetrofit()
@@ -33,13 +40,16 @@ public class LoginUtils {
 
         call.enqueue(new Callback<YelpAccessToken>() {
             @Override
-            public void onResponse(Call<YelpAccessToken> call, Response<YelpAccessToken> response) {
+            public void onResponse(@NonNull Call<YelpAccessToken> call,
+                                   @NonNull Response<YelpAccessToken> response) {
                 YelpAccessToken accessToken = response.body();
                 if(accessToken != null){
 
                     QueryPreferences.storeAccessToken(context
                             ,accessToken.getAccessToken()
                             ,accessToken.getTokenType());
+
+                    listener.onSaveAccessToken();
 
                     //Just to test the OAuth flow.
                     //testSearchApiRequest(context);
@@ -55,32 +65,10 @@ public class LoginUtils {
             @Override
             public void onFailure(Call<YelpAccessToken> call, Throwable t) {
                 Log.e(TAG,"Failed" ,t);
+                listener.onFailure();
             }
         });
     }
 
-    /*private void testSearchApiRequest(Context context) {
-        SearchApi services = RetrofitClient
-                .createService(SearchApi.class,context);
-        Call<SearchResults> callResults = services.getSearchResults("95112");
-        callResults.enqueue(new Callback<SearchResults>() {
-            @Override
-            public void onResponse(Call<SearchResults> call,
-                                   Response<SearchResults> response) {
-                if(response.body() == null){
-                    Log.d(TAG,"response has failed "
-                            + response.code());
-                    return;
-                }
 
-                Log.d(TAG,response.body()
-                        .getBusinesses().get(0).getName());
-            }
-
-            @Override
-            public void onFailure(Call<SearchResults> call, Throwable t) {
-                Log.e(TAG,"Failed",t)
-                ;                                  }
-        });
-    }*/
 }

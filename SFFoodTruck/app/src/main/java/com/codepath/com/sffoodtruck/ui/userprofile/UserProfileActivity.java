@@ -139,8 +139,6 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
                 .addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
                     int maxScroll = appBarLayout.getTotalScrollRange();
                     float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
-
-                    Log.d(TAG,"Percentage: " + percentage);
                     handleToolbarVisibility(percentage);
                 });
     }

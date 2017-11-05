@@ -258,8 +258,19 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void startNextActivity(){
             FirebaseUser user = FirebaseUtils.getCurrentUser();
             if(user!=null){
-                LoginUtils.getYelpAccessToken(SplashScreenActivity.this);
-                startHomeActivity();
+                LoginUtils .getYelpAccessToken(SplashScreenActivity.this,
+                        new LoginUtils.YelpAccessTokenListener() {
+                    @Override
+                    public void onSaveAccessToken() {
+                        startHomeActivity();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.d(TAG,"Access token is null");
+                    }
+                });
+
             }
             else{
                 Log.d(TAG,"User not logged in");

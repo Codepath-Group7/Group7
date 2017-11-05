@@ -96,8 +96,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if(user!=null){
                 hideProgressDialog();
-                LoginUtils.getYelpAccessToken(LoginActivity.this);
-                startHomeActivity();
+                LoginUtils.getYelpAccessToken(LoginActivity.this,
+                        new LoginUtils.YelpAccessTokenListener() {
+                    @Override
+                    public void onSaveAccessToken() {
+                        startHomeActivity();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.d(TAG, "Token failure! ");
+                    }
+                });
+
             }
             else{
                 Log.d(TAG,"User not logged in");
