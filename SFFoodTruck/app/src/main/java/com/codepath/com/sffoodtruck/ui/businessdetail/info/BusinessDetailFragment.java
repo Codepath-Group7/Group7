@@ -3,6 +3,7 @@ package com.codepath.com.sffoodtruck.ui.businessdetail.info;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,10 @@ import android.view.ViewGroup;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.codepath.com.sffoodtruck.data.model.Business;
+import com.codepath.com.sffoodtruck.data.model.Coordinates;
 import com.codepath.com.sffoodtruck.databinding.FragmentBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpFragment;
+import com.codepath.com.sffoodtruck.ui.util.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -85,7 +88,17 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         if(data.getHours()!=null && data.getHours().size()>0){
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
         }
-        mBusinessCoordinates = new LatLng(data.getCoordinates().getLatitude(),data.getCoordinates().getLongitude());
+        Coordinates coordinates = data.getCoordinates();
+        if (coordinates == null || coordinates.getLongitude() == null || coordinates.getLatitude() == null) {
+            if(data.getLocation().getCompleteAddress()!=null){
+                Address address = MapUtils.getLatLngFromAddress(getActivity(),data.getLocation().getCompleteAddress());
+                if(address!=null) mBusinessCoordinates = new LatLng(address.getLatitude(),address.getLongitude());
+            }
+        }
+        else{
+            mBusinessCoordinates = new LatLng(data.getCoordinates().getLatitude(),data.getCoordinates().getLongitude());
+        }
+
         initializeMapView();
         mBinding.llCallBusiness.setOnClickListener(view -> callBusiness(data.getPhone()));
     }
