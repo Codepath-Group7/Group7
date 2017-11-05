@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanJungleDEMO.otf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanCurve.ttf");
         mBinding.tvAppName.setTypeface(font);
 
         /*

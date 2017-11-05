@@ -118,7 +118,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         splashScreenIcon.setVisibility(View.INVISIBLE);
 
         TextView textView = (TextView) findViewById(R.id.splashScreenText);
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanJungleDEMO.otf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/UrbanCurve.ttf");
         textView.setTypeface(font);
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
