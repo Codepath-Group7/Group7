@@ -3,12 +3,14 @@ package com.codepath.com.sffoodtruck.ui.map;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final int REQUEST_CODE_LOCATION = ActivityRequestCodeGenerator.getFreshInt();
+    private static final String TAG = FoodTruckMapFragment.class.getSimpleName();
     private Map<String, FoodTruckMapViewModel> viewModelMap = new HashMap<>();
     private MapView mapView;
     private GoogleMap map;
@@ -213,9 +216,20 @@ public class FoodTruckMapFragment extends AbstractMvpFragment<FoodTruckMapContra
         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmapIcon);
 
         Coordinates coordinates = viewModel.getCoordinates();
-        if (coordinates == null) return; // TODO: handle locations with no coordinates
+        LatLng point;
+        if (coordinates == null || coordinates.getLongitude() == null || coordinates.getLatitude() == null) {
+            Log.d(TAG,"Truck with null coordinates " + viewModel.getLocation().getCompleteAddress());
+            if(viewModel.getLocation().getCompleteAddress()!=null){
+                Address address = MapUtils.getLatLngFromAddress(getActivity(),viewModel.getLocation().getCompleteAddress());
+                if(address!=null) point = new LatLng(address.getLatitude(),address.getLongitude());
+                else return;
+            }else {
+                return;
+            }
+        }else{
+            point = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+        }
 
-        LatLng point = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
         Marker marker = MapUtils.addMarker(map, point, name, "", icon);
 
         String id = viewModel.getId();

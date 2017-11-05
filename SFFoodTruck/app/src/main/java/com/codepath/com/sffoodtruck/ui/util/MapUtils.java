@@ -102,4 +102,23 @@ public class MapUtils {
         }
         return null;
     }
+
+    public static Address getLatLngFromAddress(Context context, String addressString){
+        List<Address> address;
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            address = geocoder.getFromLocationName(addressString,1);
+            if (address==null || address.size() == 0) {
+                return null;
+            }
+
+            /*p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
+                    (double) (location.getLongitude() * 1E6));*/
+            Log.d(TAG,"Lat from Address--> "+address.get(0).getLatitude());
+            Log.d(TAG,"Lng from Address--> "+address.get(0).getLongitude());
+            return address.get(0);
+        }catch (IOException e){
+            return null;
+        }
+    }
 }
