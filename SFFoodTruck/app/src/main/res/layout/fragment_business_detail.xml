@@ -50,6 +50,15 @@
                             android:layout_marginBottom="@dimen/margin8"
                             android:layout_marginTop="@dimen/margin8"/>
 
+                        <ImageView
+                            android:id="@+id/ivYelpLogo"
+                            android:layout_width="54dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/yelp_trademark"
+                            android:layout_below="@id/tv_business_desc"
+                            android:layout_toRightOf="@id/rbFoodTruckRating"
+                            android:layout_toEndOf="@id/rbFoodTruckRating"/>
+
                         <TextView
                             android:id="@+id/tv_price"
                             android:layout_width="wrap_content"
