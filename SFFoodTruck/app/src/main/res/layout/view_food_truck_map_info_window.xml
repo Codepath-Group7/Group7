@@ -34,17 +34,15 @@
         tools:text="@string/tools_business_name" />
 
 
-    <android.support.v7.widget.AppCompatRatingBar
+    <com.codepath.com.sffoodtruck.ui.util.YelpRatingBar
         android:id="@+id/rating_bar"
-        style="?attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/padding8"
         android:layout_marginRight="@dimen/padding8"
-        android:isIndicator="true"
         app:layout_constraintLeft_toRightOf="@+id/image_icon"
         app:layout_constraintTop_toBottomOf="@+id/text_name"
-        tools:rating="5" />
+        />
 
     <TextView
         android:id="@+id/text_price"

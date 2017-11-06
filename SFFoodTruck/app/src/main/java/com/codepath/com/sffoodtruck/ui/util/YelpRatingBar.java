@@ -2,6 +2,8 @@ package com.codepath.com.sffoodtruck.ui.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -19,7 +21,10 @@ import com.codepath.com.sffoodtruck.R;
 
 public class YelpRatingBar extends LinearLayout {
 
+    private static final String EXTRA_SAVED_INSTANCE_STATE = "YelpRatingBar.SAVED_INSTANCE_STATE";
+    private static final String EXTRA_RATING = "YelpRatingBar.EXTRA_RATING";
     private float rating;
+    private boolean firstTimeLoad;
 
     public YelpRatingBar(Context context) {
         super(context);
@@ -27,6 +32,7 @@ public class YelpRatingBar extends LinearLayout {
 
     public YelpRatingBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        firstTimeLoad = true;
         setOrientation(LinearLayout.HORIZONTAL);
         setupAttributes(attrs);
     }
@@ -50,7 +56,10 @@ public class YelpRatingBar extends LinearLayout {
     }
 
     private void init(){
-
+        if(!firstTimeLoad){
+            return;
+        }
+        firstTimeLoad = false;
         float rating;
 
         if(this.rating > 5.0){
@@ -100,6 +109,24 @@ public class YelpRatingBar extends LinearLayout {
         addView(imageView);
     }
 
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_SAVED_INSTANCE_STATE, super.onSaveInstanceState());
+        bundle.putFloat(EXTRA_RATING,this.rating);
+        return super.onSaveInstanceState();
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
 
+        if(state instanceof Bundle){
+            Bundle bundle = (Bundle) state;
+            this.rating = bundle.getFloat(EXTRA_RATING);
+            state = bundle.getParcelable(EXTRA_SAVED_INSTANCE_STATE);
+        }
+
+        super.onRestoreInstanceState(state);
+    }
 }

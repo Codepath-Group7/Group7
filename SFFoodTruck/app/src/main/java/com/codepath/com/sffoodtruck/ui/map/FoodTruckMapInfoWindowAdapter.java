@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.util.DeviceDimensionsUtil;
+import com.codepath.com.sffoodtruck.ui.util.YelpRatingBar;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
@@ -51,7 +52,7 @@ public class FoodTruckMapInfoWindowAdapter implements GoogleMap.InfoWindowAdapte
                 view.findViewById(R.id.text_name);
         nameTextView.setText(viewModel.getName());
 
-        AppCompatRatingBar ratingBar = (AppCompatRatingBar)
+        YelpRatingBar ratingBar = (YelpRatingBar)
                 view.findViewById(R.id.rating_bar);
         ratingBar.setRating(viewModel.getRating());
 
