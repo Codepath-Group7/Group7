@@ -117,6 +117,8 @@
     <string name="share_food_truck_content">Checkout this amazing food truck \n %1$s</string>
     <string name="back_to_home">Back To home</string>
     <string name="label_no_results">No Results Found</string>
+    <string name="tools_rating_based_on">Based on 777 Reviews</string>
+    <string name="rating_string">Based on %d Reviews</string>
 
 
 </resources>

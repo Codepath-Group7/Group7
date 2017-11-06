@@ -33,17 +33,14 @@
             android:layout_toRightOf="@+id/ivBusiness"
             android:layout_toEndOf="@+id/ivBusiness"/>
 
-        <RatingBar
+        <com.codepath.com.sffoodtruck.ui.util.YelpRatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Base.Widget.AppCompat.RatingBar.Small"
             android:layout_below="@+id/textView"
             android:layout_toRightOf="@+id/ivBusiness"
             android:layout_toEndOf="@+id/ivBusiness"
             android:layout_marginTop="@dimen/margin12"
-            tools:rating="5"
-            android:rating="@{obj.rating}"
-            android:isIndicator="true"
+            app:rating="@{obj.rating}"
             android:id="@+id/ratingBar"/>
 
         <TextView

@@ -16,4 +16,10 @@
         <attr name="metaButtonBarStyle" format="reference"/>
         <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
+
+
+    <declare-styleable name="YelpRatingBar">
+        <attr name="rating" format="float"/>
+    </declare-styleable>
+
 </resources>

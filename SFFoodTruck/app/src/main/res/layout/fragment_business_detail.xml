@@ -42,16 +42,23 @@
                             android:padding="@dimen/padding4"
                             tools:text="@string/tools_business_desc"/>
 
-                        <android.support.v7.widget.AppCompatRatingBar
+                        <com.codepath.com.sffoodtruck.ui.util.YelpRatingBar
                             android:id="@+id/rbFoodTruckRating"
-                            style="?attr/ratingBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tv_business_desc"
                             android:layout_marginBottom="@dimen/margin8"
                             android:layout_marginTop="@dimen/margin8"
-                            android:isIndicator="true"
-                            tools:rating="5"/>
+                            android:layout_marginLeft="@dimen/margin4"/>
+
+                        <ImageView
+                            android:id="@+id/ivYelpLogo"
+                            android:layout_width="54dp"
+                            android:layout_height="36dp"
+                            app:srcCompat="@drawable/ic_yelp_trademark_rgb"
+                            android:layout_below="@id/tv_business_desc"
+                            android:layout_toRightOf="@id/rbFoodTruckRating"
+                            android:layout_toEndOf="@id/rbFoodTruckRating"/>
 
                         <TextView
                             android:id="@+id/tv_price"
@@ -66,6 +73,13 @@
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold"
                             tools:text="@string/tools_price"/>
+                        <TextView
+                            android:id="@+id/tv_review_string"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ivYelpLogo"
+                            tools:text="@string/tools_rating_based_on"
+                            android:padding="@dimen/padding4"/>
                     </RelativeLayout>
 
                 </RelativeLayout>
