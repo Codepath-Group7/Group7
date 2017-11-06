@@ -36,9 +36,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-public class UserProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class UserProfileActivity extends AppCompatActivity
+        implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = UserProfileActivity.class.getSimpleName();
     private static final String FAVORITES_TITLE = "Favorites";
@@ -52,18 +54,12 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     private static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
     private boolean mIsTheTitleVisible = false;
 
-
     private ActivityUserProfileBinding mUserProfileBinding;
-
     private GoogleApiClient mGoogleApiClient;
-
     private static boolean isCurrentUser = false;
-
     private static String mCurrentUserId;
-
     private static MessagePayload sMessagePayload;
-
-
+    private static FirebaseUser sFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public static Intent newIntent(Context context, MessagePayload payload){
         Intent intent = new Intent(context,UserProfileActivity.class);
@@ -75,7 +71,8 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
+        mUserProfileBinding = DataBindingUtil
+                .setContentView(this, R.layout.activity_user_profile);
 
         setSupportActionBar(mUserProfileBinding.toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,13 +101,13 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
         if(getIntent() != null){
             sMessagePayload = getIntent().getParcelableExtra(EXTRA_USER);
             if(sMessagePayload == null || sMessagePayload.getUserId()
-                    .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    .equals(sFirebaseUser.getUid())){
                 isCurrentUser = true;
             }
         }
 
         if(isCurrentUser){
-            mCurrentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            mCurrentUserId = sFirebaseUser.getUid();
         }else{
             mCurrentUserId = sMessagePayload.getUserId();
         }
@@ -139,8 +136,6 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
                 .addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
                     int maxScroll = appBarLayout.getTotalScrollRange();
                     float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
-
-                    Log.d(TAG,"Percentage: " + percentage);
                     handleToolbarVisibility(percentage);
                 });
     }
@@ -164,7 +159,7 @@ public class UserProfileActivity extends AppCompatActivity implements GoogleApiC
             if(!mIsTheTitleVisible) {
                 Picasso.with(this)
                         .load(isCurrentUser ?
-                                FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl():
+                                sFirebaseUser.getPhotoUrl():
                                 Uri.parse(sMessagePayload.getImageUrl()))
                         .transform(new CircleTransform())
                         .into(mUserProfileBinding.ivToolbarProfile);

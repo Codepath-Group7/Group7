@@ -30,13 +30,10 @@
             android:text="@{obj.user.name}"
             android:textStyle="bold"
             android:padding="@dimen/padding4"/>
-        <android.support.v7.widget.AppCompatRatingBar
+        <com.codepath.com.sffoodtruck.ui.util.YelpRatingBar
             android:id="@+id/rbFoodTruckRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?attr/ratingBarStyleSmall"
-            android:isIndicator="true"
-            tools:rating="5"
             android:layout_below="@id/tv_user_name"
             android:layout_alignStart="@id/tv_user_name"
             android:layout_alignLeft="@id/tv_user_name"
@@ -44,7 +41,7 @@
             android:layout_marginBottom="@dimen/margin8"
             android:layout_marginStart="@dimen/margin4"
             android:layout_marginLeft="@dimen/margin4"
-            android:rating="@{obj.rating}"/>
+            app:rating="@{obj.rating}"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,6 +50,7 @@
             android:id="@+id/tv_review_text"
             android:padding="@dimen/padding4"
             android:text="@{obj.text}"/>
+
 
     </RelativeLayout>
 </layout>
