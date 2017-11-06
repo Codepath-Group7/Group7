@@ -6,7 +6,9 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +83,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvBusinessDesc.setText(data.getAllCategories());
         mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
         mBinding.rbFoodTruckRating.setRating(data.getRating());
+        mBinding.ivYelpLogo.setOnClickListener(view -> openYelpWebsite(data.getUrl()));
         mBinding.tvPrice.setText(data.getPrice());
         if(data.getHours()!=null && data.getHours().size()>0){
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
@@ -88,6 +91,13 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBusinessCoordinates = new LatLng(data.getCoordinates().getLatitude(),data.getCoordinates().getLongitude());
         initializeMapView();
         mBinding.llCallBusiness.setOnClickListener(view -> callBusiness(data.getPhone()));
+    }
+
+    private void openYelpWebsite(String businessUrl) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(businessUrl));
     }
 
     private void callBusiness(String phoneNumber) {
