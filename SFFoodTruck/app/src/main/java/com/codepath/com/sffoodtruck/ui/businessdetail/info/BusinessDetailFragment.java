@@ -84,6 +84,8 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
         mBinding.tvBusinessPhone.setText(data.getDisplayPhone());
         mBinding.rbFoodTruckRating.setRating(data.getRating());
         mBinding.ivYelpLogo.setOnClickListener(view -> openYelpWebsite(data.getUrl()));
+        String ratingString = getString(R.string.rating_string);
+        mBinding.tvReviewString.setText(String.format(ratingString,data.getReviewCount()));
         mBinding.tvPrice.setText(data.getPrice());
         if(data.getHours()!=null && data.getHours().size()>0){
             mBinding.tvBusinessHrs.setText(data.getHours().get(0).getTodaysHours());
