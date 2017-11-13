@@ -124,13 +124,15 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        MapsInitializer.initialize(getActivity());
-        mMap = googleMap;
-        if(mBusinessCoordinates == null) return;
-        mMap.addMarker(new MarkerOptions()
-                .position(mBusinessCoordinates));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mBusinessCoordinates,16f));
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if(isAdded()){
+            MapsInitializer.initialize(getActivity());
+            mMap = googleMap;
+            if(mBusinessCoordinates == null) return;
+            mMap.addMarker(new MarkerOptions()
+                    .position(mBusinessCoordinates));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mBusinessCoordinates,16f));
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
     public void initializeMapView() {
