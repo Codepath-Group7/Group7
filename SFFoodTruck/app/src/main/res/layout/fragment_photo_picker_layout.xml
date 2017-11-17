@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_take_photo"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start"
+        android:layout_marginLeft="@dimen/margin16"
+        android:layout_marginStart="@dimen/margin16"
+        style="?attr/borderlessButtonStyle"/>
+    <Button
+        android:id="@+id/btnChoosePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnTakePhoto"
+        android:text="@string/label_choose_photo"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start"
+        android:layout_marginLeft="@dimen/margin16"
+        android:layout_marginStart="@dimen/margin16"
+        style="?attr/borderlessButtonStyle"/>
+
+</RelativeLayout>
