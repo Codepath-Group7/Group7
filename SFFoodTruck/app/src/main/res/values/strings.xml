@@ -119,6 +119,8 @@
     <string name="label_no_results">No Results Found</string>
     <string name="tools_rating_based_on">Based on 777 Reviews</string>
     <string name="rating_string">Based on %d Reviews</string>
+    <string name="label_take_photo">Take photo</string>
+    <string name="label_choose_photo">Choose photo</string>
 
 
 </resources>

@@ -37,7 +37,7 @@ import java.util.UUID;
 
 public class TakePhotoDialogFragment extends BottomSheetDialogFragment {
     public final static String TAG = TakePhotoDialogFragment.class.getSimpleName();
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private Uri mCurrentPhotoPath = null;
     private ImageView mImageView;
     private boolean isPhotoCaptured = false;

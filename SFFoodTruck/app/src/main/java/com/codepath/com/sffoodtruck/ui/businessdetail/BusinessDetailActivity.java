@@ -31,6 +31,7 @@ import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.databinding.ActivityBusinessDetailBinding;
 import com.codepath.com.sffoodtruck.ui.base.mvp.AbstractMvpActivity;
+import com.codepath.com.sffoodtruck.ui.businessdetail.photos.PhotoPickerDialogFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.photos.TakePhotoDialogFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.SubmitReviewDialogFragment;
 import com.squareup.picasso.Callback;
@@ -42,7 +43,8 @@ import java.util.UUID;
 
 public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivityContract.MvpView
         , BusinessActivityContract.Presenter> implements BusinessActivityContract.MvpView,
-        TakePhotoDialogFragment.TakePhotoListner, SubmitReviewDialogFragment.SubmitReviewListener {
+        TakePhotoDialogFragment.TakePhotoListner, SubmitReviewDialogFragment.SubmitReviewListener,
+        PhotoPickerDialogFragment.PhotoPickerListener{
 
 
     private static final String EXTRA_BUSINESS =
@@ -55,6 +57,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     private MenuItem mFavoriteItem;
     private BusinessDetailPagerAdapter mViewPagerAdapter;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int IMG_RESULT = 22;
     private Uri mCurrentPhotoPath = null;
     private MaterialDialog mProgressDialog;
     private boolean mShowAnimation = false;
@@ -236,12 +239,18 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                 getPresenter().addToFavorites();
                 break;
             case 1:
-                dispatchTakePictureIntent();
+                openChoosePhotoDialog();
+                //dispatchTakePictureIntent();
                 break;
             case 2:
                 openSubmitReviewDialog();
                 break;
         }
+    }
+
+    public void openChoosePhotoDialog(){
+        DialogFragment fragment = new PhotoPickerDialogFragment();
+        fragment.show(getSupportFragmentManager(),PhotoPickerDialogFragment.TAG);
     }
 
     public void openSubmitReviewDialog() {
@@ -361,6 +370,11 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
             Log.d(TAG, "From Camera " + mCurrentPhotoPath);
             openTakePhotoDialog();
         }
+        else if (requestCode == IMG_RESULT && resultCode == Activity.RESULT_OK){
+            Log.d(TAG, "From Gallery " + data.getData());
+            mCurrentPhotoPath = data.getData();
+            openTakePhotoDialog();
+        }
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -381,5 +395,18 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
         if (!mShowAnimation) { //Not launched with shared element transition
             overridePendingTransition(R.anim.hold, R.anim.slide_down);
         }
+    }
+
+    @Override
+    public void onTakePhoto() {
+        dispatchTakePictureIntent();
+    }
+
+    @Override
+    public void onChoosePhoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent, IMG_RESULT);
     }
 }
