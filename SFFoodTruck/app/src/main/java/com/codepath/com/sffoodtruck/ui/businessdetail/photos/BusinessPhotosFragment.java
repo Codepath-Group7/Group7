@@ -1,18 +1,15 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail.photos;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.net.Uri;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
-import android.util.Log;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

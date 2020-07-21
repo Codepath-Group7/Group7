@@ -1,7 +1,6 @@
 package com.codepath.com.sffoodtruck.ui.login;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
@@ -12,6 +11,7 @@ import com.codepath.com.sffoodtruck.data.remote.LoginService;
 import com.codepath.com.sffoodtruck.data.remote.RetrofitClient;
 import com.codepath.com.sffoodtruck.data.remote.SearchApi;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

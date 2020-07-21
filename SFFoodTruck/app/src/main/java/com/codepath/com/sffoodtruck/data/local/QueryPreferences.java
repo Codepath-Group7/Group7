@@ -2,7 +2,6 @@ package com.codepath.com.sffoodtruck.data.local;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,6 +10,8 @@ import com.codepath.com.sffoodtruck.data.model.CustomPlace;
 import com.codepath.com.sffoodtruck.ui.util.JsonUtils;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.internal.PlaceEntity;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by saip92 on 10/11/2017.

@@ -2,10 +2,11 @@ package com.codepath.com.sffoodtruck.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by akshaymathur on 10/17/17.

@@ -2,7 +2,6 @@ package com.codepath.com.sffoodtruck.ui.photodetail;
 
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -13,6 +12,7 @@ import com.codepath.com.sffoodtruck.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import androidx.appcompat.app.AppCompatActivity;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class PhotoDetailActivity extends AppCompatActivity {

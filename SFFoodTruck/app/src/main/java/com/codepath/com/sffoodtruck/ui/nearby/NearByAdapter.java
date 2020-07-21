@@ -1,34 +1,26 @@
 package com.codepath.com.sffoodtruck.ui.nearby;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
-import com.codepath.com.sffoodtruck.databinding.ItemChatBinding;
 import com.codepath.com.sffoodtruck.databinding.ItemChatWithBgBinding;
 import com.codepath.com.sffoodtruck.ui.userprofile.UserProfileActivity;
 import com.codepath.com.sffoodtruck.ui.util.CircleTransform;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by saip92 on 10/17/2017.

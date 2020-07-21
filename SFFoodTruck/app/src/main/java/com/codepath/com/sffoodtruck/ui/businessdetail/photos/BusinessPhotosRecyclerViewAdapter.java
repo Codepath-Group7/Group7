@@ -1,9 +1,6 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail.photos;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.base.mvp.SingleLayoutAdapter;

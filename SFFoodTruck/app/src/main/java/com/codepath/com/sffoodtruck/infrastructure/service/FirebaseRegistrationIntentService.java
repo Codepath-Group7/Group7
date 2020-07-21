@@ -3,13 +3,14 @@ package com.codepath.com.sffoodtruck.infrastructure.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import androidx.annotation.Nullable;
 
 /**
  * IntentService to ensure push notifications are received

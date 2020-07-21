@@ -1,18 +1,17 @@
 package com.codepath.com.sffoodtruck.ui.userprofile.photos;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-
 import com.codepath.com.sffoodtruck.data.model.UserPostedPhoto;
 import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseAdapter;
 import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseFragment;
 import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBasePresenter;
-import com.codepath.com.sffoodtruck.ui.userprofile.base.UserProfileBaseView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by saip92 on 10/26/2017.

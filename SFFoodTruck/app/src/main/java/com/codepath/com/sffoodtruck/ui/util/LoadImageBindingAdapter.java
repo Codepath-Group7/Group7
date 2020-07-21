@@ -1,7 +1,9 @@
 package com.codepath.com.sffoodtruck.ui.util;
 
 import android.app.Activity;
-import android.databinding.BindingAdapter;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,10 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.net.Uri;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -64,7 +62,7 @@ public class LoadImageBindingAdapter {
     }
 
     @BindingAdapter({"app:loadingImage"})
-    public static void loadToolbarIcon(Toolbar toolbar,Uri url){
+    public static void loadToolbarIcon(Toolbar toolbar, Uri url){
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

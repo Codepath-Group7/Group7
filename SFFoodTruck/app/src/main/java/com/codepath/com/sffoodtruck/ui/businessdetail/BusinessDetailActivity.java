@@ -3,17 +3,19 @@ package com.codepath.com.sffoodtruck.ui.businessdetail;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Transition;
@@ -126,7 +128,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
                 .setExpandedTitleColor(ContextCompat.getColor(this,android.R.color.white));
         mBinding.collapsingToolbarLayout
                 .setCollapsedTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
-        ActionBar  actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mBusiness.getName());

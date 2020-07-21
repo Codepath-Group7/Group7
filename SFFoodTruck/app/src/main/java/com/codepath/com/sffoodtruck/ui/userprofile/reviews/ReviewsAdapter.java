@@ -1,6 +1,5 @@
 package com.codepath.com.sffoodtruck.ui.userprofile.reviews;
 
-import android.support.annotation.LayoutRes;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Review;
