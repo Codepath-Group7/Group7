@@ -67,3 +67,7 @@ SFFoodTruck/.idea/gradle.xml
 SFFoodTruck/.idea/codeStyles/Project.xml
 
 SFFoodTruck/.idea/caches/build_file_checksums.ser
+
+SFFoodTruck/app/src/main/res/values/keys.xml
+
+SFFoodTruck/.idea

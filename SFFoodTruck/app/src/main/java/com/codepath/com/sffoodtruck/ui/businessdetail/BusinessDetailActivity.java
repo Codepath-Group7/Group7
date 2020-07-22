@@ -178,7 +178,7 @@ public class BusinessDetailActivity extends AbstractMvpActivity<BusinessActivity
     @NonNull
     @Override
     public BusinessActivityContract.Presenter createPresenter() {
-        return new BusinessActivityPresenter(QueryPreferences.getAccessToken(this));
+        return new BusinessActivityPresenter(getString(R.string.yelp_api_key));
     }
 
     @Override

@@ -2,6 +2,5 @@
 <resources>
     <string name="google_api_key_enabled">AIzaSyAjbeT0xGg19ZExLWL6-Q3FusuI5wGqN_Y</string>
     <string name="google_web_client_id">1089068767481-db769h401s55iu56p6hgd3ql68prorve.apps.googleusercontent.com</string>
-    <string name="client_key">FC95QmoTCZxQjkvDJQdCaQ</string>
-    <string name="client_secret">lAbNWQBzW7KbjnRiE3llCAJuJKpeexkil34zf1joudfqz0D6YWKoDBGInUXVqDxb</string>
+    <string name="yelp_api_key">3traZ985meIOyUWYce-iINSJ41eV6wsKLH22fbNJ_YHIe8P3jlr2eoJTZ_abqzR480Xr_9MaSlPhPwIvRsYc4J4Wo5Jw40a-JdyKd_Q9dpxYRIlYQMRNWoVz988WX3Yx</string>
 </resources>

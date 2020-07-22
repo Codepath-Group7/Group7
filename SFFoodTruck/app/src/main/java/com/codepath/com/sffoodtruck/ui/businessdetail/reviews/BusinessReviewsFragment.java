@@ -95,6 +95,6 @@ public class BusinessReviewsFragment extends AbstractMvpFragment<BusinessReviews
 
     @Override
     public BusinessReviewsContract.Presenter createPresenter() {
-        return new BusinessReviewsPresenter(QueryPreferences.getAccessToken(getActivity()));
+        return new BusinessReviewsPresenter(getString(R.string.yelp_api_key));
     }
 }

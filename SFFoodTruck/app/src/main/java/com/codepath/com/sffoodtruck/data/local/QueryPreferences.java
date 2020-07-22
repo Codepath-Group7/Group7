@@ -22,7 +22,6 @@ public class QueryPreferences {
 
     public static final String PREF_FCM_TOKEN = "PREF_FCM_TOKEN";
     public static final String PREF_CURRENT_LOCATION = "PREF_CURRENT_LOCATION";
-    private static final String PREF_KEY_AUTHORIZATION = "PREF_KEY_AUTHORIZATION";
     private static final String PREF_PLACE = "PREF_PLACE";
 
     public static void storeString(Context context, String key, String value) {
@@ -35,19 +34,6 @@ public class QueryPreferences {
     public static String getStoredString(Context context, String key) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(key, "");
-    }
-
-    public static void storeAccessToken(Context context, String accessToken, String tokenType){
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(PREF_KEY_AUTHORIZATION,tokenType + " " + accessToken)
-                .apply();
-    }
-
-
-    public static String getAccessToken(Context context){
-       return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_KEY_AUTHORIZATION, "");
     }
 
 

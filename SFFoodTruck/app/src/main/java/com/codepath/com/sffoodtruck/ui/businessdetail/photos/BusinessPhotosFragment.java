@@ -43,7 +43,7 @@ public class BusinessPhotosFragment extends AbstractMvpFragment<BusinessPhotosCo
 
     @Override
     public BusinessPhotosContract.Presenter createPresenter() {
-        return new BusinessPhotosPresenter(QueryPreferences.getAccessToken(getActivity()));
+        return new BusinessPhotosPresenter(getString(R.string.yelp_api_key));
     }
 
     public static BusinessPhotosFragment newInstance(Business business) {

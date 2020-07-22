@@ -49,7 +49,7 @@ public class BusinessDetailFragment extends AbstractMvpFragment<BusinessDetailCo
 
     @Override
     public BusinessDetailContract.Presenter createPresenter() {
-        return new BusinessDetailPresenter(QueryPreferences.getAccessToken(getActivity()));
+        return new BusinessDetailPresenter(getString(R.string.yelp_api_key));
     }
 
     public static Fragment newInstance(Business business) {
