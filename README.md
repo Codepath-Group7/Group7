@@ -48,14 +48,14 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## To Run the project
 - Create /values/keys.xml with the following content and replace <YOUR_KEY> with your API keys
-
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_api_key_enabled"><YOUR_KEY></string>
     <string name="google_web_client_id"><YOUR_KEY></string>
     <string name="yelp_api_key"><YOUR_KEY></string>
 </resources>
-
+```
 ## License
 
     Copyright 2017 Akshay Mathur, Robert Lee, Sai Pranesh Mukkala
