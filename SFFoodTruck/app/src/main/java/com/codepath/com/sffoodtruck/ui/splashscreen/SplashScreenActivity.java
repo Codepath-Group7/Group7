@@ -6,9 +6,10 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Transition;
@@ -22,7 +23,6 @@ import android.widget.TextView;
 import com.codepath.com.sffoodtruck.HomeActivity;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.login.LoginActivity;
-import com.codepath.com.sffoodtruck.ui.login.LoginUtils;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -258,19 +258,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void startNextActivity(){
             FirebaseUser user = FirebaseUtils.getCurrentUser();
             if(user!=null){
-                LoginUtils .getYelpAccessToken(SplashScreenActivity.this,
-                        new LoginUtils.YelpAccessTokenListener() {
-                    @Override
-                    public void onSaveAccessToken() {
-                        startHomeActivity();
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        Log.d(TAG,"Access token is null");
-                    }
-                });
-
+                startHomeActivity();
             }
             else{
                 Log.d(TAG,"User not logged in");

@@ -2,12 +2,13 @@ package com.codepath.com.sffoodtruck.ui.nearby;
 
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,24 +19,10 @@ import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.local.DBPayloads;
 import com.codepath.com.sffoodtruck.data.model.MessagePayload;
 import com.codepath.com.sffoodtruck.databinding.FragmentNearByBinding;
-import com.codepath.com.sffoodtruck.ui.util.ParcelableUtil;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.PublishCallback;
-import com.google.android.gms.nearby.messages.PublishOptions;
-import com.google.android.gms.nearby.messages.SubscribeCallback;
-import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
 /**

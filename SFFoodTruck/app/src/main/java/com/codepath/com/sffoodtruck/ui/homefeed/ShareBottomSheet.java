@@ -2,11 +2,11 @@ package com.codepath.com.sffoodtruck.ui.homefeed;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.ShareCompat;
+import androidx.core.app.ShareCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.databinding.DialogShareBottomSheetBinding;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
  * Created by saip92 on 10/31/2017.

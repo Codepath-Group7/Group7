@@ -56,18 +56,18 @@
                     android:layout_marginBottom="@dimen/margin16"
                     android:layout_marginLeft="@dimen/margin16"/>
 
-                    <android.support.v4.widget.NestedScrollView
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvHomeFeed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin16"
                             android:layout_marginRight="@dimen/margin16"
                             android:nestedScrollingEnabled="false"/>
-                    </android.support.v4.widget.NestedScrollView>
+                    </androidx.core.widget.NestedScrollView>
 
                 <Button
                     android:id="@+id/btnSeeAll"

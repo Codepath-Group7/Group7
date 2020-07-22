@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.support.annotation.DrawableRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +27,8 @@ import com.google.maps.android.ui.IconGenerator;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.DrawableRes;
 
 /**
  * Created by robl2e on 10/10/17.

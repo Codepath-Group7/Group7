@@ -6,7 +6,7 @@
     <data>
         <variable name="obj" type="com.codepath.com.sffoodtruck.data.model.UserPostedPhoto"/>
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin8"
@@ -18,8 +18,9 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding4"
             app:imageUrl="@{obj.imageUrl}"
-            tools:src="@drawable/placeholder160x160"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder160x160" />
 
         <TextView
             android:id="@+id/tvBusinessName"
@@ -36,5 +37,5 @@
             app:layout_constraintHorizontal_bias="0.454"/>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

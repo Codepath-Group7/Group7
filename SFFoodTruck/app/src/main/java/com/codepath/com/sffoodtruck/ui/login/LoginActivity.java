@@ -2,10 +2,11 @@ package com.codepath.com.sffoodtruck.ui.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -96,19 +97,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if(user!=null){
                 hideProgressDialog();
-                LoginUtils.getYelpAccessToken(LoginActivity.this,
-                        new LoginUtils.YelpAccessTokenListener() {
-                    @Override
-                    public void onSaveAccessToken() {
-                        startHomeActivity();
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        Log.d(TAG, "Token failure! ");
-                    }
-                });
-
+                startHomeActivity();
             }
             else{
                 Log.d(TAG,"User not logged in");

@@ -1,30 +1,23 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail.reviews;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatRatingBar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.data.model.Review;
 import com.codepath.com.sffoodtruck.data.model.User;
-import com.codepath.com.sffoodtruck.databinding.FragmentSubmitReviewBinding;
 import com.codepath.com.sffoodtruck.ui.util.FirebaseUtils;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatRatingBar;
+import androidx.fragment.app.DialogFragment;
 
 /**
  * Created by akshaymathur on 10/18/17.

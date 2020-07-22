@@ -2,8 +2,6 @@ package com.codepath.com.sffoodtruck.infrastructure.service;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import retrofit2.Call;
 import retrofit2.Response;
 

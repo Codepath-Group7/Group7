@@ -1,15 +1,14 @@
 package com.codepath.com.sffoodtruck.ui.businessdetail;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
 import com.codepath.com.sffoodtruck.data.model.Business;
 import com.codepath.com.sffoodtruck.ui.businessdetail.info.BusinessDetailFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.photos.BusinessPhotosFragment;
 import com.codepath.com.sffoodtruck.ui.businessdetail.reviews.BusinessReviewsFragment;
 import com.codepath.com.sffoodtruck.ui.util.SmartFragmentStatePagerAdapter;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by akshaymathur on 10/23/17.

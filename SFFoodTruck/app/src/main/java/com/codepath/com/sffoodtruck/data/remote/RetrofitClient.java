@@ -5,7 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.com.sffoodtruck.BuildConfig;
-import com.codepath.com.sffoodtruck.data.local.QueryPreferences;
+import com.codepath.com.sffoodtruck.R;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,6 +23,7 @@ public class RetrofitClient {
     private static final String TAG = RetrofitClient.class.getSimpleName();
 
     private static final String BASE_URL = "https://api.yelp.com/";
+    private static final String AUTHENTICATION_STRING = "Bearer %s";
 
     private static Retrofit mRetrofit = null;
 
@@ -59,33 +61,15 @@ public class RetrofitClient {
             Log.d(TAG,"Context cannot be null inside createService",e);
         }
 
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            httpClient.addInterceptor(loggingInterceptor);
-        }
+        String apiKey = context.getResources().getString(R.string.yelp_api_key);
 
-        String authToken = QueryPreferences.getAccessToken(context);
-        if (!TextUtils.isEmpty(authToken)) {
-
-                AuthenticationInterceptor interceptor = new
-                        AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-                sBuilder.client(httpClient.build());
-                mRetrofit = sBuilder.build();
-            }
-
-        }
-
-        return mRetrofit.create(serviceClass);
+         return createService(serviceClass, apiKey);
     }
 
 
     //Generic service creator that adds authentication headers while creating new API interfaces
     public static <S> S createService(
-            Class<S> serviceClass, String authToken)  {
+            Class<S> serviceClass, String apiKey)  {
 
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -93,10 +77,10 @@ public class RetrofitClient {
             httpClient.addInterceptor(loggingInterceptor);
         }
 
-        if (!TextUtils.isEmpty(authToken)) {
+        if (!TextUtils.isEmpty(apiKey)) {
 
             AuthenticationInterceptor interceptor = new
-                    AuthenticationInterceptor(authToken);
+                    AuthenticationInterceptor(String.format(AUTHENTICATION_STRING, apiKey));
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);

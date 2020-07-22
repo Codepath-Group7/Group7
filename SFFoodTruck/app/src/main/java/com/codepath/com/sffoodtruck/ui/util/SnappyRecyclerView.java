@@ -2,11 +2,12 @@ package com.codepath.com.sffoodtruck.ui.util;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by saip92 on 10/30/2017.

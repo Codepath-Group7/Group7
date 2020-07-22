@@ -1,12 +1,12 @@
 package com.codepath.com.sffoodtruck.ui.userprofile.base;
 
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.base.mvp.SingleLayoutAdapter;
 
 import java.util.List;
+
+import androidx.annotation.LayoutRes;
 
 /**
  * Created by saip92 on 10/22/2017.

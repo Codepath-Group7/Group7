@@ -1,10 +1,11 @@
 package com.codepath.com.sffoodtruck.ui.nearby;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.codepath.com.sffoodtruck.R;
 import com.codepath.com.sffoodtruck.ui.util.ActivityUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class NearByActivity extends AppCompatActivity {
 
